@@ -1,0 +1,11 @@
+body {
+  background-color: black;
+}
+
+.wrap {
+  max-width: 1200px;
+}
+
+.navbar-toggler {
+  background-color: white;
+}
