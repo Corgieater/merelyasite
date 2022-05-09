@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Merely a Site</title>
+    <meta
+      name="google-signin-client_id"
+      content="586610707307-7tjqpj07v55e7mfm6a01luh164rlu6bo.apps.googleusercontent.com"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{url_for('static', filename='css/cssReset.css')}}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{url_for('static', filename='css/public.css')}}"
+    />
+    {% block style %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="flex alignRight">
+          <li class="hide"><a href="#"></a></li>
+          <li>
+            <a href="#">LOG IN</a>
+            <ul class="loginPlace">
+              <li></li>
+            </ul>
+          </li>
+          <li><a href="#">CREATE ACCOUNT</a></li>
+          <li><a href="#">FILMS</a></li>
+          <li><a href="#">NOTES</a></li>
+          <li class="hide"><a href="#">LOG OUT</a></li>
+          <li class="searchForm">
+            <input type="text" id="userInput" />
+            <a href="#"
+              ><img src="../static/images/glass.png" alt="search"
+            /></a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- log in -->
+      <section class="logInPlace alignRight hide">
+        <input
+          type="email"
+          id="loginEmail"
+          name="loginEmail"
+          placeholder="EMAIL"
+        />
+        <input
+          type="password"
+          id="loginPassword"
+          name="loginPassword"
+          placeholder="PASSWORD"
+        />
+        <button>SIGN IN</button>
+      </section>
+
+      <!-- sign up -->
+      <section class="hide signUpPlace flex alignCenter">
+        <label for="signinEmail">EMAIL</label>
+        <input
+          type="email"
+          id="signinEmail"
+          name="signinEmail"
+          placeholder="EMAIL"
+        />
+        <label for="siginPassword">PASSWORD</label>
+        <input
+          type="password"
+          id="signPassword"
+          name="signPassword"
+          placeholder="PASSWORD"
+        />
+        <label for="siginName">NAME</label>
+        <input type="text" id="signName" name="signName" placeholder="NAME" />
+        <a href="#">SIGN UP</a>
+      </section>
+    </header>
+
+    <div class="wrap">{% block content %}{% endblock %}</div>
+
+    <!-- for trailer -->
+    <!-- <iframe
+      src="http://www.imdb.com/video/imdb/vi3877612057/imdb/embed?autoplay=false&width=320"
+      width="320"
+      height="480"
+      allowfullscreen="true"
+      mozallowfullscreen="true"
+      webkitallowfullscreen="true"
+      frameborder="no"
+      scrolling="no"
+    ></iframe> -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="{{ url_for('static', filename='js/navScript.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/public.js') }}"></script>
+    {% block script %}{% endblock %}
+  </body>
+</html>

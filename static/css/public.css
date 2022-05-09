@@ -1,0 +1,109 @@
+body {
+  background-color: gray;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.flex {
+  display: flex;
+}
+
+.wrap {
+  max-width: 1200px;
+}
+
+nav {
+  margin-top: 50px;
+}
+
+.hide {
+  display: none;
+}
+
+/* position */
+.alignRight {
+  margin-left: auto;
+  margin-right: 0;
+}
+.alignCenter {
+  margin: 0 auto;
+}
+
+/* general */
+input,
+button {
+  border-radius: 5px;
+}
+
+a,
+label {
+  color: aliceblue;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 25px;
+}
+
+.warning {
+  color: darkred;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.good {
+  color: #2a9d8f;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* nav bar */
+nav > ul {
+  width: 60%;
+}
+nav > ul > li {
+  padding: 0 10px;
+}
+nav > ul > li > input {
+  width: 150px;
+}
+/* logInPlace */
+.logInPlace {
+  width: 50%;
+  margin-top: 25px;
+}
+
+.logInPlace > input,
+.logInPlace > button {
+  height: 35px;
+}
+
+/* searchForm */
+.searchForm {
+  position: relative;
+}
+.searchForm > button {
+  width: 28px;
+}
+.searchForm > a {
+  position: absolute;
+  left: 79%;
+}
+
+/* signUpPlace */
+.signUpPlace {
+  width: 500px;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+.signUpPlace > input {
+  width: 50%;
+  padding: 10px;
+  margin: 10px 0;
+}
+.signUpPlace > label {
+  font-size: 20px;
+}
