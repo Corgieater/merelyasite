@@ -3,6 +3,7 @@ from flask import *
 import jwt
 import os
 from datetime import timedelta
+import math
 
 key = os.getenv('JWT_SECRET_KEY')
 
@@ -10,9 +11,14 @@ key = os.getenv('JWT_SECRET_KEY')
 database = MovieDatabase()
 
 
-def make_dic(info):
-    searched_data = {'data': []}
-
+def make_dic(info, page, total_page):
+    page = int(page)+1
+    print(total_page)
+    searched_data = {'data': [], 'currentPage': page, 'nextPage': None, 'totalPages': total_page}
+    if page < total_page:
+        searched_data['nextPage'] = page+1
+    else:
+        searched_data['nextPage'] = None
     for info_data in info:
         dic = {
             'id': info_data[0],
@@ -22,18 +28,27 @@ def make_dic(info):
             'directors': info_data[4].split(','),
             'stars': info_data[5].split(','),
             'genre': info_data[6].split(','),
-            'plot': info_data[7]
+            'plot': info_data[7],
         }
         searched_data['data'].append(dic)
 
     return searched_data
 
 
-# test
-def get_info_func(user_input):
-    info = database.get_info(user_input)
-    dic_data = make_dic(info)
-    print(dic_data)
+def get_info_func(user_input, page):
+    data_count = database.get_total_data_count(user_input)[0]
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page)-1
+    print('total page', total_page)
+    info = database.get_info(user_input, page)
+
+    if info is False:
+        return {
+            'error': True
+        }
+    dic_data = make_dic(info, page, total_page)
     if len(dic_data['data']) == 0:
         return {
             'error': True,
@@ -42,14 +57,14 @@ def get_info_func(user_input):
     return dic_data
 
 
-def check_cookie_func():
-    encoded_cookie = request.cookies.get('user_search')
-    # 防範不知道怎樣會發生的沒cookie事件
-    if encoded_cookie is None:
-        return {
-            'data': None
-        }
-    searched_cookie = jwt.decode(encoded_cookie, key, algorithms=['HS256'])
-    print(searched_cookie)
-
-    return searched_cookie
+# def check_cookie_func():
+#     encoded_cookie = request.cookies.get('user_search')
+#     # 防範不知道怎樣會發生的沒cookie事件
+#     if encoded_cookie is None:
+#         return {
+#             'data': None
+#         }
+#     searched_cookie = jwt.decode(encoded_cookie, key, algorithms=['HS256'])
+#     print(searched_cookie)
+#
+#     return searched_cookie

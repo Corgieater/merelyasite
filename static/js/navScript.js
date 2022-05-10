@@ -114,7 +114,8 @@ searchFormBt.addEventListener("click", async function (e) {
   data = {
     searchTerm: userInput,
   };
-  window.location.replace(`/search/${userInput}`);
+  console.log(userInput);
+  window.location.replace(`/search?keyword=${userInput}`);
 });
 
 // 小功能

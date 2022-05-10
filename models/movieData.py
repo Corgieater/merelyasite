@@ -23,30 +23,16 @@ class MovieDatabase:
             password=MYSQL_PASSWORD
         )
 
-    # def add_to_database(self, inputs):
-    #     connection = self.pool.get_connection()
-    #     cursor = connection.cursor()
-    #     try:
-    #         cursor.execute('INSERT INTO user VALUES (%s, %s ,%s, %s)', inputs)
-    #     except Exception as e:
-    #         print(e)
-    #         connection.rollback()
-    #         return False
-    #     else:
-    #         connection.commit()
-    #         return True
-    #     finally:
-    #         cursor.close()
-    #         connection.close()
-
     # 這邊目前只搜電影 但東西一多起來就要多重考量
     def get_info(self, user_input, start_index=0):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
+        start_index = int(start_index)*20
         try:
-            "select * from movieInfo where title like '%dark%'"
-            cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 20', ('%'+user_input+'%', start_index))
+            cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 21',
+                           ('%'+user_input+'%', start_index))
             results = cursor.fetchall()
+            print(results)
         except Exception as e:
             print(e)
             return False
@@ -56,23 +42,18 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    # def check_user_log_in_info(self, email, password):
-    #     connection = self.pool.get_connection()
-    #     cursor = connection.cursor()
-    #     try:
-    #         cursor.execute('SELECT password,name, email, id FROM user Where email = %s', (email,))
-    #         result = cursor.fetchone()
-    #         hashed_password = result[0]
-    #         name = result[1]
-    #         email = result[2]
-    #         user_id = result[3]
-    #         passwords_are_the_same = bcrypt.check_password_hash(hashed_password, password)
-    #         if passwords_are_the_same is not True:
-    #             return False
-    #     except Exception as e:
-    #         print(e)
-    #     else:
-    #         return [name, email, user_id]
-    #     finally:
-    #         cursor.close()
-    #         connection.close()
+    def get_total_data_count(self, user_input):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT count(*) FROM movieInfo Where title like %s',
+                           ('%'+user_input+'%',))
+            result = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()

@@ -1,28 +1,37 @@
 let frame = document.querySelector(".frame");
+let pagesPlace = document.querySelector(".pagesPlace");
 
+// 做資料
+async function renderDataInfo() {
+  let data = await getData();
+  let dataInfo = data[0];
+  let userInput = data[1];
+  makeShowRow(dataInfo, userInput);
+}
+
+// 先打API去要資料
 async function getData() {
   let webHref = window.location.href;
-  let userInput = webHref.slice(29);
-  let req = await fetch(`/api/search/${userInput}`);
+  let userInput = webHref.slice(37);
+  let req = await fetch(`/api/search?keyword=${userInput}`);
+  console.log(userInput);
   const res = await req.json();
   if (res.data) {
-    return res;
+    return [res, userInput];
   } else {
     return res.message;
   }
 }
 
-async function makeShowRow() {
-  let data = await getData();
-  if (typeof data === "string") {
+async function makeShowRow(dataInfo, userInput) {
+  // 沒東西就不用做了
+  if (typeof dataInfo === "string") {
     makeMessage(frame, data);
   } else {
     let showPlace = document.querySelector(".frame > ul");
-    data = data.data;
 
     //   use for of for async func
-    for (const info of data) {
-      console.log(info);
+    for (const info of dataInfo.data) {
       let id = info["id"];
       let title = info["title"];
       let hrefTitle = title.split(" ").join("-");
@@ -61,6 +70,20 @@ async function makeShowRow() {
       showPlace.append(li);
     }
   }
+  makePageTages(userInput, dataInfo["totalPages"]);
 }
 
-makeShowRow();
+// 小功能
+// 做頁碼
+async function makePageTages(userInput, totalPages) {
+  for (let i = 0; i < totalPages; i++) {
+    let newHref = userInput.slice(0, userInput.length - 1);
+    newHref += i + 1;
+    let a = document.createElement("a");
+    a.href = `/search?keyword=${newHref}`;
+    a.textContent = i + 1;
+    pagesPlace.append(a);
+  }
+}
+
+renderDataInfo();
