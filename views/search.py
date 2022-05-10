@@ -18,7 +18,3 @@ def search(user_input):
 def redirect_to_search_page(user_input):
     return render_template('searchResults.html')
 
-
-# @search_Blueprint.route('/api/search/checkCookie')
-# def check_cookie():
-#     return check_cookie_func()

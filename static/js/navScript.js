@@ -54,7 +54,7 @@ logInBt.addEventListener("click", async function () {
   const password = document.querySelector(
     ".logInPlace>input[type='password']"
   ).value;
-
+  deleteMessage();
   data = {
     email: email,
     password: password,
@@ -114,7 +114,7 @@ searchFormBt.addEventListener("click", async function (e) {
   data = {
     searchTerm: userInput,
   };
-  window.location.replace(`/search/${userInput}`, res);
+  window.location.replace(`/search/${userInput}`);
 });
 
 // 小功能

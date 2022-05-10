@@ -60,6 +60,11 @@ label {
   font-weight: bold;
 }
 
+/* logo */
+nav > h1 {
+  margin-left: 200px;
+}
+
 /* nav bar */
 nav > ul {
   width: 60%;

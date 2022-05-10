@@ -8,5 +8,14 @@ function makeMessage(place, message) {
   let p = document.createElement("p");
   p.textContent = message;
   p.classList.add("warning");
+  p.classList.add("disposableMessage");
   place.append(p);
+}
+
+// 刪除版面訊息
+function deleteMessage() {
+  let message = document.querySelector(".disposableMessage");
+  if (message) {
+    message.remove();
+  }
 }

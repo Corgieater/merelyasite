@@ -29,24 +29,12 @@ def make_dic(info):
     return searched_data
 
 
-# def get_info_func(user_input):
-#     info = database.get_info(user_input)
-#     dic_data = make_dic(info)
-#     if len(dic_data) == 0:
-#         return {
-#             'error': True,
-#             'message': 'No such key word, please try another'
-#         }
-#     encoded_data = jwt.encode(dic_data, key, algorithm="HS256")
-#     res = make_response({'ok': True})
-#     res.set_cookie('user_search', encoded_data, timedelta(days=7))
-#     return res
-
 # test
 def get_info_func(user_input):
     info = database.get_info(user_input)
     dic_data = make_dic(info)
-    if len(dic_data) == 0:
+    print(dic_data)
+    if len(dic_data['data']) == 0:
         return {
             'error': True,
             'message': 'No such key word, please try another'
