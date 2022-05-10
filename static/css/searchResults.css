@@ -15,3 +15,12 @@
   height: 150px;
   border-radius: 5px;
 }
+
+.pagesPlace {
+  width: 20%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.pagesPlace > a {
+  padding: 5px;
+}

@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 from mysql.connector import pooling
-import flask_bcrypt as bcrypt
 
 load_dotenv()
 
@@ -24,6 +23,7 @@ class MovieDatabase:
         )
 
     # 這邊目前只搜電影 但東西一多起來就要多重考量
+    # 拿大量資料用
     def get_info(self, user_input, start_index=0):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
@@ -32,7 +32,6 @@ class MovieDatabase:
             cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 21',
                            ('%'+user_input+'%', start_index))
             results = cursor.fetchall()
-            print(results)
         except Exception as e:
             print(e)
             return False
@@ -48,6 +47,23 @@ class MovieDatabase:
         try:
             cursor.execute('SELECT count(*) FROM movieInfo Where title like %s',
                            ('%'+user_input+'%',))
+            result = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+#     拿單一資料
+    def get_film_by_id(self, film_id):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT * FROM movieInfo WHERE id = %s',
+                           (film_id,))
             result = cursor.fetchone()
         except Exception as e:
             print(e)

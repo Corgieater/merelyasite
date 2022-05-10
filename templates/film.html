@@ -1,0 +1,34 @@
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/film.css')}}"
+/>{% endblock %} {% block content %}
+<div class="flex">
+  <div class="posterPlace">
+    <img src="https://d4u16azcwb6ha.cloudfront.net/img1.jpg" alt="poster" />
+  </div>
+  <div>
+    <div class="headArea flex">
+      <h2>movie title</h2>
+      <a href="#">1999</a>
+      <p>Directed by</p>
+      <a href="#">Director name</a>
+    </div>
+    <div class="bodyArea">
+      <p>plot</p>
+    </div>
+
+    <div calss="footArea">
+      <section>
+        <p>CAST</p>
+      </section>
+      <section>
+        <p>GENRES</p>
+      </section>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/film.js') }}"></script>
+{% endblock %}

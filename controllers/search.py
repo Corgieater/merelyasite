@@ -1,8 +1,5 @@
 from models.movieData import *
-from flask import *
-import jwt
 import os
-from datetime import timedelta
 import math
 
 key = os.getenv('JWT_SECRET_KEY')

@@ -1,0 +1,30 @@
+.wrap {
+  border: 1px white solid;
+}
+.wrap > div {
+  /* justify-content: space-between; */
+}
+/* poster */
+.posterPlace {
+  width: 30%;
+}
+.posterPlace > img {
+  width: 100%;
+}
+
+/* head area */
+.headArea {
+  width: 100%;
+  border: 1px white solid;
+  align-items: flex-end;
+}
+.headArea > h2 {
+  font-size: 35px;
+  font-weight: bold;
+}
+.headArea > * {
+  margin-right: 10px;
+}
+.headArea > p {
+  font-size: 25px;
+}

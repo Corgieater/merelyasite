@@ -119,7 +119,6 @@ searchFormBt.addEventListener("click", async function (e) {
 });
 
 // 小功能
-
 // 變動nav然後重整
 function chaningNav() {
   hideOrShow(signUpPlaceBt);
