@@ -106,16 +106,15 @@ async function sendDataToBackend(method, data) {
     return res.message;
   }
 }
-
+let dataForShowrow = {};
 // 搜尋
-searchFormBt.addEventListener("click", async function () {
+searchFormBt.addEventListener("click", async function (e) {
+  e.preventDefault();
   let userInput = document.querySelector("#userInput").value;
   data = {
     searchTerm: userInput,
   };
-  const req = await fetch(`/api/search/${userInput}`);
-  const res = await req.json();
-  window.location.replace(`/search/${userInput}`);
+  window.location.replace(`/search/${userInput}`, res);
 });
 
 // 小功能

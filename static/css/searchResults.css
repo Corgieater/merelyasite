@@ -1,0 +1,17 @@
+.frame {
+  border: white 1px solid;
+}
+
+.showRow {
+  padding: 10px;
+}
+
+.showRow > div {
+  margin-left: 20px;
+}
+
+.showRow > div > img {
+  width: 100px;
+  height: 150px;
+  border-radius: 5px;
+}

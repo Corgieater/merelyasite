@@ -1,3 +1,26 @@
-{% extends "base.html" %} {% block style %}{% endblock %} {% block content %}
-<p>am i really here?</p>
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/searchResults.css')}}"
+/>{% endblock %} {% block content %}
+<div class="frame">
+  <ul>
+    <li>
+      <div class="showRow flex">
+        <div>
+          <img src="https://d4u16azcwb6ha.cloudfront.net/img1.jpg" alt="img" />
+        </div>
+        <div>
+          <a href="/film/moviename-year">title</a>
+          <a href="/films/year/movieyear">year</a>
+          <p>Directed by</p>
+          <a href="/director/directorname">directorname</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/searchResults.js') }}"></script>
 {% endblock %}

@@ -11,15 +11,14 @@ search_Blueprint = Blueprint(
 
 @search_Blueprint.route('/api/search/<user_input>')
 def search(user_input):
-    results = get_info_func(user_input)
-    if len(results) == 0:
-        return {
-            'error': True,
-            'message': 'No such key word, please try another'
-        }
-    else:
-        return results
+    return get_info_func(user_input)
+
 
 @search_Blueprint.route('/search/<user_input>')
 def redirect_to_search_page(user_input):
     return render_template('searchResults.html')
+
+
+# @search_Blueprint.route('/api/search/checkCookie')
+# def check_cookie():
+#     return check_cookie_func()
