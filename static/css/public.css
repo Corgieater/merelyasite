@@ -35,6 +35,16 @@ nav {
 }
 
 /* general */
+
+/* 搜尋欄 */
+#userInput:focus {
+  outline: solid white 3px;
+}
+#userInput {
+  border: None;
+  outline: None;
+}
+
 input,
 button {
   border-radius: 5px;

@@ -1,3 +1,4 @@
+"use strict";
 // nav按鈕
 const googleBt = document.querySelector("#googleSignin");
 let signUpBt = document.querySelector(".signUpPlace > a");
@@ -110,12 +111,14 @@ let dataForShowrow = {};
 // 搜尋
 searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
-  let userInput = document.querySelector("#userInput").value.replace(" ", "+");
-  data = {
-    searchTerm: userInput,
-  };
-  console.log(userInput);
-  window.location.replace(`/search?keyword=${userInput}`);
+  let userInput = document.querySelector("#userInput");
+  if (userInput.value === "") {
+    userInput.focus();
+  } else {
+    window.location.replace(
+      `/search?keyword=${userInput.value.replaceAll(" ", "+")}&page=1`
+    );
+  }
 });
 
 // 小功能

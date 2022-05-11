@@ -23,5 +23,10 @@ def make_dic(film_data):
 
 def get_film_by_id_func(film_id):
     data = database.get_film_by_id(film_id)
+    if data is None:
+        return {
+            'error': True,
+            'message': 'There is no such id, please check it again'
+        }
     data_dic = make_dic(data)
     return data_dic

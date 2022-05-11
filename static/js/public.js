@@ -1,3 +1,4 @@
+"use strict";
 // 顯示或隱藏區域
 function hideOrShow(element) {
   element.classList.toggle("hide");
@@ -21,9 +22,21 @@ function deleteMessage() {
 }
 
 // 從href拿使用者輸入值
-function cutUserInput(href, target) {
+function cutUserInput(target) {
+  let href = window.location.href;
   let shift = target.length;
   let userInputIndex = href.indexOf(target) + shift;
   let userInput = href.slice(userInputIndex);
   return userInput;
+}
+
+// 特別用來建名字中有空格的a link
+function makeAlinkAndAppend(area, iterableData) {
+  for (let info of iterableData) {
+    let href = info.replaceAll(" ", "-");
+    let a = document.createElement("a");
+    a.href = `/director/${href}`;
+    a.textContent = info;
+    area.append(a);
+  }
 }

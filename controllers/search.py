@@ -34,7 +34,7 @@ def make_dic(info, page, total_page):
 def get_info_func(user_input, page):
     data_count = database.get_total_data_count(user_input)[0]
     print('data count', data_count)
-    if data_count == 0:
+    if data_count is None:
         return {
             'error': True,
             'message': 'No such key word, please try another'

@@ -5,15 +5,18 @@
 .showRow {
   padding: 10px;
 }
-
 .showRow > div {
   margin-left: 20px;
 }
-
 .showRow > div > img {
   width: 100px;
   height: 150px;
   border-radius: 5px;
+}
+.showRow > div > a,
+.showRow > div > p,
+.showRow > div > p > a {
+  margin-right: 10px;
 }
 
 .pagesPlace {

@@ -10,20 +10,19 @@ async function renderDataInfo() {
 
 // 先打API去要資料
 async function getData() {
-  let webHref = window.location.href;
-  let userInput = cutUserInput(webHref, "d=");
-  console.log(userInput);
-  let req = await fetch(`/api/search?keyword=${userInput}`);
-  console.log(`/api/search?keyword=${userInput}`);
+  let userInputAndPage = cutUserInput("d=");
+  console.log(userInputAndPage);
+  let req = await fetch(`/api/search?keyword=${userInputAndPage}`);
+  console.log(`/api/search?keyword=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
-    return [res, userInput];
+    return [res, userInputAndPage];
   } else {
     return res.message;
   }
 }
 
-async function makeShowRow(data, userInput) {
+async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
   console.log(data);
   if (typeof data === "string") {
@@ -36,7 +35,6 @@ async function makeShowRow(data, userInput) {
     for (const info of data.data) {
       let id = info["id"];
       let title = info["title"];
-      let hrefTitle = title.split(" ").join("-");
       let year = info["year"];
       let directors = info["directors"];
       let li = document.createElement("li");
@@ -48,7 +46,7 @@ async function makeShowRow(data, userInput) {
       let a2 = document.createElement("a");
       let p = document.createElement("p");
       img.src = `https://d4u16azcwb6ha.cloudfront.net/img${id}.jpg`;
-      a1.href = `/film/${hrefTitle}`;
+      a1.href = `/film/${id}`;
       a2.href = `/film/${year}`;
       a1.textContent = title + " ";
       a2.textContent = year;
@@ -61,28 +59,34 @@ async function makeShowRow(data, userInput) {
       div3.append(div2);
       div3.classList.add("showRow");
       div3.classList.add("flex");
-      for (let director of directors) {
-        let hrefDirector = director.replace(" ", "-");
-        let a = document.createElement("a");
-        a.href = `/director/${hrefDirector}`;
-        a.textContent = director;
-        p.append(a);
-      }
+      makeAlinkAndAppend(p, directors);
+      // for (let director of directors) {
+      //   let hrefDirector = director.replace(" ", "-");
+      //   let a = document.createElement("a");
+      //   a.href = `/director/${hrefDirector}`;
+      //   a.textContent = director;
+      //   p.append(a);
+      // }
       li.append(div3);
       showPlace.append(li);
     }
   }
-  makePageTags(userInput, data["totalPages"]);
+  makePageTags(userInputAndPage, data["totalPages"]);
 }
 
 // 小功能
 // 做頁碼
-async function makePageTags(userInput, totalPages) {
+async function makePageTags(userInputAndPage, totalPages) {
+  console.log("usrinpiut", userInputAndPage);
+  // 這裡的問題 改一下
   for (let i = 0; i < totalPages; i++) {
-    let newHref = userInput.slice(0, userInput.length - 1);
-    newHref += i + 1;
+    // 找出要切哪
+    let sliceIndex = userInputAndPage.indexOf("e=");
+    console.log("slice Index", sliceIndex);
+    // 切到底拿到除了page以外的querystring
+    let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
     let a = document.createElement("a");
-    a.href = `/search?keyword=${newHref}`;
+    a.href = `/search?keyword=${querystringWithoutPage}${i + 1}`;
     a.textContent = i + 1;
     pagesPlace.append(a);
   }
