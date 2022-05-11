@@ -1,4 +1,24 @@
 "use strict";
+
+// 給要headers的功能打API用
+async function sendDataToBackend(method, data, address) {
+  const req = await fetch(address, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  console.log(data);
+  const res = await req.json();
+  console.log(res);
+  if (res.ok) {
+    return true;
+  } else {
+    return res.message;
+  }
+}
+
 // 顯示或隱藏區域
 function hideOrShow(element) {
   element.classList.toggle("hide");

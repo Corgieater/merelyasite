@@ -1,3 +1,4 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
 .wrap {
   /* border: 1px white solid; */
 }
@@ -5,9 +6,6 @@
 section > a {
   margin-right: 10px;
 }
-/* .wrap > div {
-  justify-content: space-between;
-} */
 /* poster */
 .posterPlace {
   max-width: 30%;
@@ -31,7 +29,7 @@ section > a {
   /* border: 1px white solid; */
   align-items: flex-end;
 }
-.headArea > h2 {
+.headArea > section > h2 {
   font-size: 35px;
   font-weight: bold;
 }
@@ -41,6 +39,9 @@ section > a {
 .headArea > p {
   font-size: 25px;
 }
+.headArea > .actionBox > ul {
+  border: 1px white solid;
+}
 
 /* body area */
 .bodyArea {
@@ -49,5 +50,62 @@ section > a {
 .bodyArea > .plot {
   font-size: 20px;
   line-height: 1.5;
-  width: 70%;
+  width: 50%;
 }
+
+/* reviewBox */
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.reviewBox {
+  border: 1px white solid;
+  position: relative;
+}
+
+/* 別人寫的星星 */
+/* thanks Ahmed Nefzaoui */
+/* Ratings widget */
+.rate {
+  display: inline-block;
+  border: 0;
+}
+/* Hide radio */
+.rate > input {
+  display: none;
+}
+/* Order correctly by floating highest to the right */
+.rate > label {
+  float: right;
+}
+/* The star of the show */
+.rate > label:before {
+  display: inline-block;
+  font-size: 2rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  cursor: pointer;
+  font-family: FontAwesome;
+  content: "\f005 "; /* full star */
+}
+
+/* Half star trick */
+.rate .half:before {
+  content: "\f089 "; /* half star no outline */
+  position: absolute;
+  padding-right: 0;
+}
+/* Click + hover color */
+input:checked ~ label, /* color current and previous stars on checked */
+label:hover, label:hover ~ label {
+  color: #73b100;
+} /* color previous stars on hover */
+
+/* Hover highlights */
+input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
+input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
+  color: #a6e72d;
+}
+/* 別人寫的星星 */

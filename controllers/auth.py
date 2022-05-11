@@ -9,6 +9,8 @@ key = os.getenv('JWT_SECRET_KEY')
 
 # 申請帳號相關功能
 # 申請帳號
+
+
 def sign_up(email, password, name):
     password = bcrypt.generate_password_hash(password)
     data = (None, name, email, password)
@@ -48,7 +50,7 @@ def log_in(email, password):
         user_data = {
             'userName': user_info[0],
             'userEmail': user_info[1],
-            'userId': user_info
+            'userId': user_info[2]
         }
 
         encoded_data = jwt.encode(user_data, key, algorithm="HS256")
@@ -72,10 +74,11 @@ def user_checker():
                 'data': None
             }
         data = jwt.decode(token, key, algorithms=["HS256"])
-        print(data)
         if data:
             return {
-                    'userName': data['userName']
+                    'userName': data['userName'],
+                    'userEmail': data['userEmail'],
+                    'userId': data['userId']
                 }
 
     except Exception as e:

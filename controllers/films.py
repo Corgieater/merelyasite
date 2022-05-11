@@ -1,9 +1,12 @@
 from models.movieData import *
+from models.reviewData import *
 import os
 
 key = os.getenv('JWT_SECRET_KEY')
 
-database = MovieDatabase()
+movie_database = MovieDatabase()
+review_database = ReviewDatabase()
+
 
 def make_dic(film_data):
     print(film_data)
@@ -11,18 +14,18 @@ def make_dic(film_data):
         'id':film_data[0],
         'title':film_data[1],
         'year': film_data[2],
-        'rating': film_data[3],
-        'directors': film_data[4].split(','),
-        'stars': film_data[5].split(','),
-        'genres': film_data[6].split(','),
-        'plot': film_data[7]
+        'directors': film_data[3].split(','),
+        'stars': film_data[4].split(','),
+        'genres': film_data[5].split(','),
+        'plot': film_data[6],
+        'average':film_data[7],
     }
 
     return dic
 
 
 def get_film_by_id_func(film_id):
-    data = database.get_film_by_id(film_id)
+    data = movie_database.get_film_by_id(film_id)
     if data is None:
         return {
             'error': True,
@@ -30,3 +33,22 @@ def get_film_by_id_func(film_id):
         }
     data_dic = make_dic(data)
     return data_dic
+
+
+def write_review_func():
+    pass
+
+
+def renew_rate_func(rate, user_id, movie_id):
+    # data = (rate, user_id, movie_id)
+    rate_updated = review_database.rating(rate, user_id, movie_id)
+    if rate_updated:
+        return {'ok': True}
+    else:
+        return{
+            'error':'Something went wrong, please try again'
+        }
+
+
+def get_rate_func(user_id, movie_id):
+    pass

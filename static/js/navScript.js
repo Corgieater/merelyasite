@@ -1,4 +1,7 @@
 "use strict";
+
+// user訊息
+let userData = null;
 // nav按鈕
 const googleBt = document.querySelector("#googleSignin");
 let signUpBt = document.querySelector(".signUpPlace > a");
@@ -35,13 +38,13 @@ signUpBt.addEventListener("click", async function () {
   let name = document.querySelector(".signUpPlace>input[type='text']").value;
   console.log(email, password, name);
 
-  data = {
+  let data = {
     email: email,
     password: password,
     name: name,
   };
 
-  returnMessage = await sendDataToBackend("POST", data);
+  let returnMessage = await sendDataToBackend("POST", data, "/api/user");
   if (returnMessage === true) {
     window.location.reload();
   } else {
@@ -56,12 +59,12 @@ logInBt.addEventListener("click", async function () {
     ".logInPlace>input[type='password']"
   ).value;
   deleteMessage();
-  data = {
+  let data = {
     email: email,
     password: password,
   };
 
-  returnMessage = await sendDataToBackend("PATCH", data);
+  let returnMessage = await sendDataToBackend("PATCH", data, "/api/user");
   if (returnMessage !== true) {
     makeMessage(logInPlace, returnMessage);
   } else {
@@ -75,38 +78,22 @@ async function checkIfLogged() {
   const res = await req.json();
   if (res.userName) {
     profileBt.firstChild.textContent = res.userName;
-    chaningNav();
+    changingNav();
+    console.log(res);
+    userData = res;
   }
 }
 
 // 登出
 logOutBt.addEventListener("click", logOut);
-async function logOut() {
-  console.log("hi");
+async function logOut(e) {
+  e.preventDefault();
   const req = await fetch("/api/user", {
     method: "DELETE",
   });
-  chaningNav();
+  window.location.reload();
 }
 
-// 給要headers的功能打API用
-async function sendDataToBackend(method, data) {
-  const req = await fetch("/api/user", {
-    method: method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  console.log(data);
-  const res = await req.json();
-  console.log(res);
-  if (res.ok) {
-    return true;
-  } else {
-    return res.message;
-  }
-}
 let dataForShowrow = {};
 // 搜尋
 searchFormBt.addEventListener("click", async function (e) {
@@ -123,7 +110,7 @@ searchFormBt.addEventListener("click", async function (e) {
 
 // 小功能
 // 變動nav然後重整
-function chaningNav() {
+function changingNav() {
   hideOrShow(signUpPlaceBt);
   hideOrShow(logInPlaceBt);
   hideOrShow(profileBt);
