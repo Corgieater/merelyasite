@@ -19,3 +19,11 @@ function deleteMessage() {
     message.remove();
   }
 }
+
+// 從href拿使用者輸入值
+function cutUserInput(href, target) {
+  let shift = target.length;
+  let userInputIndex = href.indexOf(target) + shift;
+  let userInput = href.slice(userInputIndex);
+  return userInput;
+}

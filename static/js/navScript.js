@@ -110,7 +110,7 @@ let dataForShowrow = {};
 // 搜尋
 searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
-  let userInput = document.querySelector("#userInput").value;
+  let userInput = document.querySelector("#userInput").value.replace(" ", "+");
   data = {
     searchTerm: userInput,
   };

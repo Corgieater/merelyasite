@@ -10,7 +10,6 @@ database = MovieDatabase()
 
 def make_dic(info, page, total_page):
     page = int(page)+1
-    print(total_page)
     searched_data = {'data': [], 'currentPage': page, 'nextPage': None, 'totalPages': total_page}
     if page < total_page:
         searched_data['nextPage'] = page+1
@@ -34,11 +33,16 @@ def make_dic(info, page, total_page):
 
 def get_info_func(user_input, page):
     data_count = database.get_total_data_count(user_input)[0]
+    print('data count', data_count)
+    if data_count == 0:
+        return {
+            'error': True,
+            'message': 'No such key word, please try another'
+        }
     total_page = math.ceil(data_count / 20)
     if page is None:
         page = 1
     page = int(page)-1
-    print('total page', total_page)
     info = database.get_info(user_input, page)
 
     if info is False:
@@ -46,22 +50,10 @@ def get_info_func(user_input, page):
             'error': True
         }
     dic_data = make_dic(info, page, total_page)
-    if len(dic_data['data']) == 0:
-        return {
-            'error': True,
-            'message': 'No such key word, please try another'
-        }
+    # if len(dic_data['data']) == 0:
+    #     return {
+    #         'error': True,
+    #         'message': 'No such key word, please try another'
+    #     }
     return dic_data
 
-
-# def check_cookie_func():
-#     encoded_cookie = request.cookies.get('user_search')
-#     # 防範不知道怎樣會發生的沒cookie事件
-#     if encoded_cookie is None:
-#         return {
-#             'data': None
-#         }
-#     searched_cookie = jwt.decode(encoded_cookie, key, algorithms=['HS256'])
-#     print(searched_cookie)
-#
-#     return searched_cookie
