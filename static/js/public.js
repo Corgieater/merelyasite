@@ -14,12 +14,20 @@ async function sendDataToBackend(method, data, address) {
   console.log(res);
   if (res.ok) {
     return true;
-  } else {
+  } else if (res.message) {
     return res.message;
+  } else {
+    return res.data;
   }
 }
 
 // 顯示或隱藏區域
+function hide(element) {
+  element.classList.add("hide");
+}
+function show(element) {
+  element.classList.remove("hide");
+}
 function hideOrShow(element) {
   element.classList.toggle("hide");
 }
@@ -60,3 +68,10 @@ function makeAlinkAndAppend(area, iterableData) {
     area.append(a);
   }
 }
+
+// 拿使用者資料 no use:(
+// async function getUserData() {
+//   const req = await fetch("/api/user");
+//   const res = await req.json();
+//   return res;
+// }

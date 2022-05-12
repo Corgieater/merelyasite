@@ -72,6 +72,7 @@ class Database:
         except Exception as e:
             print(e)
         else:
+            print('user info', [name, email, user_id])
             return [name, email, user_id]
         finally:
             cursor.close()

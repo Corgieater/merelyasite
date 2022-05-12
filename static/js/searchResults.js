@@ -45,7 +45,7 @@ async function makeShowRow(data, userInputAndPage) {
       let a1 = document.createElement("a");
       let a2 = document.createElement("a");
       let p = document.createElement("p");
-      img.src = `https://d4u16azcwb6ha.cloudfront.net/img${id}.jpg`;
+      img.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${id}.jpg`;
       a1.href = `/film/${id}`;
       a2.href = `/film/${year}`;
       a1.textContent = title + " ";

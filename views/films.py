@@ -32,15 +32,44 @@ def renew_rate():
     data = request.get_json()
     rate = data['rate']
     user_id = data['userId']
-    movie_id = data['movieId']
+    film_id = data['filmId']
 
-    return renew_rate_func(rate, user_id, movie_id)
+    return renew_rate_func(rate, user_id, film_id)
 
 
-@films_blueprint.route('/api/rate', methods=['GET'])
+@films_blueprint.route('/api/rate', methods=['POST'])
 def get_rate():
     data = request.get_json()
     user_id = data['userId']
-    movie_id = data['movieId']
-    # 回傳分數做一做喔
-    return get_rate_func(user_id, movie_id)
+    film_id = data['filmId']
+
+    return get_rate_func(user_id, film_id)
+
+
+@films_blueprint.route('/api/rate', methods=['DELETE'])
+def delete_rate():
+    data = request.get_json()
+    user_id = data['userId']
+    film_id = data['filmId']
+
+    return delete_rate_func(user_id, film_id)
+
+# 評論
+
+
+@films_blueprint.route('/api/review', methods=['PATCH'])
+def film_review():
+    data = request.get_json()
+    print(data)
+    user_review = data['userReview']
+    film_id = data['filmId']
+    current_date = data['currentDate']
+    watched_date = data['watchedDate']
+    if watched_date is None:
+        watched_date = None
+    user_id = data['userId']
+
+    return film_review_func(user_review, film_id, current_date, watched_date, user_id)
+
+# delete review
+# edit review

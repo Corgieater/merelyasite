@@ -29,7 +29,7 @@ class MovieDatabase:
         cursor = connection.cursor()
         start_index = int(start_index)*20
         try:
-            cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 20',
+            cursor.execute('SELECT * FROM movie_info Where title like %s LIMIT %s, 20',
                            ('%'+user_input+'%', start_index))
             results = cursor.fetchall()
         except Exception as e:
@@ -45,7 +45,7 @@ class MovieDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movieInfo Where title like %s',
+            cursor.execute('SELECT count(*) FROM movie_info Where title like %s',
                            ('%'+user_input+'%',))
             result = cursor.fetchone()
             if result == 0:
@@ -64,7 +64,7 @@ class MovieDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT * FROM movieInfo WHERE id = %s',
+            cursor.execute('SELECT * FROM movie_info WHERE id = %s',
                            (film_id,))
             result = cursor.fetchone()
             if result is None:

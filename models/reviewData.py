@@ -23,18 +23,19 @@ class ReviewDatabase:
         )
     # 寫評論
 
-    def write_review(self, review, movie_id, watch_date, user_id):
+    def write_review(self, user_review, film_id, current_date, watched_date, user_id):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 20',
-                           (review, movie_id, watch_date, user_id))
-            results = cursor.fetchall()
+            cursor.execute('INSERT INTO reviews VALUES (%s, %s, %s ,%s, %s ,%s)',
+                           (None, user_review, film_id, current_date, watched_date, user_id))
         except Exception as e:
             print(e)
+            connection.rollback()
             return False
         else:
-            return results
+            connection.commit()
+            return True
         finally:
             cursor.close()
             connection.close()
@@ -46,11 +47,11 @@ class ReviewDatabase:
         cursor = connection.cursor()
         try:
             # 找舊有無資料
-            cursor.execute('SELECT * FROM rates WHERE movieId = %s AND userId = %s',
+            cursor.execute('SELECT * FROM rates WHERE movie_id = %s AND user_id = %s',
                            (movie_id, user_id))
             user_is_rated = cursor.fetchone()
             if user_is_rated:
-                cursor.execute('UPDATE rates SET rate = %s WHERE userId = %s AND movieId = %s',
+                cursor.execute('UPDATE rates SET rate = %s WHERE user_id = %s AND movie_id = %s',
                                (rate, user_id, movie_id))
             else:
                 cursor.execute('INSERT INTO rates VALUES (%s, %s, %s ,%s)', (None, rate, movie_id, user_id))
@@ -65,13 +66,13 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    def get_review(self, user_input, start_index=0):
+    # 拿評分資料
+    def get_rate_data(self, user_id, film_id):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
-        start_index = int(start_index)*20
         try:
-            cursor.execute('SELECT * FROM movieInfo Where title like %s LIMIT %s, 20',
-                           ('%'+user_input+'%', start_index))
+            cursor.execute('SELECT rate FROM rates Where movie_id = %s AND user_id = %s',
+                           (user_id, film_id))
             results = cursor.fetchall()
         except Exception as e:
             print(e)
@@ -82,11 +83,29 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
+    # 刪除評分資料
+    def delete_rate_data(self, user_id, film_id):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DELETE FROM rates WHERE movie_id = %s AND user_id = %s;',
+                           (user_id, film_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
     def get_total_data_count(self, user_input):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movieInfo Where title like %s',
+            cursor.execute('SELECT count(*) FROM movie_info Where title like %s',
                            ('%'+user_input+'%',))
             result = cursor.fetchone()
             if result == 0:
@@ -105,7 +124,7 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT * FROM movieInfo WHERE id = %s',
+            cursor.execute('SELECT * FROM movie_info WHERE id = %s',
                            (film_id,))
             result = cursor.fetchone()
             if result is None:

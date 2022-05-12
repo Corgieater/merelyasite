@@ -1,7 +1,5 @@
 "use strict";
-
-// user訊息
-let userData = null;
+let currentUserId = null;
 // nav按鈕
 const googleBt = document.querySelector("#googleSignin");
 let signUpBt = document.querySelector(".signUpPlace > a");
@@ -72,7 +70,7 @@ logInBt.addEventListener("click", async function () {
   }
 });
 
-// 檢查登入與否
+// 檢查登入與否然後變動Nav
 async function checkIfLogged() {
   const req = await fetch("/api/user");
   const res = await req.json();
@@ -80,7 +78,9 @@ async function checkIfLogged() {
     profileBt.firstChild.textContent = res.userName;
     changingNav();
     console.log(res);
-    userData = res;
+    currentUserId = res["userId"];
+    // userData = res;
+    // return res;
   }
 }
 

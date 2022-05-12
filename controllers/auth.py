@@ -74,6 +74,7 @@ def user_checker():
                 'data': None
             }
         data = jwt.decode(token, key, algorithms=["HS256"])
+        print(data)
         if data:
             return {
                     'userName': data['userName'],
