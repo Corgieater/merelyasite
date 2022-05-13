@@ -1,7 +1,4 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
-.wrap {
-  /* border: 1px white solid; */
-}
 
 section > a {
   margin-right: 10px;
@@ -9,22 +6,24 @@ section > a {
 /* poster */
 .posterPlace {
   max-width: 30%;
+  margin-right: 10px;
 }
 .posterPlace > img {
   width: 100%;
 }
 
 /* text */
+.textPlace > .headArea > section:nth-child(1) {
+  /* max-width: 30%; */
+}
 .textPlace {
   line-height: 1.5;
-  margin-left: 20px;
 }
 
 /* head area */
 .headArea {
   width: 100%;
-  /* border: 1px white solid; */
-  align-items: flex-end;
+  /* justify-content: space-between; */
 }
 .headArea > section > h2 {
   font-size: 35px;
@@ -36,8 +35,28 @@ section > a {
 .headArea > p {
   font-size: 25px;
 }
-.headArea > .actionBox > ul {
-  /* border: 1px white solid; */
+
+/* actionBox */
+.actionBox {
+  border-radius: 5px;
+  min-width: 35%;
+  height: 20%;
+  margin-left: 10px;
+  background-color: lightslategrey;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+.actionBox > ul > * {
+  padding: 10px;
+}
+.actionBox > ul > li:nth-child(3) > fieldset > a {
+  position: absolute;
+  left: 5px;
+  bottom: 28%;
+}
+.actionBox > ul > li:nth-child(4) {
+  font-size: 25px;
 }
 
 /* body area */
@@ -133,13 +152,13 @@ section > a {
 /* Click + hover color */
 input:checked ~ label, /* color current and previous stars on checked */
 label:hover, label:hover ~ label {
-  color: #73b100;
+  color: gold;
 } /* color previous stars on hover */
 
 /* Hover highlights */
 input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
 input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
 label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
-  color: #a6e72d;
+  color: gold;
 }
 /* 別人寫的星星 */

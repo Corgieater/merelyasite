@@ -29,6 +29,7 @@ def renew_rate():
 
     return renew_rate_func(rate, user_id, film_id)
 
+
 # 拿使用者上次評分
 @films_blueprint.route('/api/rate', methods=['POST'])
 def get_rate():
@@ -38,14 +39,25 @@ def get_rate():
 
     return get_rate_func(user_id, film_id)
 
+
 # 刪評分
 @films_blueprint.route('/api/rate', methods=['DELETE'])
 def delete_rate():
     data = request.get_json()
+    print("films_blueprint.route('/api/rate', methods=['DELETE']", data)
+    film_id = data['filmId']
     user_id = data['userId']
+
+    return delete_rate_func(film_id, user_id)
+
+
+# 拿電影均分
+@films_blueprint.route('/api/average-rate', methods=['POST'])
+def get_average_rate():
+    data = request.get_json()
     film_id = data['filmId']
 
-    return delete_rate_func(user_id, film_id)
+    return get_average_rate_func(film_id)
 
 
 # 寫/更新評論 寫到使用者頁面的時候回頭來寫
@@ -73,6 +85,7 @@ def film_delete():
     user_id = data['userId']
 
     return film_delete_func(film_id, user_id)
+
 
 
 # 修改評論

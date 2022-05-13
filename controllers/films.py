@@ -48,9 +48,11 @@ def renew_rate_func(rate, user_id, film_id):
 
 def get_rate_func(user_id, movie_id):
     rate = review_database.get_rate_data(user_id, movie_id)
+    print('get_rate_func', user_id, movie_id)
+    print('get_rate_func', rate)
     if rate:
         data = {
-            'data': {'rate':rate[0][0]}
+            'data': {'rate':rate[0]}
         }
         return data
     else:
@@ -59,9 +61,9 @@ def get_rate_func(user_id, movie_id):
         }
 
 
-def delete_rate_func(user_id, film_id):
-    print(user_id, film_id)
-    data_deleted = review_database.delete_rate_data(user_id, film_id)
+def delete_rate_func(film_id, user_id):
+    print(film_id, user_id)
+    data_deleted = review_database.delete_rate_data(film_id, user_id)
     if data_deleted:
         return {
             'ok': True
@@ -70,6 +72,20 @@ def delete_rate_func(user_id, film_id):
         return{
             'error': False,
             'message': 'Deleting failed, please try again'
+        }
+
+# 拿均分
+def get_average_rate_func(film_id):
+    print(film_id)
+    data = review_database.get_average_rate_data(film_id)[0]
+    print(data)
+    if data:
+        return {
+            'data': data
+        }
+    else:
+        return {
+            'error': False
         }
 
 

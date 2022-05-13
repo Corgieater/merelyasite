@@ -84,8 +84,8 @@ class ReviewDatabase:
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT rate FROM rates Where movie_id = %s AND user_id = %s',
-                           (user_id, film_id))
-            results = cursor.fetchall()
+                           (film_id, user_id,))
+            results = cursor.fetchone()
         except Exception as e:
             print(e)
             return False
@@ -96,12 +96,12 @@ class ReviewDatabase:
             connection.close()
 
     # 刪除評分資料
-    def delete_rate_data(self, user_id, film_id):
+    def delete_rate_data(self, film_id, user_id):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
             cursor.execute('DELETE FROM rates WHERE movie_id = %s AND user_id = %s;',
-                           (user_id, film_id))
+                           (film_id, user_id))
         except Exception as e:
             print(e)
             connection.rollback()
@@ -109,6 +109,23 @@ class ReviewDatabase:
         else:
             connection.commit()
             return True
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 拿均分資料
+    def get_average_rate_data(self, film_id):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT ROUND(AVG(rate),1) AS average_rate FROM rates WHERE movie_id = %s',
+                           (film_id,))
+            results = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return results
         finally:
             cursor.close()
             connection.close()

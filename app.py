@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from views.user import *
 from views.search import *
 from views.films import *
+from views.userProfile import *
 import requests
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -22,6 +23,7 @@ app = Flask(
 app.register_blueprint(user_blueprint)
 app.register_blueprint(search_blueprint)
 app.register_blueprint(films_blueprint)
+app.register_blueprint(user_profile_blueprint)
 
 
 @app.route('/')

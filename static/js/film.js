@@ -15,6 +15,9 @@ let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
 let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(1)>a");
 console.log(reviewBt);
+let averageRatePlace = document.querySelector(
+  ".actionBox > ul > li:nth-child(4)"
+);
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
@@ -35,7 +38,7 @@ let reviewPoster = document.querySelector(
 let filmId = cutUserInput("m/");
 
 // 寫評分按鈕
-// 打開評分區
+// 打開評論區
 reviewBt.addEventListener("click", function (e) {
   e.preventDefault();
   hideOrShow(reviewBox);
@@ -83,7 +86,7 @@ saveBt.addEventListener("click", async function () {
   }
 });
 
-// 關閉評分區
+// 關閉評論區
 closeBt.addEventListener("click", function (e) {
   e.preventDefault();
   hide(reviewBox);
@@ -117,8 +120,9 @@ async function getUserRate() {
     filmId: filmId,
     userId: id,
   };
-  console.log(data);
+  console.log("拿該使用者評分: 資料", data);
   let score = await sendDataToBackend("POST", data, "/api/rate");
+  console.log("last time rate", score);
   return score;
 }
 
@@ -202,8 +206,9 @@ async function showPreviousRate() {
   }
 }
 
-// 去除評分
-cancelBt.addEventListener("click", async function () {
+// 刪除評分
+cancelBt.addEventListener("click", async function (e) {
+  e.preventDefault();
   for (let bt of rateBts) {
     bt.checked = false;
   }
@@ -218,6 +223,18 @@ cancelBt.addEventListener("click", async function () {
   hide(cancelBt);
   window.location.reload();
 });
+
+// 拿電影均分
+async function getAberageRate() {
+  let data = {
+    filmId: filmId,
+  };
+  let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
+  console.log(232, averageRate);
+  if (averageRate !== undefined) {
+    averageRatePlace.textContent = `Average rate ${averageRate}`;
+  }
+}
 
 // 拿電影資料
 async function getFilm() {
@@ -251,5 +268,4 @@ async function showFilmInfo() {
 
 showFilmInfo();
 showPreviousRate();
-
-// 要做使用者均分
+getAberageRate();
