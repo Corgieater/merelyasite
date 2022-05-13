@@ -61,7 +61,7 @@ function cutUserInput(target) {
 // 特別用來建名字中有空格的a link
 function makeAlinkAndAppend(area, iterableData) {
   for (let info of iterableData) {
-    let href = info.replaceAll(" ", "-");
+    let href = info.replaceAll(" ", "+");
     let a = document.createElement("a");
     a.href = `/director/${href}`;
     a.textContent = info;

@@ -8,15 +8,30 @@ films_blueprint = Blueprint(
     template_folder='templates'
 )
 
-
+# ID搜電影
 @films_blueprint.route('/api/film/<film_id>')
 def search_by_id(film_id):
     return get_film_by_id_func(film_id)
 
 
+# render template ID
 @films_blueprint.route('/film/<film_id>')
 def render_film_page(film_id):
     return render_template('film.html')
+
+
+# director搜電影
+@films_blueprint.route('/api/director/<director>')
+def search_by_director(director):
+    print(director.replace('+', ' '))
+    director = director.replace('+', ' ')
+    return get_film_by_director(director)
+
+
+# render template director
+@films_blueprint.route('/director/<director>')
+def render_director_page(director):
+    return render_template('director.html')
 
 
 # 評分
@@ -85,7 +100,6 @@ def film_delete():
     user_id = data['userId']
 
     return film_delete_func(film_id, user_id)
-
 
 
 # 修改評論

@@ -30,6 +30,7 @@ app.register_blueprint(user_profile_blueprint)
 def index():
 	return render_template('index.html')
 
+
 if __name__ == '__main__' and environment == 'developmente':
 	app.run(debug=True, port=3000)
 else:

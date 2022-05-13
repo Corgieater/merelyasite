@@ -37,6 +37,7 @@ async function makeShowRow(data, userInputAndPage) {
       let title = info["title"];
       let year = info["year"];
       let directors = info["directors"];
+      console.log(directors);
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");
@@ -60,13 +61,6 @@ async function makeShowRow(data, userInputAndPage) {
       div3.classList.add("showRow");
       div3.classList.add("flex");
       makeAlinkAndAppend(p, directors);
-      // for (let director of directors) {
-      //   let hrefDirector = director.replace(" ", "-");
-      //   let a = document.createElement("a");
-      //   a.href = `/director/${hrefDirector}`;
-      //   a.textContent = director;
-      //   p.append(a);
-      // }
       li.append(div3);
       showPlace.append(li);
     }

@@ -35,6 +35,22 @@ def get_film_by_id_func(film_id):
     return data_dic
 
 
+# 用導演搜電影
+def get_film_by_director(director):
+    data = movie_database.get_film_by_director(director)
+    if data is None:
+        return {
+            'error': True,
+            'message': 'There is no such director, please check it again'
+        }
+    data_dic = {'data': {
+        'id_list': [],
+    }}
+    for film_id in data:
+        data_dic['data']['id_list'].append(film_id[0])
+    return data_dic
+
+
 def renew_rate_func(rate, user_id, film_id):
     # data = (rate, user_id, movie_id)
     rate_updated = review_database.rating(rate, user_id, film_id)
@@ -73,6 +89,7 @@ def delete_rate_func(film_id, user_id):
             'error': False,
             'message': 'Deleting failed, please try again'
         }
+
 
 # 拿均分
 def get_average_rate_func(film_id):

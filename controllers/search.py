@@ -20,11 +20,10 @@ def make_dic(info, page, total_page):
             'id': info_data[0],
             'title': info_data[1],
             'year': info_data[2],
-            'rating': info_data[3],
-            'directors': info_data[4].split(','),
-            'stars': info_data[5].split(','),
-            'genre': info_data[6].split(','),
-            'plot': info_data[7],
+            'directors': info_data[3].split(','),
+            'stars': info_data[4].split(','),
+            'genre': info_data[5].split(','),
+            'plot': info_data[6],
         }
         searched_data['data'].append(dic)
 

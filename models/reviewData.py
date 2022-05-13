@@ -134,7 +134,7 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movie_info Where title like %s',
+            cursor.execute('SELECT count(*) FROM movie_info Where title LIKE %s',
                            ('%'+user_input+'%',))
             result = cursor.fetchone()
             if result == 0:
