@@ -21,8 +21,8 @@ class ReviewDatabase:
             user=MYSQL_USER,
             password=MYSQL_PASSWORD
         )
-    # 寫評論
 
+    # 寫/更新評論
     def write_review(self, user_review, film_id, current_date, watched_date, user_id):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
@@ -40,21 +40,33 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    #     更新評分
+    # 刪除評論
+    def delete_review(self, film_id, user_id):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DELETE FROM reviews WHERE movie_id = %s AND user_id = %s;',
+                           (film_id, user_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 更新評分
     def rating(self, rate, user_id, movie_id):
         print(rate, user_id, movie_id)
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            # 找舊有無資料
-            cursor.execute('SELECT * FROM rates WHERE movie_id = %s AND user_id = %s',
-                           (movie_id, user_id))
-            user_is_rated = cursor.fetchone()
-            if user_is_rated:
-                cursor.execute('UPDATE rates SET rate = %s WHERE user_id = %s AND movie_id = %s',
-                               (rate, user_id, movie_id))
-            else:
-                cursor.execute('INSERT INTO rates VALUES (%s, %s, %s ,%s)', (None, rate, movie_id, user_id))
+            cursor.execute('INSERT INTO rates(id, rate, movie_id, user_id) VALUES (%s, %s, %s ,%s) '
+                           'ON DUPLICATE KEY UPDATE rate=%s, movie_id=%s, user_id=%s',
+                           (None, rate, movie_id, user_id, rate, movie_id, user_id), )
         except Exception as e:
             print(e)
             connection.rollback()

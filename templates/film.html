@@ -97,16 +97,17 @@
       </section>
     </div>
   </div>
-  <div class="reviewBox">
+  <div class="reviewBox flex hide">
     <section><img src="" alt="poster" /></section>
     <section>
-      <a class="close" href="#">X</a>
+      <a class="closeBt" href="#">X</a>
       <p>I WATCHED...</p>
       <h2></h2>
-      <label for="watchedBox">Specify the date you watched it?</label>
-      <input type="checkbox" id="watchedBox" />
-      <input type="date" name="watchedDay" id="watchedDay" />
-      <textarea name="review" id="review" cols="30" rows="10"></textarea>
+
+      <input type="checkbox" id="watched" />
+      <input class="hide" type="date" name="watchedDay" id="watchedDay" />
+      <label for="watched">Specify the date you watched it</label>
+      <textarea name="review" id="review" cols="50" rows="15"></textarea>
       <button>SAVE</button>
     </section>
   </div>

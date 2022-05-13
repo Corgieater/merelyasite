@@ -33,10 +33,10 @@ function hideOrShow(element) {
 }
 
 // 做訊息貼在選定區域
-function makeMessage(place, message) {
+function makeMessage(place, message, colorClass = "warning") {
   let p = document.createElement("p");
   p.textContent = message;
-  p.classList.add("warning");
+  p.classList.add(colorClass);
   p.classList.add("disposableMessage");
   place.append(p);
 }

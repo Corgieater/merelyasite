@@ -1,6 +1,5 @@
 "use strict";
 
-// let userData = null;
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
 let title = document.querySelector(".headArea > section :nth-child(1)");
@@ -9,47 +8,86 @@ let directors = document.querySelector(".headArea > section :nth-child(4)");
 let plot = document.querySelector(".plot > p");
 let casts = document.querySelector(".casts");
 let genres = document.querySelector(".genres");
+let mask = document.querySelector(".mask");
 
 // action區
 let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
+let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(1)>a");
+console.log(reviewBt);
 
 // review區
+let reviewBox = document.querySelector(".reviewBox");
+let dateCheckBox = document.querySelector(
+  '.reviewBox > section:nth-child(2) > input[type="checkbox"]'
+);
+let dateInputPlace = document.querySelector("#watchedDay");
 let saveBt = document.querySelector(".reviewBox > section > button");
+let closeBt = document.querySelector(".closeBt");
 let reviewTitle = document.querySelector(
   ".reviewBox > section:nth-child(2) > h2"
+);
+let reviewPoster = document.querySelector(
+  ".reviewBox > section:nth-child(1) > img"
 );
 
 // 查詢用
 let filmId = cutUserInput("m/");
 
+// 寫評分按鈕
+// 打開評分區
+reviewBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hideOrShow(reviewBox);
+  show(mask);
+});
+
+// 顯示日期按鈕
+dateCheckBox.addEventListener("click", function () {
+  hideOrShow(dateInputPlace);
+});
+
 // 儲存評論
 saveBt.addEventListener("click", async function () {
   let userLog = document.querySelector("textarea").value;
-  console.log(userLog);
-  const req = await fetch("/api/user");
-  const res = await req.json();
-  let id = res["userId"];
-  let today = new Date();
-  let dd = String(today.getDate()).padStart(2, "0");
-  let mm = String(today.getMonth() + 1).padStart(2, "0");
-  let yyyy = today.getFullYear();
-  let watchedDate = document
-    .querySelector('.reviewBox > section > input[type="date"]')
-    .value.replaceAll("-", "/");
-  if (watchedDate === "") {
-    watchedDate = null;
+  let messagePlace = document.querySelector(
+    ".reviewBox > section:nth-child(2)"
+  );
+  deleteMessage();
+  if (userLog === "") {
+    makeMessage(messagePlace, "Type something, please");
+  } else {
+    const req = await fetch("/api/user");
+    const res = await req.json();
+    let id = res["userId"];
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, "0");
+    let mm = String(today.getMonth() + 1).padStart(2, "0");
+    let yyyy = today.getFullYear();
+    let watchedDate = document
+      .querySelector('.reviewBox > section > input[type="date"]')
+      .value.replaceAll("-", "/");
+    if (watchedDate === "") {
+      watchedDate = null;
+    }
+    console.log(watchedDate);
+    today = yyyy + "/" + mm + "/" + dd;
+    let data = {
+      userReview: userLog,
+      filmId: filmId,
+      currentDate: today,
+      watchedDate: watchedDate,
+      userId: id,
+    };
+    sendDataToBackend("PATCH", data, "/api/review");
   }
-  console.log(watchedDate);
-  today = yyyy + "/" + mm + "/" + dd;
-  let data = {
-    userReview: userLog,
-    filmId: filmId,
-    currentDate: today,
-    watchedDate: watchedDate,
-    userId: id,
-  };
-  sendDataToBackend("PATCH", data, "/api/review");
+});
+
+// 關閉評分區
+closeBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hide(reviewBox);
+  hide(mask);
 });
 
 // 評分星星 按評分會直送資料庫更新
@@ -202,6 +240,7 @@ async function showFilmInfo() {
   let filmStars = data["stars"];
   let filmGenres = data["genres"];
   poster.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${filmId}.jpg`;
+  reviewPoster.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${filmId}.jpg`;
   title.textContent = filmTitle;
   year.textContent = filmYear;
   plot.textContent = filmPlot;

@@ -13,9 +13,6 @@ section > a {
 .posterPlace > img {
   width: 100%;
 }
-.posterPlace > img {
-  border-radius: 5px;
-}
 
 /* text */
 .textPlace {
@@ -40,7 +37,7 @@ section > a {
   font-size: 25px;
 }
 .headArea > .actionBox > ul {
-  border: 1px white solid;
+  /* border: 1px white solid; */
 }
 
 /* body area */
@@ -54,14 +51,51 @@ section > a {
 }
 
 /* reviewBox */
-.close {
+.closeBt {
+  color: black;
   position: absolute;
   right: 0;
   top: 0;
 }
 .reviewBox {
-  border: 1px white solid;
-  position: relative;
+  /* border: 1px white solid; */
+  position: absolute;
+  background-color: lightslategrey;
+  width: 70%;
+  height: 550px;
+  left: 15%;
+  z-index: 3;
+}
+.reviewBox > section {
+  padding: 30px;
+}
+.reviewBox > section > img {
+  max-width: 80%;
+}
+.reviewBox > section:nth-child(2) {
+  line-height: 1.5;
+  width: 80%;
+}
+.reviewBox > section > p {
+  color: lightblue;
+  font-weight: bold;
+  font-size: 20px;
+}
+.reviewBox > section > h2 {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.reviewBox > section:nth-child(2) > input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+.reviewBox > section:nth-child(2) > label {
+  color: lightblue;
+}
+
+.reviewBox > section > label {
+  color: black;
 }
 
 /* 別人寫的星星 */
