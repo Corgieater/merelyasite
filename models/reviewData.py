@@ -45,7 +45,7 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('DELETE FROM reviews WHERE movie_id = %s AND user_id = %s;',
+            cursor.execute('DELETE FROM reviews WHERE film_id = %s AND user_id = %s;',
                            (film_id, user_id))
         except Exception as e:
             print(e)
@@ -58,14 +58,34 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
+    # 拿評論 (看可不可以改寫成if else然後可以處理5或多個)
+    def get_reviews_data(self, user_name):
+        connection = self.pool.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT user.id, reviews.id, reviews.user_review, reviews.film_id, '
+                           'reviews.today, reviews.watched_date FROM user LEFT join reviews '
+                           'ON user.id = reviews.user_id WHERE user.name = %s '
+                           'ORDER BY reviews.id DESC LIMIT 5',
+                           (user_name,))
+            results = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()
+
     # 更新評分
     def rating(self, rate, user_id, movie_id):
         print(rate, user_id, movie_id)
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO rates(id, rate, movie_id, user_id) VALUES (%s, %s, %s ,%s) '
-                           'ON DUPLICATE KEY UPDATE rate=%s, movie_id=%s, user_id=%s',
+            cursor.execute('INSERT INTO rates(id, rate, user_id, film_id) VALUES (%s, %s, %s ,%s) '
+                           'ON DUPLICATE KEY UPDATE rate=%s, film_id=%s, user_id=%s',
                            (None, rate, movie_id, user_id, rate, movie_id, user_id), )
         except Exception as e:
             print(e)
@@ -83,7 +103,7 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT rate FROM rates Where movie_id = %s AND user_id = %s',
+            cursor.execute('SELECT rate FROM rates Where film_id = %s AND user_id = %s',
                            (film_id, user_id,))
             results = cursor.fetchone()
         except Exception as e:
@@ -100,7 +120,7 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('DELETE FROM rates WHERE movie_id = %s AND user_id = %s;',
+            cursor.execute('DELETE FROM rates WHERE film_id = %s AND user_id = %s;',
                            (film_id, user_id))
         except Exception as e:
             print(e)
@@ -118,7 +138,8 @@ class ReviewDatabase:
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT ROUND(AVG(rate),1) AS average_rate FROM rates WHERE movie_id = %s',
+            # 我改過ROUND(AVG(rate),1)
+            cursor.execute('SELECT ROUND(AVG(rate),1) AS average_rate FROM rates WHERE film_id = %s',
                            (film_id,))
             results = cursor.fetchone()
         except Exception as e:

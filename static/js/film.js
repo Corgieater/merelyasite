@@ -1,4 +1,6 @@
 "use strict";
+// 查詢用
+let filmId = cutUserInput("m/");
 
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
@@ -11,13 +13,14 @@ let genres = document.querySelector(".genres");
 let mask = document.querySelector(".mask");
 
 // action區
+let rateBtsWrap = document.querySelector(".rate");
 let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
 let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(1)>a");
-console.log(reviewBt);
 let averageRatePlace = document.querySelector(
   ".actionBox > ul > li:nth-child(4)"
 );
+let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
@@ -34,8 +37,31 @@ let reviewPoster = document.querySelector(
   ".reviewBox > section:nth-child(1) > img"
 );
 
-// 查詢用
-let filmId = cutUserInput("m/");
+// 沒登入就把reviewBox的東西都藏起來吧
+async function showProperReviewBox() {
+  const userIsLogged = await checkIfLogged();
+  console.log(userIsLogged);
+  if (!userIsLogged) {
+    hide(rateBtsWrap);
+    hide(reviewBt);
+    hide(addListBt);
+    // let li = document.createAttribute("li");
+    // li.textContent = "Log in to review or rate";
+
+    let actionBox = document.querySelector(".actionBox > ul");
+    actionBox.style.height = "200px";
+    let li = document.createElement("li");
+    let p = document.createElement("p");
+    p.textContent = "Log in to review or rate";
+    li.append(p);
+    let averageRate = document.querySelector(
+      ".actionBox > ul > li:nth-child(4)"
+    );
+    actionBox.insertBefore(li, averageRate);
+  }
+}
+
+showProperReviewBox();
 
 // 寫評分按鈕
 // 打開評論區
@@ -83,6 +109,8 @@ saveBt.addEventListener("click", async function () {
       userId: id,
     };
     sendDataToBackend("PATCH", data, "/api/review");
+    hide(reviewBox);
+    hide(mask);
   }
 });
 
@@ -97,17 +125,19 @@ closeBt.addEventListener("click", function (e) {
 rateBts.forEach((bt) => {
   bt.addEventListener("click", async function (e) {
     let rate = e.target.value;
-    console.log(rate);
     const req = await fetch("/api/user");
     const res = await req.json();
     let id = res["userId"];
-    let data = {
-      rate: rate,
-      userId: id,
-      filmId: filmId,
-    };
-    sendDataToBackend("PATCH", data, "/api/rate");
-    window.location.reload();
+    if (id !== undefined) {
+      console.log("userid", id);
+      let data = {
+        rate: rate,
+        userId: id,
+        filmId: filmId,
+      };
+      sendDataToBackend("PATCH", data, "/api/rate");
+      window.location.reload();
+    }
   });
 });
 

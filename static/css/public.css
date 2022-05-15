@@ -22,7 +22,7 @@ nav {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 /* position */
@@ -70,6 +70,22 @@ label {
   color: #2a9d8f !important;
   font-size: 25px !important;
   font-weight: bold !important;
+}
+
+.white {
+  color: white !important;
+  font-size: 25px !important;
+  font-weight: bold !important;
+}
+
+/* top message place */
+.danger {
+  background-color: darkred;
+}
+.globalMessagePlace {
+  height: 50px;
+  text-align: center;
+  padding: 10px;
 }
 
 /* 帷幕 */

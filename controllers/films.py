@@ -23,7 +23,7 @@ def make_dic(film_data):
 
     return dic
 
-
+# 用ID拿電影
 def get_film_by_id_func(film_id):
     data = movie_database.get_film_by_id(film_id)
     if data is None:
@@ -35,7 +35,7 @@ def get_film_by_id_func(film_id):
     return data_dic
 
 
-# 用導演搜電影
+# 用導演拿電影
 def get_film_by_director(director):
     data = movie_database.get_film_by_director(director)
     if data is None:
@@ -51,8 +51,11 @@ def get_film_by_director(director):
     return data_dic
 
 
+# 更新或加入評分
 def renew_rate_func(rate, user_id, film_id):
-    # data = (rate, user_id, movie_id)
+    if user_id is None:
+        print('NOPELPELE')
+    print('renew_rate_func', rate, user_id, film_id)
     rate_updated = review_database.rating(rate, user_id, film_id)
     if rate_updated:
         return {'ok': True}
@@ -62,13 +65,16 @@ def renew_rate_func(rate, user_id, film_id):
         }
 
 
+# 拿上次評分
 def get_rate_func(user_id, movie_id):
+    if user_id is None:
+        print('NOPELPELE')
     rate = review_database.get_rate_data(user_id, movie_id)
     print('get_rate_func', user_id, movie_id)
     print('get_rate_func', rate)
     if rate:
         data = {
-            'data': {'rate':rate[0]}
+            'data': {'rate': rate[0]}
         }
         return data
     else:
@@ -76,7 +82,7 @@ def get_rate_func(user_id, movie_id):
             'data': {'rate':None}
         }
 
-
+# 刪除評分
 def delete_rate_func(film_id, user_id):
     print(film_id, user_id)
     data_deleted = review_database.delete_rate_data(film_id, user_id)
@@ -107,6 +113,7 @@ def get_average_rate_func(film_id):
 
 
 # 評論相關
+# 留評論
 def film_review_func(user_review, film_id, current_date, watched_date, user_id):
     review_added = review_database.write_review(user_review, film_id, current_date, watched_date, user_id)
     if review_added:
@@ -119,7 +126,7 @@ def film_review_func(user_review, film_id, current_date, watched_date, user_id):
             'message': 'Review failed, please try again'
         }
 
-
+# 刪除評論
 def film_delete_func(film_id, user_id):
     review_deleted = review_database.delete_review(film_id, user_id)
     if review_deleted:
@@ -132,7 +139,7 @@ def film_delete_func(film_id, user_id):
             'message': 'Review deleting failed, please try again'
         }
 
-
+# 改評論
 def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
     review_edited = review_database.edit_review(user_review, film_id, current_date, watched_date, user_id)
     if review_edited:
@@ -143,4 +150,17 @@ def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
         return {
             'error': False,
             'message': 'Review failed, please try again'
+        }
+# 拿評論
+def get_reviews_func(film_id, user_if):
+    print(film_id)
+    data = review_database.get_reviews_data(film_id, user_if)
+    print(data)
+    if data:
+        return {
+            'data': data
+        }
+    else:
+        return {
+            'error': False
         }

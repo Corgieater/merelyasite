@@ -38,21 +38,34 @@ def render_director_page(director):
 @films_blueprint.route('/api/rate', methods=['PATCH'])
 def renew_rate():
     data = request.get_json()
-    rate = data['rate']
-    user_id = data['userId']
-    film_id = data['filmId']
-
-    return renew_rate_func(rate, user_id, film_id)
+    try:
+        rate = data['rate']
+        user_id = data['userId']
+        film_id = data['filmId']
+    except Exception as e:
+        print(e)
+        return {
+            'data': {'error': True,
+                     'message': 'Please log in'}
+        }
+    else:
+        return renew_rate_func(rate, user_id, film_id)
 
 
 # 拿使用者上次評分
 @films_blueprint.route('/api/rate', methods=['POST'])
 def get_rate():
     data = request.get_json()
-    user_id = data['userId']
-    film_id = data['filmId']
-
-    return get_rate_func(user_id, film_id)
+    try:
+        user_id = data['userId']
+        film_id = data['filmId']
+    except Exception as e:
+        print(e)
+        return {
+            'data': {'rate': None}
+        }
+    else:
+        return get_rate_func(user_id, film_id)
 
 
 # 刪評分

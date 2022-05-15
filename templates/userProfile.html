@@ -1,5 +1,15 @@
-{% extends "base.html" %} {% block content %}
-<div class="user">
-  <img src="" alt="user pic" />
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/userProfile.css')}}"
+/>
+{% endblock %} {% block content %}
+<div class="reviews">
+  <h2>RECENRTLY REVIEWS</h2>
+  <hr />
+  <ul></ul>
 </div>
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/userProfile.js') }}"></script>
 {% endblock %}

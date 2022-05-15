@@ -1,5 +1,6 @@
 "use strict";
 let currentUserId = null;
+let globalMessagePlace = document.querySelector(".globalMessagePlace");
 // nav按鈕
 const googleBt = document.querySelector("#googleSignin");
 let signUpBt = document.querySelector(".signUpPlace > a");
@@ -7,6 +8,7 @@ let logInBt = document.querySelector(".logInPlace > button");
 let logOutBt = document.querySelector("nav > ul > li:nth-child(6)");
 let profileBt = document.querySelector("nav > ul > li:nth-child(1)");
 let searchFormBt = document.querySelector(".searchForm > a");
+let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
 
 // 打開特定區域用的按鈕
 const signUpPlaceBt = document.querySelector("nav > ul > li:nth-child(3) > a");
@@ -27,8 +29,10 @@ logInPlaceBt.addEventListener("click", function () {
 
 // 申請帳號和登入
 // 申請帳號
-signUpBt.addEventListener("click", async function () {
+signUpBt.addEventListener("click", async function (e) {
   // 拿資料丟API
+  e.preventDefault();
+  deleteMessage();
   let email = document.querySelector(".signUpPlace>input[type='email']").value;
   let password = document.querySelector(
     ".signUpPlace>input[type='password']"
@@ -51,7 +55,8 @@ signUpBt.addEventListener("click", async function () {
 });
 
 // 登入相關
-logInBt.addEventListener("click", async function () {
+logInBt.addEventListener("click", async function (e) {
+  e.preventDefault();
   const email = document.querySelector(".logInPlace>input[type='email']").value;
   const password = document.querySelector(
     ".logInPlace>input[type='password']"
@@ -69,18 +74,19 @@ logInBt.addEventListener("click", async function () {
     window.location.reload();
   }
 });
-
 // 檢查登入與否然後變動Nav
 async function checkIfLogged() {
   const req = await fetch("/api/user");
   const res = await req.json();
   if (res.userName) {
     profileBt.firstChild.textContent = res.userName;
+    // 把user profile button加上href
+    userProfileHref.href = `/user_profile/${res.userName}`;
     changingNav();
-    console.log(res);
     currentUserId = res["userId"];
-    // userData = res;
-    // return res;
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -91,7 +97,7 @@ async function logOut(e) {
   const req = await fetch("/api/user", {
     method: "DELETE",
   });
-  window.location.reload();
+  window.location.replace("/");
 }
 
 let dataForShowrow = {};
@@ -109,12 +115,12 @@ searchFormBt.addEventListener("click", async function (e) {
 });
 
 // 小功能
-// 變動nav然後重整
+// 有登入顯示profileBt和logOutBthide然後重整
 function changingNav() {
-  hideOrShow(signUpPlaceBt);
-  hideOrShow(logInPlaceBt);
-  hideOrShow(profileBt);
-  hideOrShow(logOutBt);
+  hide(signUpPlaceBt);
+  hide(logInPlaceBt);
+  show(profileBt);
+  show(logOutBt);
   window.location.reload;
 }
 
