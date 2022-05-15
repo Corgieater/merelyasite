@@ -8,7 +8,7 @@ async function makePosterLi(idList) {
     let aLink = document.createElement("a");
     aLink.href = `/film/${id}`;
     aLink.append(img);
-    img.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${id}.jpg`;
+    img.src = `https://dwn6ych98b9pm.cloudfront.net/posters/img${id}.jpg`;
     li.append(aLink);
     posterPlace.append(li);
   }

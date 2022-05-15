@@ -256,8 +256,8 @@ async function showFilmInfo() {
   let filmPlot = data["plot"];
   let filmStars = data["stars"];
   let filmGenres = data["genres"];
-  poster.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${filmId}.jpg`;
-  reviewPoster.src = `https://d4u16azcwb6ha.cloudfront.net/posters/img${filmId}.jpg`;
+  poster.src = `https://dwn6ych98b9pm.cloudfront.net/posters/img${filmId}.jpg`;
+  reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/posters/img${filmId}.jpg`;
   title.textContent = filmTitle;
   year.textContent = filmYear;
   plot.textContent = filmPlot;

@@ -75,9 +75,7 @@ class MoviePro(scrapy.Spider):
     def parse_poster(self, response):
         item = response.meta['item']
         poster_url = response.xpath('//*[@id="__next"]/main/div[2]/div[3]/div[4]/img/@src').get()
-        # print('aaaaaaaaaaaaaaaaa\n', poster_url)
         item['image_urls'] = [poster_url]
-        # print('wewewweewewwe\n', item['image_urls'])
 
         yield item
         # yield {
