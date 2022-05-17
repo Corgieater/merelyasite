@@ -1,3 +1,4 @@
+"use strict";
 let frame = document.querySelector(".frame");
 let pagesPlace = document.querySelector(".pagesPlace");
 

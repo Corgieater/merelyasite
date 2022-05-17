@@ -67,11 +67,7 @@ def renew_rate_func(rate, user_id, film_id):
 
 # 拿上次評分
 def get_rate_func(user_id, movie_id):
-    if user_id is None:
-        print('NOPELPELE')
     rate = review_database.get_rate_data(user_id, movie_id)
-    print('get_rate_func', user_id, movie_id)
-    print('get_rate_func', rate)
     if rate:
         data = {
             'data': {'rate': rate[0]}

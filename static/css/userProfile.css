@@ -1,0 +1,45 @@
+.wrap > * {
+  margin-bottom: 30px;
+}
+/* user */
+.profile > img {
+  width: 150px;
+}
+.profile > section {
+  margin-left: 100px;
+  margin-top: 20px;
+}
+.profile > section > h2 {
+  color: white;
+  font-weight: bold;
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+.profile > section > a {
+  background-color: lightsteelblue;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+}
+/* latest review */
+.reviewdPlace > li {
+  border-bottom: 1px white solid;
+  padding: 10px 0;
+}
+.reviewdPlace > li > div {
+  height: 200px;
+  margin-right: 20px;
+}
+.reviewText {
+  width: 500px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.reviewdPlace > li > div > img {
+  max-height: 100%;
+}
+
+.starPlace > img {
+  height: 20px;
+}

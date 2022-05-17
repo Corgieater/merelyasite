@@ -18,6 +18,7 @@ def render_user_profile(user_name):
 # 拿最新的五個評論
 @user_profile_blueprint.route('/api/get_latest_reviews/<user_name>')
 def get_user_latest_five_reviews(user_name):
+    print(user_name)
     return get_user_latest_five_reviews_func(user_name)
 
 

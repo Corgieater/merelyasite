@@ -1,3 +1,4 @@
+"use strict";
 let director = cutUserInput("r/");
 let posterPlace = document.querySelector(".posterPlace");
 

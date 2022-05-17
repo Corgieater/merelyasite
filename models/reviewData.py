@@ -64,10 +64,16 @@ class ReviewDatabase:
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT user.id, reviews.id, reviews.user_review, reviews.film_id, '
-                           'reviews.today, reviews.watched_date FROM user LEFT join reviews '
-                           'ON user.id = reviews.user_id WHERE user.name = %s '
-                           'ORDER BY reviews.id DESC LIMIT 5',
-                           (user_name,))
+                           'reviews.today, reviews.watched_date, movie_info.title, movie_info.year, '
+                           'rates.rate '
+                           'FROM user '
+                           'INNER JOIN reviews ON reviews.user_id = user.id '
+                           'INNER JOIN movie_info ON reviews.film_id = movie_info.id '
+                           'LEFT JOIN rates ON rates.user_id = reviews.user_id '
+                           'AND rates.film_id = movie_info.id '
+                           'WHERE user.name = %s '
+                           'ORDER BY reviews.id DESC '
+                           'LIMIT 5', (user_name,))
             results = cursor.fetchall()
         except Exception as e:
             print(e)
@@ -78,15 +84,19 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 更新評分
+    # 更新評分 先找有沒有舊的 有就更新 沒有就加入
     def rating(self, rate, user_id, movie_id):
-        print(rate, user_id, movie_id)
         connection = self.pool.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO rates(id, rate, user_id, film_id) VALUES (%s, %s, %s ,%s) '
-                           'ON DUPLICATE KEY UPDATE rate=%s, film_id=%s, user_id=%s',
-                           (None, rate, movie_id, user_id, rate, movie_id, user_id), )
+            cursor.execute('SELECT rate FROM rates WHERE film_id = %s', (movie_id,))
+            result = cursor.fetchone()
+            if result is not None:
+                cursor.execute('update rates set rate = %s WHERE user_id = %s AND film_id = %s',
+                               (rate, user_id, movie_id,))
+            else:
+                cursor.execute('INSERT INTO rates(id, rate, user_id, film_id) VALUES(%s, %s, %s, %s)',
+                               (None, rate, user_id, movie_id))
         except Exception as e:
             print(e)
             connection.rollback()
@@ -151,6 +161,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
+    # 算資料幾筆
     def get_total_data_count(self, user_input):
         connection = self.pool.get_connection()
         cursor = connection.cursor()
@@ -169,7 +180,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-#     拿單一資料
+#     用ID拿單一資料
     def get_film_by_id(self, film_id):
         connection = self.pool.get_connection()
         cursor = connection.cursor()

@@ -5,10 +5,45 @@
   href="{{url_for('static', filename='css/userProfile.css')}}"
 />
 {% endblock %} {% block content %}
+<!-- profile -->
+<div class="profile flex">
+  <img src="../static/images/user.png" alt="pic" />
+  <section>
+    <h2>123</h2>
+    <a href="/setting">EDIT PROFILE</a>
+  </section>
+</div>
+
+<!-- profile nav -->
+<ul class="userProfileNav flex">
+  <li><a href="#">Reviews</a></li>
+  <li><a href="#">Watchlist</a></li>
+</ul>
+
+<!-- latest reviews -->
 <div class="reviews">
-  <h2>RECENRTLY REVIEWS</h2>
+  <h3>RECENRTLY REVIEWS</h3>
   <hr />
-  <ul></ul>
+  <ul class="reviewdPlace">
+    <!-- <li class="flex">
+      <div>
+        <img
+          src="https://dwn6ych98b9pm.cloudfront.net/posters/img1.jpg"
+          alt=""
+        />
+      </div>
+      <div>
+        <a href="">movie Name</a>
+        <a href="">1997</a>
+        <section class="starPlace">
+          <img src="../static/images/star.png" alt="" />
+          <img src="../static/images/half_star.png" alt="" />
+        </section>
+        <p>date</p>
+        <p>some text</p>
+      </div>
+    </li> -->
+  </ul>
 </div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/userProfile.js') }}"></script>

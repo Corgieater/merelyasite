@@ -45,8 +45,6 @@ async function showProperReviewBox() {
     hide(rateBtsWrap);
     hide(reviewBt);
     hide(addListBt);
-    // let li = document.createAttribute("li");
-    // li.textContent = "Log in to review or rate";
 
     let actionBox = document.querySelector(".actionBox > ul");
     actionBox.style.height = "200px";
