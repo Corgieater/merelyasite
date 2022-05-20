@@ -146,6 +146,7 @@ searchFormBt.addEventListener("click", async function (e) {
 
 // 打API拿電影資料加入dababase
 addMovieBt.addEventListener("click", async function () {
+  deleteMessage();
   let userInputTitle = movieTitle.value;
   console.log(userInputTitle);
   let userInputYear = movieYear.value;
@@ -153,7 +154,13 @@ addMovieBt.addEventListener("click", async function () {
     `/api/addFilm?t=${userInputTitle}&y=${userInputYear}`
   );
   const res = await req.json();
-  console.log(res);
+  if (res.ok) {
+    makeMessage(addMoviePlace, "It's done!", "good");
+    userInputTitle = "";
+    userInputYear = "";
+  } else {
+    makeMessage(addMoviePlace, res.message);
+  }
 });
 
 // 小功能

@@ -24,8 +24,7 @@ def get_movie_from_omdb_func(title, year):
     url = f'http://www.omdbapi.com/?apikey={omdb_key}&t={title}&y={year}&plot=full'
     data_exist = database.find_in_database(title)
     if data_exist:
-        return {'error': True,
-                'message': 'Movie already exists'}
+        return False
     else:
         movie_id = database.check_last_movie_id()[0]+1
         response = urlopen(url)

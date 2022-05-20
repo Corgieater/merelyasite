@@ -13,7 +13,7 @@ from models.databaseClass import pool as p
 
 class MovieDatabase:
     # 這邊目前只搜電影 但東西一多起來就要多重考量
-    # 無差別拿大量資料用
+    # 搜尋title和director+無差別拿大量資料用
     def get_info(self, user_input, start_index=0):
         connection = p.get_connection()
         cursor = connection.cursor()

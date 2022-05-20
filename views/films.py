@@ -141,7 +141,7 @@ def get_movie_from_omdb():
         return {'ok': True}
     else:
         return {'error': True,
-                'message': 'Something went wrong, please try again'}
+                'message': 'Movie already exist'}
 
 
 # 修改評論

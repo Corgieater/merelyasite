@@ -31,6 +31,7 @@ class ImportDatabase:
             print('---add to database callllllll------\n')
             connection = p.get_connection()
             cursor = connection.cursor()
+            cursor.execute('')
             cursor.execute('INSERT INTO movie_info VALUES(%s,%s,%s,%s,%s,%s,%s)', movie_input)
         except Exception as e:
             print(e)
@@ -47,17 +48,16 @@ class ImportDatabase:
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
-            cursor.execute('SELECT id FROM movie_info WHERE title like %s', (title,))
+            title = title.replace('+', ' ')
+            cursor.execute('SELECT id FROM movie_info WHERE title like %s', ('%'+title+'%',))
             result = cursor.fetchone()
-            if result is None:
-                return False
+            if result is not None:
+                return True
         except Exception as e:
             print(e)
-            connection.rollback()
             return True
         else:
-            connection.commit()
-            return True
+            return False
         finally:
             cursor.close()
             connection.close()
