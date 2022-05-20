@@ -1,0 +1,9 @@
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/userProfile.css')}}"
+/>
+{% endblock %} {% block content %} {% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/userProfile.js') }}"></script>
+{% endblock %}

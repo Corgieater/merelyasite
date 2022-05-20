@@ -4,12 +4,9 @@ section > a {
   margin-right: 10px;
 }
 /* poster */
-.posterPlace {
-  max-width: 30%;
-  margin-right: 10px;
-}
 .posterPlace > img {
-  width: 100%;
+  max-width: 300px;
+  margin-right: 50px;
 }
 
 /* text */
@@ -20,6 +17,18 @@ section > a {
   line-height: 1.5;
 }
 
+/* text area body */
+.headArea,
+.directorsPlace,
+.bodyArea,
+.casts {
+  margin-bottom: 20px;
+}
+.headArea a,
+.footArea a {
+  text-decoration: underline;
+  text-decoration-color: antiquewhite;
+}
 /* head area */
 .headArea {
   width: 100%;
@@ -28,12 +37,31 @@ section > a {
 .headArea > section > h2 {
   font-size: 35px;
   font-weight: bold;
+  color: white !important;
 }
 .headArea > * {
   margin-right: 10px;
 }
-.headArea > p {
+.headArea > section > p {
   font-size: 25px;
+  font-weight: bold;
+}
+
+/* body area */
+.bodyArea {
+  margin: 20px 0;
+}
+.bodyArea > .plot {
+  font-size: 20px;
+  line-height: 1.5;
+  width: 50%;
+}
+
+/* foot area */
+.casts > p,
+.genres > p {
+  font-size: 25px;
+  font-weight: bold;
 }
 
 /* actionBox */
@@ -50,25 +78,23 @@ section > a {
 .actionBox > ul > * {
   padding: 10px;
 }
+/* 取消星星評分的按鈕 */
 .actionBox > ul > li:nth-child(3) > fieldset > a {
+  font-size: 30px;
   position: absolute;
-  left: 5px;
-  bottom: 28%;
+  left: 10px;
+  bottom: 80px;
+  text-decoration: none;
 }
 .actionBox > ul > li:nth-child(4) {
   font-size: 25px;
+  text-decoration: underline;
+  text-decoration-color: antiquewhite;
 }
-
-/* body area */
-.bodyArea {
-  margin: 20px 0;
+.actionBox > ul > li:nth-child(4) {
+  text-decoration: none;
+  color: antiquewhite;
 }
-.bodyArea > .plot {
-  font-size: 20px;
-  line-height: 1.5;
-  width: 50%;
-}
-
 /* reviewBox */
 .closeBt {
   color: black;
@@ -151,14 +177,16 @@ section > a {
 }
 /* Click + hover color */
 input:checked ~ label, /* color current and previous stars on checked */
-label:hover, label:hover ~ label {
+label:hover,  label:hover ~label {
   color: gold;
 } /* color previous stars on hover */
 
 /* Hover highlights */
-input:checked + label:hover, input:checked ~ label:hover, /* highlight current and previous stars */
+input:checked +label:hover,input:checked ~label:hover, /* highlight current and previous stars */
 input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
 label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
   color: gold;
 }
 /* 別人寫的星星 */
+/* deal with label color changin issues on other places than stars */
+/* fix hover text on average rate */

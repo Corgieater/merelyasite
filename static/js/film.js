@@ -6,11 +6,10 @@ let filmId = cutUserInput("m/");
 let poster = document.querySelector(".posterPlace > img");
 let title = document.querySelector(".headArea > section :nth-child(1)");
 let year = document.querySelector(".headArea > section :nth-child(2)");
-let directors = document.querySelector(".headArea > section :nth-child(4)");
+let directors = document.querySelector(".directorsPlace");
 let plot = document.querySelector(".plot > p");
 let casts = document.querySelector(".casts");
 let genres = document.querySelector(".genres");
-let mask = document.querySelector(".mask");
 
 // action區
 let rateBtsWrap = document.querySelector(".rate");
@@ -52,9 +51,14 @@ async function showProperReviewBox() {
     let p = document.createElement("p");
     p.textContent = "Log in to review or rate";
     li.append(p);
+    p.style.cursor = "pointer";
+    p.addEventListener("click", function () {
+      hideOrShow(logInPlace);
+    });
     let averageRate = document.querySelector(
       ".actionBox > ul > li:nth-child(4)"
     );
+    averageRate.title = "hi";
     actionBox.insertBefore(li, averageRate);
   }
 }
@@ -253,7 +257,7 @@ cancelBt.addEventListener("click", async function (e) {
 });
 
 // 拿電影均分
-async function getAberageRate() {
+async function getAverageRate() {
   let data = {
     filmId: filmId,
   };
@@ -289,11 +293,11 @@ async function showFilmInfo() {
   title.textContent = filmTitle;
   year.textContent = filmYear;
   plot.textContent = filmPlot;
-  makeAlinkAndAppend(directors, filmDirectors);
-  makeAlinkAndAppend(casts, filmStars);
-  makeAlinkAndAppend(genres, filmGenres);
+  makeAlinkAndAppend(directors, "/director/", filmDirectors);
+  makeAlinkAndAppend(casts, "/actor/", filmStars);
+  makeAlinkAndAppend(genres, "/genre/", filmGenres);
 }
 
 showFilmInfo();
 showPreviousRate();
-getAberageRate();
+getAverageRate();

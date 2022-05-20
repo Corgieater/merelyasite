@@ -9,6 +9,12 @@
       name="google-signin-client_id"
       content="586610707307-7tjqpj07v55e7mfm6a01luh164rlu6bo.apps.googleusercontent.com"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;900&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       type="text/css"
@@ -34,10 +40,12 @@
             <ul class="loginPlace"></ul>
           </li>
           <li><a href="#">CREATE ACCOUNT</a></li>
-          <li><a href="/search?keyword=&page=1">FILMS</a></li>
+          <li><a href="/films">FILMS</a></li>
           <!-- 如果films沒辦法用爬蟲抓出最新電影之類的 那還有必要ㄇ -->
           <li><a href="#">NOTES</a></li>
           <li class="hide"><a href="#">LOG OUT</a></li>
+          <!-- 如果有東西不會動 就是因為ADD MOIVE本來應該加在最後的關係:( -->
+          <li><a href="#">ADD MOVIE</a></li>
           <li class="searchForm">
             <input type="text" id="userInput" />
             <a href="#"
@@ -65,7 +73,8 @@
       </section>
 
       <!-- sign up -->
-      <section class="hide signUpPlace flex alignCenter">
+      <section class="hide signUpPlace flex">
+        <a class="signUpPlaceCloseBt" href="#">X</a>
         <label for="signinEmail">EMAIL</label>
         <input
           type="email"
@@ -86,7 +95,25 @@
       </section>
     </header>
 
-    <div class="wrap">{% block content %}{% endblock %}</div>
+    <div class="wrap">
+      <div class="addMoviePlace hide">
+        <a class="addMovieCloseBt" href="#">X</a>
+        <h2>Can't find the movie you are looking for?</h2>
+        <h2>Help us build our database!</h2>
+        <br />
+        <label for="movieTitle">Movie title</label>
+        <br />
+        <input type="text" id="movieTitle" />
+        <br />
+        <label for="movieYear">Year</label>
+        <br />
+        <input type="text" id="movieYear" />
+        <br />
+        <br />
+        <button>Add movie</button>
+      </div>
+      {% block content %}{% endblock %}
+    </div>
 
     <!-- for trailer -->
     <!-- <iframe

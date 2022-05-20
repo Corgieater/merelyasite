@@ -1,3 +1,4 @@
+from models.databaseClass import pool as p
 import os
 from dotenv import load_dotenv
 from mysql.connector import pooling
@@ -11,20 +12,9 @@ MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
 MYSQL_DATABASE = 'movie'
 
 
-class Database:
-    def __init__(self):
-        self.pool = pooling.MySQLConnectionPool(
-            pool_name='pool',
-            pool_size=5,
-            pool_reset_session=True,
-            host=MYSQL_HOST,
-            database=MYSQL_DATABASE,
-            user=MYSQL_USER,
-            password=MYSQL_PASSWORD
-        )
-
+class UserDatabase:
     def add_to_database(self, inputs):
-        connection = self.pool.get_connection()
+        connection = p.get_connection()
         cursor = connection.cursor()
         try:
             cursor.execute('INSERT INTO user VALUES (%s, %s ,%s, %s)', inputs)
@@ -40,7 +30,7 @@ class Database:
             connection.close()
 
     def get_email(self, email):
-        connection = self.pool.get_connection()
+        connection = p.get_connection()
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT email FROM user Where email = %s', (email,))
@@ -57,7 +47,7 @@ class Database:
             connection.close()
 
     def check_user_log_in_info(self, email, password):
-        connection = self.pool.get_connection()
+        connection = p.get_connection()
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT password,name, email, id FROM user Where email = %s', (email,))

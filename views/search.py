@@ -21,4 +21,3 @@ def search():
 @search_blueprint.route('/search')
 def render_search_page():
     return render_template('searchResults.html')
-

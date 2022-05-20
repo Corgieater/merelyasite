@@ -4,7 +4,6 @@ from models.userData import *
 from datetime import timedelta
 import os
 
-database = Database()
 key = os.getenv('JWT_SECRET_KEY')
 
 # 申請帳號相關功能
@@ -12,6 +11,7 @@ key = os.getenv('JWT_SECRET_KEY')
 
 
 def sign_up(email, password, name):
+    database = UserDatabase()
     password = bcrypt.generate_password_hash(password)
     data = (None, name, email, password)
     email_duplication = database.get_email(email)
@@ -37,6 +37,7 @@ def sign_up(email, password, name):
 # 登入相關
 def log_in(email, password):
     # 先確認有沒有此email
+    database = UserDatabase()
     email_exist = database.get_email(email)
     if not email_exist:
         return {
@@ -67,6 +68,7 @@ def log_in(email, password):
 
 
 def user_checker():
+
     try:
         token = request.cookies.get('user_info')
         if token is None:

@@ -1,6 +1,7 @@
 "use strict";
 let currentUserId = null;
 let globalMessagePlace = document.querySelector(".globalMessagePlace");
+let mask = document.querySelector(".mask");
 // nav按鈕
 const googleBt = document.querySelector("#googleSignin");
 let signUpBt = document.querySelector(".signUpPlace > a");
@@ -13,18 +14,47 @@ let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
 // 打開特定區域用的按鈕
 const signUpPlaceBt = document.querySelector("nav > ul > li:nth-child(3) > a");
 const logInPlaceBt = document.querySelector("nav > ul > li:nth-child(2) > a");
+let addMovieNavBt = document.querySelector(
+  "body > header > nav > ul > li:nth-child(7) > a"
+);
+
+// 關閉特定區域用的按鈕
+let addMovieCloseBt = document.querySelector(".addMovieCloseBt");
+let signUpPlaceCloseBt = document.querySelector(".signUpPlaceCloseBt");
 
 // 區域
 let signUpPlace = document.querySelector(".signUpPlace");
 let logInPlace = document.querySelector(".logInPlace");
+let addMoviePlace = document.querySelector(".addMoviePlace");
 
 // 區域toggle
 signUpPlaceBt.addEventListener("click", function () {
   hideOrShow(signUpPlace);
+  hideOrShow(mask);
 });
 
 logInPlaceBt.addEventListener("click", function () {
   hideOrShow(logInPlace);
+  // hideOrShow(mask);
+});
+
+addMovieNavBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hideOrShow(addMoviePlace);
+  hideOrShow(mask);
+});
+
+// 關閉區域
+signUpPlaceCloseBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hide(signUpPlace);
+  hide(mask);
+});
+
+addMovieCloseBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hide(addMoviePlace);
+  hide(mask);
 });
 
 // 申請帳號和登入
@@ -112,6 +142,18 @@ searchFormBt.addEventListener("click", async function (e) {
       `/search?keyword=${userInput.value.replaceAll(" ", "+")}&page=1`
     );
   }
+});
+
+// 打API拿電影資料加入dababase
+addMovieBt.addEventListener("click", async function () {
+  let userInputTitle = movieTitle.value;
+  console.log(userInputTitle);
+  let userInputYear = movieYear.value;
+  const req = await fetch(
+    `/api/addFilm?t=${userInputTitle}&y=${userInputYear}`
+  );
+  const res = await req.json();
+  console.log(res);
 });
 
 // 小功能

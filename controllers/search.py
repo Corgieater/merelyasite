@@ -4,9 +4,6 @@ import math
 
 key = os.getenv('JWT_SECRET_KEY')
 
-# 名稱要改嗎? 畢竟到時候要一起搜review?
-database = MovieDatabase()
-
 
 def make_dic(info, page, total_page):
     page = int(page)+1
@@ -31,6 +28,7 @@ def make_dic(info, page, total_page):
 
 
 def get_info_func(user_input, page):
+    database = MovieDatabase()
     data_count = database.get_total_data_count(user_input)[0]
     print('data count', data_count)
     if data_count is None:

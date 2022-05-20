@@ -1,5 +1,18 @@
 body {
-  background-color: grey;
+  background-color: #212121;
+}
+/* font */
+* {
+  font-family: "Roboto", sans-serif !important;
+}
+* > p,
+a,
+label,
+h2 {
+  color: antiquewhite;
+}
+a {
+  text-decoration: none;
 }
 
 *,
@@ -36,27 +49,27 @@ nav {
 
 /* general */
 
-/* 搜尋欄 */
-#userInput:focus {
+/* input */
+input:focus {
   outline: solid white 3px;
 }
-#userInput {
+input {
   border: None;
   outline: None;
+  padding: 5px;
 }
 
 input,
 button,
 img,
-textarea {
+textarea,
+.signUpPlace,
+.addMoviePlace {
   border-radius: 5px;
 }
 
-a,
 label {
-  color: aliceblue;
   font-weight: bold;
-  text-decoration: none;
   font-size: 25px;
 }
 
@@ -138,17 +151,52 @@ nav > ul > li > input {
 }
 
 /* signUpPlace */
+.signUpPlaceCloseBt {
+  position: absolute;
+  right: 10px;
+}
 .signUpPlace {
-  width: 500px;
+  width: 350px;
   flex-direction: column;
-  margin: 0 auto;
+  left: 40%;
   margin-top: 50px;
+  border: solid 1px antiquewhite;
+  padding: 10px;
+  position: absolute;
+  z-index: 3;
+  background-color: lightslategrey;
 }
 .signUpPlace > input {
-  width: 50%;
+  width: 80%;
   padding: 10px;
   margin: 10px 0;
 }
 .signUpPlace > label {
   font-size: 20px;
+}
+
+/* addMoviePlace */
+.addMoviePlace {
+  height: 350px;
+  width: 500px;
+  border: 1px white solid;
+  padding: 10px;
+  position: absolute;
+  left: 40%;
+  z-index: 3;
+  background-color: lightslategrey;
+}
+.addMoviePlace > h2 {
+  margin-top: 10px;
+  font-size: 23px;
+  font-weight: bold;
+}
+.addMoviePlace > input {
+  margin: 10px 0;
+}
+.addMovieCloseBt {
+  font-size: 25px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }

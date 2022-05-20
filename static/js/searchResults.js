@@ -61,7 +61,7 @@ async function makeShowRow(data, userInputAndPage) {
       div3.append(div2);
       div3.classList.add("showRow");
       div3.classList.add("flex");
-      makeAlinkAndAppend(p, directors);
+      makeAlinkAndAppend(p, "/director/", directors);
       li.append(div3);
       showPlace.append(li);
     }

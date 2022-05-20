@@ -1,5 +1,16 @@
 from controllers.films import *
 from flask import *
+from controllers.getMovie import *
+
+
+# from moviePro.spiders import movieSpy
+# from scrapy.crawler import CrawlerProcess
+# from scrapy.settings import Settings
+# from moviePro import settings as my_settings
+
+
+
+
 
 films_blueprint = Blueprint(
     'films_Blueprint',
@@ -7,6 +18,7 @@ films_blueprint = Blueprint(
     static_folder='static',
     template_folder='templates'
 )
+
 
 # ID搜電影
 @films_blueprint.route('/api/film/<film_id>')
@@ -113,6 +125,24 @@ def film_delete():
     user_id = data['userId']
 
     return film_delete_func(film_id, user_id)
+
+
+# nav 上的films
+@films_blueprint.route('/films')
+def render_films_page():
+    return render_template('publicFilms.html')
+
+
+@films_blueprint.route('/api/addFilm')
+def get_movie_from_omdb():
+    title = request.args.get('t').replace('+', ' ')
+    year = request.args.get('y')
+    add_to_database = get_movie_from_omdb_func(title, year)
+    if add_to_database:
+        return {'ok': True}
+    else:
+        return {'error': True,
+                'message': 'Something went wrong, please try again'}
 
 
 # 修改評論

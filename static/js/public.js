@@ -1,5 +1,9 @@
 "use strict";
 
+const addMovieBt = document.querySelector(".addMoviePlace > button");
+let movieTitle = document.querySelector("#movieTitle");
+let movieYear = document.querySelector("#movieYear");
+
 // 給要headers的功能打API用
 async function sendDataToBackend(method, data, address) {
   const req = await fetch(address, {
@@ -59,11 +63,11 @@ function cutUserInput(target) {
 }
 
 // 特別用來建名字中有空格的a link
-function makeAlinkAndAppend(area, iterableData) {
+function makeAlinkAndAppend(area, prefix, iterableData) {
   for (let info of iterableData) {
     let href = info.replaceAll(" ", "+");
     let a = document.createElement("a");
-    a.href = `/director/${href}`;
+    a.href = prefix + href;
     a.textContent = info;
     area.append(a);
   }
