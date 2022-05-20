@@ -68,42 +68,39 @@ section > a {
 .actionBox {
   border-radius: 5px;
   min-width: 35%;
-  height: 20%;
   margin-left: 10px;
-  background-color: lightslategrey;
+  height: 350px;
+  background-color: #264653;
   color: white;
   text-align: center;
   position: relative;
 }
 .actionBox > ul > * {
-  padding: 10px;
+  padding: 15px;
 }
 /* 取消星星評分的按鈕 */
 .actionBox > ul > li:nth-child(3) > fieldset > a {
   font-size: 30px;
   position: absolute;
   left: 10px;
-  bottom: 80px;
+  bottom: 125px;
   text-decoration: none;
 }
 .actionBox > ul > li:nth-child(4) {
   font-size: 25px;
-  text-decoration: underline;
   text-decoration-color: antiquewhite;
-}
-.actionBox > ul > li:nth-child(4) {
-  text-decoration: none;
-  color: antiquewhite;
 }
 /* reviewBox */
 .closeBt {
-  color: black;
+  font-size: 25px;
+  color: antiquewhite;
   position: absolute;
   right: 0;
   top: 0;
 }
 .reviewBox {
   /* border: 1px white solid; */
+  border-radius: 5px;
   position: absolute;
   background-color: lightslategrey;
   width: 70%;
@@ -115,7 +112,7 @@ section > a {
   padding: 30px;
 }
 .reviewBox > section > img {
-  max-width: 80%;
+  max-width: 65%;
 }
 .reviewBox > section:nth-child(2) {
   line-height: 1.5;
@@ -188,5 +185,28 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
   color: gold;
 }
 /* 別人寫的星星 */
-/* deal with label color changin issues on other places than stars */
-/* fix hover text on average rate */
+.mouseTextPlace {
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: antiquewhite;
+  color: #264653;
+  position: absolute;
+  right: 23%;
+  top: 460px;
+}
+.mouseTextPlace:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 13px solid transparent;
+  border-top-color: #faebd7;
+  border-bottom: 0;
+  border-left: 0;
+  margin-left: -6.5px;
+  margin-bottom: -13px;
+}

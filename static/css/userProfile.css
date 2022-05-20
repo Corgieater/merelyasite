@@ -21,7 +21,15 @@
   border-radius: 5px;
   font-size: 18px;
 }
-/* latest review */
+/* user profile nav 施工中*/
+.wrap > ul > li {
+  margin-right: 20px;
+}
+
+/* latest review row*/
+.reviews > h3 {
+  color: antiquewhite;
+}
 .reviewdPlace > li {
   border-bottom: 1px white solid;
   padding: 10px 0;
@@ -29,6 +37,9 @@
 .reviewdPlace > li > div {
   height: 200px;
   margin-right: 20px;
+}
+.reviewBody > * {
+  padding: 5px;
 }
 .reviewText {
   width: 500px;
@@ -39,7 +50,6 @@
 .reviewdPlace > li > div > img {
   max-height: 100%;
 }
-
 .starPlace > img {
   height: 20px;
 }

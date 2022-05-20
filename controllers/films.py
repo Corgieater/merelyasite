@@ -98,12 +98,11 @@ def delete_rate_func(film_id, user_id):
 # 拿均分
 def get_average_rate_func(film_id):
     review_database = ReviewDatabase()
-    print(film_id)
-    data = review_database.get_average_rate_data(film_id)[0]
-    print(data)
+    data = review_database.get_average_rate_data(film_id)
+    print('print data',data)
     if data:
         return {
-            'data': data
+            'data': {'totalCount': data[0],'average':data[1]}
         }
     else:
         return {

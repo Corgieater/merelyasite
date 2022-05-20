@@ -38,7 +38,7 @@ async function showRecentlyReviews() {
         alt="img"
       />
     </div>
-    <div>
+    <div class='reviewBody'>
       <a href="/film/${info["filmId"]}">${info["filmTitle"]}</a>
       <a href="#">${info["filmYear"]}</a>
       <section class="starPlace"></section>

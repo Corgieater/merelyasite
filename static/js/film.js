@@ -80,12 +80,12 @@ dateCheckBox.addEventListener("click", function () {
 
 // 儲存評論
 saveBt.addEventListener("click", async function () {
-  let userLog = document.querySelector("textarea").value;
+  let userLog = document.querySelector("textarea");
   let messagePlace = document.querySelector(
     ".reviewBox > section:nth-child(2)"
   );
   deleteMessage();
-  if (userLog === "") {
+  if (userLog.value === "") {
     makeMessage(messagePlace, "Type something, please");
   } else {
     const req = await fetch("/api/user");
@@ -104,7 +104,7 @@ saveBt.addEventListener("click", async function () {
     console.log(watchedDate);
     today = yyyy + "/" + mm + "/" + dd;
     let data = {
-      userReview: userLog,
+      userReview: userLog.value,
       filmId: filmId,
       currentDate: today,
       watchedDate: watchedDate,
@@ -113,6 +113,7 @@ saveBt.addEventListener("click", async function () {
     sendDataToBackend("PATCH", data, "/api/review");
     hide(reviewBox);
     hide(mask);
+    userLog.value = "";
   }
 });
 
@@ -262,9 +263,17 @@ async function getAverageRate() {
     filmId: filmId,
   };
   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
-  console.log(232, averageRate);
-  if (averageRate !== undefined) {
-    averageRatePlace.textContent = `Average rate ${averageRate}`;
+  let mouseTextPlace = document.querySelector(".mouseTextPlace");
+  if (averageRate["average"] !== null) {
+    averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
+    averageRatePlace.style.cursor = "pointer";
+
+    mouseTextPlace.textContent = `Based on ${averageRate["totalCount"]} ratings`;
+    averageRatePlace.addEventListener("click", function () {
+      hideOrShow(mouseTextPlace);
+    });
+  } else {
+    averageRatePlace.textContent = `No one rated yet`;
   }
 }
 

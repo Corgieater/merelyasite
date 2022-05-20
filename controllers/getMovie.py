@@ -22,9 +22,7 @@ def get_movie_from_omdb_func(title, year):
     database = ImportDatabase()
     title = title.replace(' ', '+')
     url = f'http://www.omdbapi.com/?apikey={omdb_key}&t={title}&y={year}&plot=full'
-    print(url)
     data_exist = database.find_in_database(title)
-    print(data_exist)
     if data_exist:
         return {'error': True,
                 'message': 'Movie already exists'}

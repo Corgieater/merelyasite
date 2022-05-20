@@ -82,11 +82,13 @@ class ReviewDatabase:
             cursor.execute('SELECT rate FROM rates WHERE film_id = %s', (movie_id,))
             result = cursor.fetchone()
             if result is not None:
-                cursor.execute('update rates set rate = %s WHERE user_id = %s AND film_id = %s',
-                               (rate, user_id, movie_id,))
-            else:
                 cursor.execute('INSERT INTO rates(id, rate, user_id, film_id) VALUES(%s, %s, %s, %s)',
                                (None, rate, user_id, movie_id))
+
+            else:
+                cursor.execute('UPDATE rates SET rate = %s WHERE user_id = %s AND film_id = %s',
+                               (rate, user_id, movie_id,))
+
         except Exception as e:
             print(e)
             connection.rollback()
@@ -133,12 +135,12 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿均分資料
+    # 拿均分資料+總共多少人平分
     def get_average_rate_data(self, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT ROUND(AVG(rate),1) AS average_rate FROM rates WHERE film_id = %s',
+            cursor.execute('SELECT count(*), ROUND(AVG(rate),1) FROM rates AS total_count WHERE film_id = %s',
                            (film_id,))
             results = cursor.fetchone()
         except Exception as e:

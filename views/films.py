@@ -104,7 +104,6 @@ def get_average_rate():
 @films_blueprint.route('/api/review', methods=['PATCH'])
 def film_review():
     data = request.get_json()
-    print(data)
     user_review = data['userReview']
     film_id = data['filmId']
     current_date = data['currentDate']

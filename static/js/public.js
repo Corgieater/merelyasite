@@ -1,6 +1,4 @@
 "use strict";
-
-const addMovieBt = document.querySelector(".addMoviePlace > button");
 let movieTitle = document.querySelector("#movieTitle");
 let movieYear = document.querySelector("#movieYear");
 
@@ -13,7 +11,7 @@ async function sendDataToBackend(method, data, address) {
     },
     body: JSON.stringify(data),
   });
-  console.log(data);
+  console.log("send this to back", data, typeof data);
   const res = await req.json();
   console.log(res);
   if (res.ok) {

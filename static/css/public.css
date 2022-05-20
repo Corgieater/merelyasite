@@ -200,3 +200,9 @@ nav > ul > li > input {
   right: 10px;
   top: 5px;
 }
+.addMoviePlace label:hover,
+.addMoviePlace label:hover ~ label,
+.signUpPlace label:hover,
+.signUpPlace label:hover ~ label {
+  color: antiquewhite;
+}

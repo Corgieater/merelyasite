@@ -10,6 +10,7 @@ let logOutBt = document.querySelector("nav > ul > li:nth-child(6)");
 let profileBt = document.querySelector("nav > ul > li:nth-child(1)");
 let searchFormBt = document.querySelector(".searchForm > a");
 let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
+const addMovieBt = document.querySelector(".addMovieBt");
 
 // 打開特定區域用的按鈕
 const signUpPlaceBt = document.querySelector("nav > ul > li:nth-child(3) > a");
@@ -35,7 +36,6 @@ signUpPlaceBt.addEventListener("click", function () {
 
 logInPlaceBt.addEventListener("click", function () {
   hideOrShow(logInPlace);
-  // hideOrShow(mask);
 });
 
 addMovieNavBt.addEventListener("click", function (e) {
