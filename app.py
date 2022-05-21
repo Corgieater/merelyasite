@@ -28,7 +28,7 @@ def index():
 	return render_template('index.html')
 
 
-if __name__ == '__main__' and environment == 'developmente':
+if __name__ == '__main__' and environment == 'development':
 	app.run(debug=True, host='localhost', port=3000)
 else:
 	app.run(host='0.0.0.0', port=3000)
