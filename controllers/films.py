@@ -1,11 +1,13 @@
 from models.movieData import *
 from models.reviewData import *
 import os
+import math
 
 key = os.getenv('JWT_SECRET_KEY')
 
 movie_database = MovieDatabase()
 review_database = ReviewDatabase()
+
 
 
 def make_dic(film_data):
@@ -22,6 +24,20 @@ def make_dic(film_data):
 
     return dic
 
+
+def make_page(data, page, total_page):
+    page = int(page) + 1
+    data['data']['currentPage'] = page
+    data['data']['nextPage'] = None
+    data['data']['totalPages'] = total_page
+
+    if page < total_page:
+        data['nextPage'] = page + 1
+    else:
+        data['nextPage'] = None
+
+    return data
+
 # 用ID拿電影
 def get_film_by_id_func(film_id):
     data = movie_database.get_film_by_id(film_id)
@@ -33,7 +49,7 @@ def get_film_by_id_func(film_id):
     return data
 
 
-# 用導演拿電影
+# 用導演拿電影 OK
 def get_films_by_director_func(director):
     data = movie_database.get_film_by_director(director)
     print(data)
@@ -46,21 +62,28 @@ def get_films_by_director_func(director):
     return data
 
 
-# 用genre/演員拿電影(因為太多所以要頁數)
-def get_films_by_input_func(ser_input, input_type, start_index=0):
-    data = movie_database.get_film_by_input(ser_input, input_type, start_index)
-    print(data)
-    if data is None:
+# 演員拿電影 OK
+def get_films_by_actor_func(actor, page):
+    data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
+    if data_count is None:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
         }
-    data_dic = {'data': {
-        'id_list': [],
-    }}
-    for film_id in data:
-        data_dic['data']['id_list'].append(film_id[0])
-    return data_dic
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = movie_database.get_film_by_actor(actor, page)
+    info = make_page(info, page, total_page)
+    return info
+    # data = movie_database.get_film_by_actor(actor, start_index)
+    # data_dic = {'data': {
+    #     'movieId': [],
+    # }}
+    # for film_id in data:
+    #     data_dic['data']['movieId'].append(film_id[2])
+    # return data_dic
 
 
 # 更新或加入評分

@@ -24,28 +24,43 @@ def make_movie_info_dic(movie, directors, actors, genres):
         }
     }
     for director in directors:
-        print('di', director)
         dic['data']['directors'].append(director[0])
     for actor in actors:
-        print('ac', actor)
         dic['data']['actors'].append(actor[0])
     for genre in genres:
-        print('ge', genre)
         dic['data']['genres'].append(genre[0])
-    print(dic)
     return dic
+
 
 def make_director_movie_dic(search_results):
     dic = {
-        'data':{
+        'data': {
             'directorID': search_results[0][0],
-            'directorName': search_results[1][1],
+            'directorName': search_results[0][1],
             'directorMovieId':[]
         }
     }
+
     for result in search_results:
         dic['data']['directorMovieId'].append(result[2])
     return dic
+
+
+def make_actor_movie_dic(search_results):
+    main_dic = {
+        'data':{
+            'data':[]
+        }
+    }
+    for result in search_results:
+        clean_data= {
+            'actorId': result[0],
+            'actorName': result[1],
+            'movieId': result[2]
+        }
+        main_dic['data']['data'].append(clean_data)
+    return main_dic
+
 
 class MovieDatabase:
     # 這邊目前只搜電影 但東西一多起來就要多重考量
@@ -81,15 +96,22 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    def get_total_data_count(self, user_input):
+    def get_total_data_count_from_type(self, user_input, type):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movies_info Where title like %s',
-                           ('%'+user_input+'%',))
-            result = cursor.fetchone()
-            if result == 0:
-                return None
+            if type == 'movie':
+                cursor.execute('SELECT count(*) FROM movies_info Where title like %s',
+                               ('%'+user_input+'%',))
+                result = cursor.fetchone()
+                if result == 0:
+                    return None
+            if type == 'actor':
+                cursor.execute('SELECT count(*) FROM actors Where name like %s',
+                               ('%' + user_input + '%',))
+                result = cursor.fetchone()
+                if result == 0:
+                    return None
         except Exception as e:
             print(e)
             return False
@@ -99,7 +121,7 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-#     拿單一資料
+#     拿單一資料 BY ID
     def get_film_by_id(self, film_id):
         try:
             connection = p.get_connection()
@@ -159,6 +181,8 @@ class MovieDatabase:
                            'AND directors.director_id = directors_movies.dm_director_id',
                            ('%'+director+'%',))
             result = cursor.fetchall()
+            print('movieData get_film_by_director', result)
+            # director_id, name, movie_id
             director_movie_dic = make_director_movie_dic(result)
             if result is None:
                 return None
@@ -171,22 +195,33 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    # 用genre/演員拿電影(通常滿多的要LIMIT)
-    def get_film_by_input(self, user_input, input_type, start_index):
+    # 演員拿電影(通常滿多的要LIMIT) HERE
+    def get_film_by_actor(self, actor, start_index):
         start_index = int(start_index)*20
+        print('movieData get_film_by_actor ', actor)
+        print(type(start_index))
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
-            cursor.execute(f'SELECT id FROM movie_info WHERE {input_type} LIKE %s LIMIT %s, 20',
-                           ('%'+user_input+'%',start_index))
+            cursor.execute('''SELECT actors.actor_id, actors.name,
+                                actors_movies.am_movie_id
+                                FROM actors
+                                INNER JOIN actors_movies
+                                ON actors.name LIKE %s
+                                AND actors.actor_id = actors_movies.am_actor_id
+                                ORDER BY actor_id
+                                LIMIT %s,20
+                                ''', ('%'+actor+'%', start_index))
             result = cursor.fetchall()
-            if result is None:
+            actor_movie_dic = make_actor_movie_dic(result)
+            print('movieData get_film_by_actor ', result)
+            if len(result) is 0:
                 return None
         except Exception as e:
             print(e)
             return False
         else:
-            return result
+            return actor_movie_dic
         finally:
             cursor.close()
             connection.close()

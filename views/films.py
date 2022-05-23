@@ -16,7 +16,7 @@ films_blueprint = Blueprint(
 )
 
 
-# ID搜電影
+# ID搜電影 OK
 @films_blueprint.route('/api/film/<film_id>')
 def search_by_id(film_id):
     return get_film_by_id_func(film_id)
@@ -28,7 +28,8 @@ def render_film_page(film_id):
     return render_template('film.html')
 
 
-# director搜電影
+# director搜電影 OK
+# 導演導的片通常不多就不Limit了
 @films_blueprint.route('/api/director/<director>')
 def search_by_director(director):
     print('director',director.replace('+', ' '))
@@ -42,15 +43,24 @@ def render_director_page(director):
     return render_template('director.html')
 
 
-# 演員搜電影
+# 演員搜電影 HERE
 # 演員演得片跟genre一樣超多 要改~"~
 @films_blueprint.route('/api/actor')
 def search_by_actor():
     actor = request.args.get('actor')
+    print(actor)
     page = request.args.get('page')
-    print('actor',actor.replace('+', ' '))
+    print(page)
+    if page is None:
+        page = 1
     actor = actor.replace('+', ' ')
-    return get_films_by_input_func(actor, 'stars', page)
+    print(actor, 'after replace')
+    return get_films_by_actor_func(actor, page)
+
+# render template actor
+@films_blueprint.route('/actor')
+def render_actor_page():
+    return render_template('actor.html')
 
 # 欸我這到底是要不要打API???還是我直接往HTML拿資料就好???*****
 # genre搜電影
@@ -63,13 +73,8 @@ def search_by_genre():
 
 
 
-# render template actor
-@films_blueprint.route('/actor')
-def render_actor_page():
-    return render_template('actor.html')
 
-
-# render template actor
+# render template genre
 @films_blueprint.route('/genre')
 def render_genre_page():
     return render_template('genre.html')

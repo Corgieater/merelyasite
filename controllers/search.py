@@ -23,12 +23,11 @@ def make_dic(info, page, total_page):
         }
         searched_data['data'].append(dic)
 
-    print('serachdata', searched_data)
     return searched_data
 
 
 def get_info_func(user_input, page):
-    data_count = database.get_total_data_count(user_input)[0]
+    data_count = database.get_total_data_count_from_type(user_input, 'movie')[0]
     print('data count', data_count)
     if data_count is None:
         return {
