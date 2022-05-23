@@ -74,20 +74,24 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 更新評分 先找有沒有舊的 有就更新 沒有就加入
-    def rating(self, rate, user_id, movie_id):
+    # 更新評分 先找有沒有舊的 有就更新 沒有就加入 OK
+    def rating(self, rate, user_id, film_id):
+        print('reviewData rating')
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT rate FROM rates WHERE film_id = %s', (movie_id,))
+            print('trying finding')
+            cursor.execute('SELECT rate FROM rates WHERE rate_film_id = %s AND rate_user_id = %s', (film_id, user_id))
             result = cursor.fetchone()
-            if result is not None:
-                cursor.execute('INSERT INTO rates(id, rate, user_id, film_id) VALUES(%s, %s, %s, %s)',
-                               (None, rate, user_id, movie_id))
-
+            print(result)
+            if result is None:
+                print('trying insert')
+                cursor.execute('INSERT INTO rates(rate_id, rate, rate_user_id, rate_film_id) VALUES(%s, %s, %s, %s)',
+                               (None, rate, user_id, film_id))
             else:
-                cursor.execute('UPDATE rates SET rate = %s WHERE user_id = %s AND film_id = %s',
-                               (rate, user_id, movie_id,))
+                print('trying update')
+                cursor.execute('UPDATE rates SET rate = %s WHERE rate_user_id = %s AND rate_film_id = %s',
+                               (rate, user_id, film_id,))
 
         except Exception as e:
             print(e)
@@ -100,12 +104,12 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評分資料
+    # 拿評分資料 OK
     def get_rate_data(self, user_id, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT rate FROM rates Where film_id = %s AND user_id = %s',
+            cursor.execute('SELECT rate FROM rates Where rate_film_id = %s AND rate_user_id = %s',
                            (film_id, user_id,))
             results = cursor.fetchone()
         except Exception as e:
@@ -117,12 +121,13 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 刪除評分資料
+    # 刪除評分資料 OK
     def delete_rate_data(self, film_id, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
+        print('in delete rate data from reviewData')
         try:
-            cursor.execute('DELETE FROM rates WHERE film_id = %s AND user_id = %s;',
+            cursor.execute('DELETE FROM rates WHERE rate_film_id = %s AND rate_user_id = %s',
                            (film_id, user_id))
         except Exception as e:
             print(e)
@@ -140,7 +145,7 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*), ROUND(AVG(rate),1) FROM rates AS total_count WHERE film_id = %s',
+            cursor.execute('SELECT count(*), ROUND(AVG(rate),1) FROM rates AS total_count WHERE rate_film_id = %s',
                            (film_id,))
             results = cursor.fetchone()
         except Exception as e:
@@ -157,7 +162,7 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movie_info Where title LIKE %s',
+            cursor.execute('SELECT count(*) FROM movies_info Where title LIKE %s',
                            ('%'+user_input+'%',))
             result = cursor.fetchone()
             if result == 0:
@@ -176,7 +181,7 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT * FROM movie_info WHERE id = %s',
+            cursor.execute('SELECT * FROM movies_info WHERE id = %s',
                            (film_id,))
             result = cursor.fetchone()
             if result is None:

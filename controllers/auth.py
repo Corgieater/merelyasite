@@ -8,10 +8,10 @@ key = os.getenv('JWT_SECRET_KEY')
 
 # 申請帳號相關功能
 # 申請帳號
+database = UserDatabase()
 
 
 def sign_up(email, password, name):
-    database = UserDatabase()
     password = bcrypt.generate_password_hash(password)
     data = (None, name, email, password)
     email_duplication = database.get_email(email)

@@ -87,10 +87,10 @@ def get_films_by_actor_func(actor, page):
 
 
 # 更新或加入評分
-def renew_rate_func(rate, user_id, film_id):
+def rating_func(rate, user_id, film_id):
     if user_id is None:
         print('NOPELPELE')
-    print('renew_rate_func', rate, user_id, film_id)
+    print('rating_func from controllers', rate, user_id, film_id)
     rate_updated = review_database.rating(rate, user_id, film_id)
     if rate_updated:
         return {'ok': True}
@@ -115,7 +115,7 @@ def get_rate_func(user_id, movie_id):
 
 # 刪除評分
 def delete_rate_func(film_id, user_id):
-    print(film_id, user_id)
+    print('delete_rate_func control',film_id, user_id)
     data_deleted = review_database.delete_rate_data(film_id, user_id)
     if data_deleted:
         return {

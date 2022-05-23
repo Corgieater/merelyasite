@@ -91,7 +91,7 @@
         />
         <label for="siginName">NAME</label>
         <input type="text" id="signName" name="signName" placeholder="NAME" />
-        <a href="#">SIGN UP</a>
+        <a class="signUpBt" href="#">SIGN UP</a>
       </section>
     </header>
 
@@ -115,17 +115,6 @@
       {% block content %}{% endblock %}
     </div>
 
-    <!-- for trailer -->
-    <!-- <iframe
-      src="http://www.imdb.com/video/imdb/vi3877612057/imdb/embed?autoplay=false&width=320"
-      width="320"
-      height="480"
-      allowfullscreen="true"
-      mozallowfullscreen="true"
-      webkitallowfullscreen="true"
-      frameborder="no"
-      scrolling="no"
-    ></iframe> -->
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="{{ url_for('static', filename='js/navScript.js') }}"></script>
     <script src="{{ url_for('static', filename='js/public.js') }}"></script>

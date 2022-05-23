@@ -3,14 +3,16 @@ let currentUserId = null;
 let globalMessagePlace = document.querySelector(".globalMessagePlace");
 let mask = document.querySelector(".mask");
 // nav按鈕
-const googleBt = document.querySelector("#googleSignin");
-let signUpBt = document.querySelector(".signUpPlace > a");
 let logInBt = document.querySelector(".logInPlace > button");
 let logOutBt = document.querySelector("nav > ul > li:nth-child(6)");
 let profileBt = document.querySelector("nav > ul > li:nth-child(1)");
 let searchFormBt = document.querySelector(".searchForm > a");
 let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
 const addMovieBt = document.querySelector(".addMovieBt");
+
+// 申請帳號的按鈕
+const googleBt = document.querySelector("#googleSignin");
+let signUpBt = document.querySelector(".signUpBt");
 
 // 打開特定區域用的按鈕
 const signUpPlaceBt = document.querySelector("nav > ul > li:nth-child(3) > a");
@@ -29,7 +31,8 @@ let logInPlace = document.querySelector(".logInPlace");
 let addMoviePlace = document.querySelector(".addMoviePlace");
 
 // 區域toggle
-signUpPlaceBt.addEventListener("click", function () {
+signUpPlaceBt.addEventListener("click", function (e) {
+  e.preventDefault();
   hideOrShow(signUpPlace);
   hideOrShow(mask);
 });
@@ -61,6 +64,7 @@ addMovieCloseBt.addEventListener("click", function (e) {
 // 申請帳號
 signUpBt.addEventListener("click", async function (e) {
   // 拿資料丟API
+  console.log("hi");
   e.preventDefault();
   deleteMessage();
   let email = document.querySelector(".signUpPlace>input[type='email']").value;
@@ -75,9 +79,10 @@ signUpBt.addEventListener("click", async function (e) {
     password: password,
     name: name,
   };
-
+  console.log(data);
   let returnMessage = await sendDataToBackend("POST", data, "/api/user");
   if (returnMessage === true) {
+    console.log("success");
     window.location.reload();
   } else {
     makeMessage(signUpPlace, returnMessage);

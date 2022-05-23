@@ -26,14 +26,15 @@ def make_dic(info, page, total_page):
     return searched_data
 
 
+# 目前只能找電影 看之後可不可以改成找全部
 def get_info_func(user_input, page):
     data_count = database.get_total_data_count_from_type(user_input, 'movie')[0]
-    print('data count', data_count)
-    if data_count is None:
+    if data_count is 0:
         return {
             'error': True,
             'message': 'No such key word, please try another'
         }
+    print('data_count', data_count)
     total_page = math.ceil(data_count / 20)
     print(total_page)
     if page is None:

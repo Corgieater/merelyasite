@@ -2,6 +2,8 @@
 // 查詢用
 let filmId = cutUserInputAtLast("m/");
 
+console.log("hi from filmjs");
+
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
 let title = document.querySelector(".headArea > section :nth-child(1)");
@@ -132,14 +134,17 @@ rateBts.forEach((bt) => {
     const res = await req.json();
     let id = res["userId"];
     if (id !== undefined) {
-      console.log("userid", id);
       let data = {
         rate: rate,
         userId: id,
         filmId: filmId,
       };
-      sendDataToBackend("PATCH", data, "/api/rate");
-      window.location.reload();
+      let ratingMessage = await sendDataToBackend("PATCH", data, "/api/rate");
+      if (ratingMessage === true) {
+        window.location.reload();
+      } else {
+        makeMessage(averageRatePlace, ratingMessage);
+      }
     }
   });
 });
@@ -252,9 +257,20 @@ cancelBt.addEventListener("click", async function (e) {
     filmId: filmId,
     userId: id,
   };
-  sendDataToBackend("DELETE", data, "/api/rate");
-  hide(cancelBt);
-  window.location.reload();
+  console.log(data, "cancelBt");
+  let deleteRatingMessage = await sendDataToBackend(
+    "DELETE",
+    data,
+    "/api/rate"
+  );
+  console.log(deleteRatingMessage);
+  if (deleteRatingMessage === true) {
+    hide(cancelBt);
+    window.location.reload();
+  } else {
+    console.log(deleteRatingMessage, "deleteRatingMessage");
+    makeMessage(averageRatePlace, deleteRatingMessage);
+  }
 });
 
 // 拿電影均分
@@ -264,7 +280,7 @@ async function getAverageRate() {
   };
   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
   let mouseTextPlace = document.querySelector(".mouseTextPlace");
-  if (averageRate["average"] !== null) {
+  if (averageRate !== undefined) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
 

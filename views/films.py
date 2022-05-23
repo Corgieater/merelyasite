@@ -82,7 +82,7 @@ def render_genre_page():
 
 # 評分
 @films_blueprint.route('/api/rate', methods=['PATCH'])
-def renew_rate():
+def rating():
     data = request.get_json()
     try:
         rate = data['rate']
@@ -95,7 +95,7 @@ def renew_rate():
                      'message': 'Please log in'}
         }
     else:
-        return renew_rate_func(rate, user_id, film_id)
+        return rating_func(rate, user_id, film_id)
 
 
 # 拿使用者上次評分

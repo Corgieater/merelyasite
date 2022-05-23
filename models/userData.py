@@ -17,7 +17,7 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO user VALUES (%s, %s ,%s, %s)', inputs)
+            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s)', inputs)
         except Exception as e:
             print(e)
             connection.rollback()
@@ -33,7 +33,7 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT email FROM user Where email = %s', (email,))
+            cursor.execute('SELECT email FROM users Where email = %s', (email,))
             result = cursor.fetchone()
             if result:
                 return True
@@ -50,7 +50,7 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT password,name, email, id FROM user Where email = %s', (email,))
+            cursor.execute('SELECT password, name, email, user_id FROM users Where email = %s', (email,))
             result = cursor.fetchone()
             hashed_password = result[0]
             name = result[1]

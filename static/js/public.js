@@ -15,8 +15,10 @@ async function sendDataToBackend(method, data, address) {
   const res = await req.json();
   console.log(res);
   if (res.ok) {
+    console.log("res.ok", res.ok);
     return true;
   } else if (res.message) {
+    console.log("res.message", res.message);
     return res.message;
   } else {
     return res.data;
