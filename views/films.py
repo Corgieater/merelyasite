@@ -8,10 +8,6 @@ from controllers.getMovie import *
 # from scrapy.settings import Settings
 # from moviePro import settings as my_settings
 
-
-
-
-
 films_blueprint = Blueprint(
     'films_Blueprint',
     __name__,
@@ -35,15 +31,48 @@ def render_film_page(film_id):
 # director搜電影
 @films_blueprint.route('/api/director/<director>')
 def search_by_director(director):
-    print(director.replace('+', ' '))
+    print('director',director.replace('+', ' '))
     director = director.replace('+', ' ')
-    return get_film_by_director(director)
-
+    return get_films_by_director_func(director)
 
 # render template director
 @films_blueprint.route('/director/<director>')
 def render_director_page(director):
+    #參數沒用到還是要填
     return render_template('director.html')
+
+
+# 演員搜電影
+# 演員演得片跟genre一樣超多 要改~"~
+@films_blueprint.route('/api/actor')
+def search_by_actor():
+    actor = request.args.get('actor')
+    page = request.args.get('page')
+    print('actor',actor.replace('+', ' '))
+    actor = actor.replace('+', ' ')
+    return get_films_by_input_func(actor, 'stars', page)
+
+# 欸我這到底是要不要打API???還是我直接往HTML拿資料就好???*****
+# genre搜電影
+@films_blueprint.route('/api/genre')
+def search_by_genre():
+    genre = request.args.get('genre')
+    page = request.args.get('page')
+    print('genre', genre, page)
+    return get_films_by_input_func(genre, 'genres', page)
+
+
+
+# render template actor
+@films_blueprint.route('/actor')
+def render_actor_page():
+    return render_template('actor.html')
+
+
+# render template actor
+@films_blueprint.route('/genre')
+def render_genre_page():
+    return render_template('genre.html')
 
 
 # 評分

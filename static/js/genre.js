@@ -1,6 +1,8 @@
 "use strict";
-let director = cutUserInputInMiddle("r/", "&");
-console.log(director, "directorjs");
+// let genre = cutUserInput("e/");
+let href = window.location.href;
+let genre = cutUserInputInMiddle("e=", "&");
+let page = cutUserInputAtLast("ge=");
 let posterPlace = document.querySelector(".posterPlace");
 
 async function makePosterLi(idList) {
@@ -16,9 +18,8 @@ async function makePosterLi(idList) {
   }
 }
 async function getMovieByDirector() {
-  let req = await fetch(`/api/director/${director}`);
+  let req = await fetch(`/api/genre?genre=${genre}&page=1`);
   let res = await req.json();
-  print(res);
   let idList = await res["data"]["id_list"];
   makePosterLi(idList);
 }

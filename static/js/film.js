@@ -1,6 +1,6 @@
 "use strict";
 // 查詢用
-let filmId = cutUserInput("m/");
+let filmId = cutUserInputAtLast("m/");
 
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
@@ -279,7 +279,6 @@ async function getAverageRate() {
 
 // 拿電影資料
 async function getFilm() {
-  const filmId = cutUserInput("m/");
   const req = await fetch(`/api/film/${filmId}`);
   const res = await req.json();
   return res;
@@ -288,23 +287,25 @@ async function getFilm() {
 // 顯示電影資料
 async function showFilmInfo() {
   let data = await getFilm();
+  data = data["data"];
   console.log(data);
-  let filmId = data["id"];
+  let filmId = data["movieId"];
   let filmTitle = data["title"];
   reviewTitle.textContent = data["title"];
   let filmYear = data["year"];
   let filmDirectors = data["directors"];
-  let filmPlot = data["plot"];
-  let filmStars = data["stars"];
+  let filmPlot = data["story"];
+  let filmStars = data["actors"];
   let filmGenres = data["genres"];
   poster.src = `https://dwn6ych98b9pm.cloudfront.net/posters/img${filmId}.jpg`;
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/posters/img${filmId}.jpg`;
   title.textContent = filmTitle;
   year.textContent = filmYear;
+  year.href = `/year?year=${filmYear}`;
   plot.textContent = filmPlot;
   makeAlinkAndAppend(directors, "/director/", filmDirectors);
-  makeAlinkAndAppend(casts, "/actor/", filmStars);
-  makeAlinkAndAppend(genres, "/genre/", filmGenres);
+  makeAlinkAndAppend(casts, `/actor?actor=`, filmStars);
+  makeAlinkAndAppend(genres, "/genre?genre=", filmGenres);
 }
 
 showFilmInfo();

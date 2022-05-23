@@ -8,7 +8,8 @@ search_blueprint = Blueprint(
     template_folder='templates'
 )
 
-
+# http://localhost:3000/search?keyword=&page=1
+# 網頁右上角的搜尋from OK
 @search_blueprint.route('/api/search')
 def search():
     user_keyword = request.args.get('keyword')

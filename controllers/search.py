@@ -4,6 +4,8 @@ import math
 
 key = os.getenv('JWT_SECRET_KEY')
 
+database = MovieDatabase()
+
 
 def make_dic(info, page, total_page):
     page = int(page)+1
@@ -17,18 +19,15 @@ def make_dic(info, page, total_page):
             'id': info_data[0],
             'title': info_data[1],
             'year': info_data[2],
-            'directors': info_data[3].split(','),
-            'stars': info_data[4].split(','),
-            'genre': info_data[5].split(','),
-            'plot': info_data[6],
+            'directors': info_data[3].split(',')
         }
         searched_data['data'].append(dic)
 
+    print('serachdata', searched_data)
     return searched_data
 
 
 def get_info_func(user_input, page):
-    database = MovieDatabase()
     data_count = database.get_total_data_count(user_input)[0]
     print('data count', data_count)
     if data_count is None:
@@ -37,10 +36,12 @@ def get_info_func(user_input, page):
             'message': 'No such key word, please try another'
         }
     total_page = math.ceil(data_count / 20)
+    print(total_page)
     if page is None:
         page = 1
     page = int(page)-1
     info = database.get_info(user_input, page)
+    print(info, 'info')
 
     if info is False:
         return {

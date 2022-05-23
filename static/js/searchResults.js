@@ -9,9 +9,9 @@ async function renderDataInfo() {
   makeShowRow(data, userInput);
 }
 
-// 先打API去要資料
+// 先打API去要資料 多頁用
 async function getData() {
-  let userInputAndPage = cutUserInput("d=");
+  let userInputAndPage = cutUserInputAtLast("d=");
   console.log(userInputAndPage);
   let req = await fetch(`/api/search?keyword=${userInputAndPage}`);
   console.log(`/api/search?keyword=${userInputAndPage}`);

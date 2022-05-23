@@ -4,6 +4,8 @@ import os
 
 key = os.getenv('JWT_SECRET_KEY')
 
+movie_database = MovieDatabase()
+review_database = ReviewDatabase()
 
 
 def make_dic(film_data):
@@ -22,25 +24,36 @@ def make_dic(film_data):
 
 # 用ID拿電影
 def get_film_by_id_func(film_id):
-    movie_database = MovieDatabase()
     data = movie_database.get_film_by_id(film_id)
     if data is None:
         return {
             'error': True,
             'message': 'There is no such id, please check it again'
         }
-    data_dic = make_dic(data)
-    return data_dic
+    return data
 
 
 # 用導演拿電影
-def get_film_by_director(director):
-    movie_database = MovieDatabase()
+def get_films_by_director_func(director):
     data = movie_database.get_film_by_director(director)
+    print(data)
     if data is None:
         return {
             'error': True,
-            'message': 'There is no such director, please check it again'
+            'message': 'There is no such person, please check it again'
+        }
+
+    return data
+
+
+# 用genre/演員拿電影(因為太多所以要頁數)
+def get_films_by_input_func(ser_input, input_type, start_index=0):
+    data = movie_database.get_film_by_input(ser_input, input_type, start_index)
+    print(data)
+    if data is None:
+        return {
+            'error': True,
+            'message': 'There is no such person, please check it again'
         }
     data_dic = {'data': {
         'id_list': [],
@@ -52,7 +65,6 @@ def get_film_by_director(director):
 
 # 更新或加入評分
 def renew_rate_func(rate, user_id, film_id):
-    review_database = ReviewDatabase()
     if user_id is None:
         print('NOPELPELE')
     print('renew_rate_func', rate, user_id, film_id)
@@ -67,7 +79,6 @@ def renew_rate_func(rate, user_id, film_id):
 
 # 拿上次評分
 def get_rate_func(user_id, movie_id):
-    review_database = ReviewDatabase()
     rate = review_database.get_rate_data(user_id, movie_id)
     if rate:
         data = {
@@ -81,7 +92,6 @@ def get_rate_func(user_id, movie_id):
 
 # 刪除評分
 def delete_rate_func(film_id, user_id):
-    review_database = ReviewDatabase()
     print(film_id, user_id)
     data_deleted = review_database.delete_rate_data(film_id, user_id)
     if data_deleted:
@@ -97,7 +107,6 @@ def delete_rate_func(film_id, user_id):
 
 # 拿均分
 def get_average_rate_func(film_id):
-    review_database = ReviewDatabase()
     data = review_database.get_average_rate_data(film_id)
     print('print data',data)
     if data:
@@ -113,7 +122,6 @@ def get_average_rate_func(film_id):
 # 評論相關
 # 留評論
 def film_review_func(user_review, film_id, current_date, watched_date, user_id):
-    review_database = ReviewDatabase()
     review_added = review_database.write_review(user_review, film_id, current_date, watched_date, user_id)
     if review_added:
         return {
@@ -128,7 +136,6 @@ def film_review_func(user_review, film_id, current_date, watched_date, user_id):
 
 # 刪除評論
 def film_delete_func(film_id, user_id):
-    review_database = ReviewDatabase()
     review_deleted = review_database.delete_review(film_id, user_id)
     if review_deleted:
         return {
@@ -142,7 +149,6 @@ def film_delete_func(film_id, user_id):
 
 # 改評論
 def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
-    review_database = ReviewDatabase()
     review_edited = review_database.edit_review(user_review, film_id, current_date, watched_date, user_id)
     if review_edited:
         return {
@@ -157,7 +163,6 @@ def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
 
 # 拿評論
 def get_reviews_func(user_name):
-    review_database = ReviewDatabase()
     data = review_database.get_reviews_data(user_name)
     print(data)
     if data:

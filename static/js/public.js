@@ -51,12 +51,21 @@ function deleteMessage() {
   }
 }
 
-// 從href拿使用者輸入值
-function cutUserInput(target) {
+// 從href拿在最後的使用者的輸入值
+function cutUserInputAtLast(target) {
   let href = window.location.href;
   let shift = target.length;
   let userInputIndex = href.indexOf(target) + shift;
   let userInput = href.slice(userInputIndex);
+  return userInput;
+}
+// 從href拿要自己定位的使用者輸入值
+function cutUserInputInMiddle(targetHead, targetTail) {
+  let href = window.location.href;
+  let shift = targetHead.length;
+  let head = href.indexOf(targetHead);
+  let tail = href.indexOf(targetTail);
+  let userInput = href.slice(head + shift, tail);
   return userInput;
 }
 
