@@ -133,7 +133,7 @@ section > a {
   height: 20px;
 }
 .reviewBox > section:nth-child(2) > label {
-  color: lightblue;
+  color: lightblue !important;
 }
 
 .reviewBox > section > label {

@@ -162,8 +162,10 @@ def film_review():
     if watched_date is None:
         watched_date = None
     user_id = data['userId']
+    spoilers = data['spoilers']
+    print('from vews films',spoilers)
 
-    return film_review_func(user_review, film_id, current_date, watched_date, user_id)
+    return film_review_func(user_review, film_id, current_date, watched_date, user_id, spoilers)
 
 
 # 刪評論 *********** 寫到使用者頁面的時候回頭來檢查

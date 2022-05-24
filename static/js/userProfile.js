@@ -32,6 +32,8 @@ async function showRecentlyReviews() {
     const filmTitle = info["filmTitle"];
     const review = info["review"];
     const reviewId = info["reviewId"];
+    const spoilers = info["spoilers"];
+    console.log("spoilers", typeof spoilers);
     // 把後面的時間切掉
     if (watchedDay !== null) {
       console.log("use watched day");
@@ -58,19 +60,12 @@ async function showRecentlyReviews() {
     </div>
   </li>
       `;
-    // let watchdDatePlace = document.querySelector(
-    //   "ul > li:nth-child(1) > div.reviewBody > p:nth-child(4)"
-    // );
-
-    // if (watchedDay === null) {
-
-    // }else{
-
-    // }
     li.innerHTML = content;
     reviewdPlace.append(li);
     let userRate = info["userRate"];
     let starPlace = document.querySelectorAll(".starPlace");
+    let reviewBody = document.querySelectorAll(".reviewBody")[i];
+    let reviewText = document.querySelectorAll(".reviewText")[i];
     if (userRate !== null) {
       if (userRate !== "0.5") {
         let fullStarRate = parseInt(userRate);
@@ -86,6 +81,26 @@ async function showRecentlyReviews() {
         img.src = "../static/images/half_star.png";
         starPlace[i].append(img);
       }
+    }
+    // 這個理論上是給外人用的 user profile不用 但我先寫好
+    if (spoilers) {
+      reviewText.classList.add("hide");
+      let alert = document.createElement("p");
+      alert.textContent = "There are spoilers in this review!";
+      let spoilerAlert = document.createElement("a");
+      spoilerAlert.textContent = "I don't mind, let me read.";
+      spoilerAlert.href = "#";
+      spoilerAlert.addEventListener("click", function (e) {
+        e.preventDefault();
+        reviewText.classList.remove("hide");
+        alert.classList.add("hide");
+        spoilerAlert.classList.add("hide");
+      });
+
+      reviewBody.insertBefore(spoilerAlert, reviewText);
+      reviewBody.insertBefore(alert, spoilerAlert);
+    } else {
+      console.log("we are good");
     }
   }
 }

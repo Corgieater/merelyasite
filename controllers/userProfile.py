@@ -20,10 +20,11 @@ def make_review_dic(data):
             'reviewDay': info[1],
             'watchedDay': info[2],
             'reviewId': info[3],
-            'filmId': info[4],
-            'filmTitle': info[5],
-            'filmYear': info[6],
-            'userRate': info[7]
+            'spoilers': info[4],
+            'filmId': info[5],
+            'filmTitle': info[6],
+            'filmYear': info[7],
+            'userRate': info[8]
         }
         data_dic['data'].append(dic)
     return data_dic

@@ -25,9 +25,8 @@ let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
-let dateCheckBox = document.querySelector(
-  '.reviewBox > section:nth-child(2) > input[type="checkbox"]'
-);
+let dateCheckBox = document.querySelector("#watched");
+let spoilersCheckBox = document.querySelector("#spoilers");
 let dateInputPlace = document.querySelector("#watchedDay");
 let saveBt = document.querySelector(".reviewBox > section > button");
 let closeBt = document.querySelector(".closeBt");
@@ -97,25 +96,36 @@ saveBt.addEventListener("click", async function () {
     let dd = String(today.getDate()).padStart(2, "0");
     let mm = String(today.getMonth() + 1).padStart(2, "0");
     let yyyy = today.getFullYear();
-    let watchedDate = document
-      .querySelector('.reviewBox > section > input[type="date"]')
-      .value.replaceAll("-", "/");
-    if (watchedDate === "") {
-      watchedDate = null;
+    let watchedDate = document.querySelector(
+      '.reviewBox > section > input[type="date"]'
+    );
+    let spoilers = false;
+
+    watchedDate.value.replaceAll("-", "/");
+    if (watchedDate.value === "") {
+      watchedDate.value = null;
     }
-    console.log(watchedDate);
+    if (spoilersCheckBox.checked === true) {
+      spoilers = true;
+    }
     today = yyyy + "/" + mm + "/" + dd;
     let data = {
       userReview: userLog.value,
       filmId: filmId,
       currentDate: today,
-      watchedDate: watchedDate,
+      watchedDate: watchedDate.value,
       userId: id,
+      spoilers: spoilers,
     };
+    console.log("datatata", data);
     sendDataToBackend("PATCH", data, "/api/review");
     hide(reviewBox);
     hide(mask);
     userLog.value = "";
+    dateCheckBox.checked = false;
+    watchedDate.value = "";
+    spoilersCheckBox.checked = false;
+    hide(watchedDate);
   }
 });
 
@@ -257,13 +267,11 @@ cancelBt.addEventListener("click", async function (e) {
     filmId: filmId,
     userId: id,
   };
-  console.log(data, "cancelBt");
   let deleteRatingMessage = await sendDataToBackend(
     "DELETE",
     data,
     "/api/rate"
   );
-  console.log(deleteRatingMessage);
   if (deleteRatingMessage === true) {
     hide(cancelBt);
     window.location.reload();

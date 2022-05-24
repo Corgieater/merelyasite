@@ -12,15 +12,16 @@ from models.databaseClass import pool as p
 
 
 class ReviewDatabase:
-    # 寫/更新評論
-    def write_review(self, user_review, movie_id, current_date, watched_date, user_id):
+    # 寫/更新評論 renew not yet done
+    def write_review(self, user_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
+        print('reviewData',user_review, movie_id, current_date, watched_date, user_id, spoilers)
         try:
             cursor.execute('INSERT INTO reviews (review_id, user_review,'
-                           'movie_id, today, watched_date, user_id)'
-                           'VALUES(DEFAULT, %s, %s ,%s, %s, %s)',
-                           (user_review, movie_id, current_date, watched_date, user_id))
+                           'movie_id, today, watched_date, user_id, spoilers)'
+                           'VALUES(DEFAULT, %s, %s ,%s, %s, %s, %s)',
+                           (user_review, movie_id, current_date, watched_date, user_id, spoilers))
         except Exception as e:
             print('write_review reviewData')
             print(e)
@@ -57,7 +58,7 @@ class ReviewDatabase:
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT reviews.user_review, reviews.today, reviews.watched_date,\n'
-                           'reviews.review_id,\n'
+                           'reviews.review_id, reviews.spoilers,\n'
                            'movies_info.movie_id, movies_info.title, movies_info.year,\n'
                            'rates.rate\n'
                            'FROM users\n'

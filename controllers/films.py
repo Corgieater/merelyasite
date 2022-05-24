@@ -188,8 +188,10 @@ def get_average_rate_func(film_id):
 
 # 評論相關
 # 留評論
-def film_review_func(user_review, film_id, current_date, watched_date, user_id):
-    review_added = review_database.write_review(user_review, film_id, current_date, watched_date, user_id)
+def film_review_func(user_review, film_id, current_date, watched_date, user_id, spoilers):
+    review_added = review_database.write_review(user_review, film_id, current_date, watched_date, user_id, spoilers)
+    print(review_added)
+    print('controllers films')
     if review_added:
         return {
             'ok': True
