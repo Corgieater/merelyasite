@@ -29,10 +29,10 @@ async function renderDataInfo() {
 
 // 先打API去要資料 多頁用
 async function getData() {
-  let userInputAndPage = cutUserInputAtLast("d=");
+  let userInputAndPage = cutUserInputAtLast("r=");
   console.log(userInputAndPage);
-  let req = await fetch(`/api/search?keyword=${userInputAndPage}`);
-  console.log(`/api/search?keyword=${userInputAndPage}`);
+  let req = await fetch(`/api/search/director?director=${userInputAndPage}`);
+  console.log(`/api/search/director?director=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -48,38 +48,33 @@ async function makeShowRow(data, userInputAndPage) {
     makeMessage(frame, data);
   } else {
     let showPlace = document.querySelector(".frame > ul");
-    data = data[0];
+    data = data[0]["data"];
 
     //   use for of for async func
     for (const info of data.data) {
-      let id = info["id"];
-      let title = info["title"];
-      let year = info["year"];
-      let directors = info["directors"];
-      console.log(directors);
+      console.log(info);
+      let id = info["directorId"];
+      let directorName = info["directorName"];
+      let noSpaceName = directorName.replaceAll(" ", "+");
+      let totalMoiesCount = info["directorMovieCount"];
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");
       let div3 = document.createElement("div");
       let img = document.createElement("img");
       let a1 = document.createElement("a");
-      let a2 = document.createElement("a");
       let p = document.createElement("p");
-      img.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${id}.jpg`;
-      a1.href = `/film/${id}`;
-      a2.href = `/film/${year}`;
-      a1.textContent = title + " ";
-      a2.textContent = year;
-      p.textContent = "Directed by ";
+      img.src = `../static/images/film.svg`;
+      a1.href = `/director?director=${noSpaceName}&page=1`;
+      a1.textContent = directorName + " ";
+      p.textContent = `Director of ${totalMoiesCount} movies`;
       div1.append(img);
       div2.append(a1);
-      div2.append(a2);
       div2.append(p);
       div3.append(div1);
       div3.append(div2);
       div3.classList.add("showRow");
       div3.classList.add("flex");
-      makeAlinkAndAppend(p, "/director?director=", directors);
       li.append(div3);
       showPlace.append(li);
     }

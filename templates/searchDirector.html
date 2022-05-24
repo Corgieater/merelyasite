@@ -5,7 +5,7 @@
   href="{{url_for('static', filename='css/searchResults.css')}}"
 />{% endblock %} {% block content %}
 <div class="frame">
-  <h2>Show specific results</h2>
+  <h2>RESULTS FOR DIRECTOR {{ director }}</h2>
   <ul class="searchCollections">
     <a href="#">Movies</a>
     <a href="#">Reviews</a>
@@ -16,7 +16,10 @@
     <!-- <li>
       <div class="showRow flex">
         <div>
-          <img src="https://d4u16azcwb6ha.cloudfront.net/img1.jpg" alt="img" />
+          <img
+            src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img1.jpg"
+            alt="img"
+          />
         </div>
         <div>
           <a href="/film/moviename-year">title</a>
@@ -30,5 +33,5 @@
 </div>
 <div class="pagesPlace alignCenter"></div>
 {% endblock %} {% block script %}
-<script src="{{ url_for('static', filename='js/searchResults.js') }}"></script>
+<script src="{{ url_for('static', filename='js/searchDirector.js') }}"></script>
 {% endblock %}

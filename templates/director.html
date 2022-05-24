@@ -5,7 +5,9 @@
   href="{{url_for('static', filename='css/director-actor-genre.css')}}"
 />
 {% endblock %} {% block content %}
+<h2>RESULTS FOR DIRECTOR {{ director }}</h2>
 <ul class="posterPlace flex"></ul>
+<div class="pagesPlace alignCenter"></div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/director.js') }}"></script>
 {% endblock %}

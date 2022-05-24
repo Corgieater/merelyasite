@@ -23,5 +23,7 @@ async function getMovieByDirector() {
   console.log(res);
   let movieData = await res["data"]["data"];
   makePosterLi(movieData);
+  let userInputAndPage = cutUserInputAtLast("r=");
+  makePageTags("actor?actor", userInputAndPage, res["totalPages"]);
 }
 getMovieByDirector();

@@ -90,8 +90,9 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
 // }
 
 // 做頁碼
-async function makePageTags(userInputAndPage, totalPages) {
-  console.log("usrinpiut", userInputAndPage);
+async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
+  console.log("makePageTagds", userInputAndPage);
+  let pagesPlace = document.querySelector(".pagesPlace");
   // 這裡的問題 改一下
   for (let i = 0; i < totalPages; i++) {
     // 找出要切哪
@@ -100,7 +101,7 @@ async function makePageTags(userInputAndPage, totalPages) {
     // 切到底拿到除了page以外的querystring
     let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
     let a = document.createElement("a");
-    a.href = `/search?keyword=${querystringWithoutPage}${i + 1}`;
+    a.href = `/${pageAndQuery}=${querystringWithoutPage}${i + 1}`;
     a.textContent = i + 1;
     pagesPlace.append(a);
   }

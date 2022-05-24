@@ -9,7 +9,6 @@ movie_database = MovieDatabase()
 review_database = ReviewDatabase()
 
 
-
 def make_dic(film_data):
     print(film_data)
     dic = {
@@ -26,19 +25,36 @@ def make_dic(film_data):
 
 
 def make_page(data, page, total_page):
+    print(data,data)
     page = int(page) + 1
-    data['data']['currentPage'] = page
-    data['data']['nextPage'] = None
+    data['currentPage'] = page
+    data['nextPage'] = None
     data['totalPages'] = total_page
 
     if page < total_page:
         data['nextPage'] = page + 1
     else:
         data['nextPage'] = None
-
     return data
 
-# 用ID拿電影
+# NAME拿導演
+def get_director_by_name_func(director, page):
+    data_count = movie_database.get_total_data_count_from_type(director, 'only_director')[0]
+    print(data_count)
+    if data_count is 0:
+        return {
+            'error': True,
+            'message': 'There is no such id, please check it again'
+        }
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = movie_database.get_director_by_name(director, page)
+    info = make_page(info, page, total_page)
+    return info
+
+# 用ID拿電影 OK
 def get_film_by_id_func(film_id):
     data = movie_database.get_film_by_id(film_id)
     if data is None:
@@ -53,7 +69,7 @@ def get_film_by_id_func(film_id):
 def get_films_by_director_func(director, page):
     data_count = movie_database.get_total_data_count_from_type(director, 'director')[0]
     print('datacount', data_count)
-    if data_count is None:
+    if data_count is 0:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
@@ -71,7 +87,10 @@ def get_films_by_director_func(director, page):
 # 演員拿電影 OK
 def get_films_by_actor_func(actor, page):
     data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
-    if data_count is None:
+    # 這邊是算出演員有多少叫OO的
+    # 那下面就要改成秀出演員
+    print('data count get_films_by_actor_func', data_count)
+    if data_count is 0:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
@@ -92,7 +111,26 @@ def get_films_by_actor_func(actor, page):
     # return data_dic
 
 
-# 更新或加入評分
+# GENRE拿電影 HERE
+def get_films_by_genre_func(genre, page):
+    data_count = movie_database.get_total_data_count_from_type(genre, 'genre')[0]
+    print('data count get_films_by_genre_func', data_count)
+    if data_count is 0:
+        return {
+            'error': True,
+            'message': 'There is no such person, please check it again'
+        }
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = movie_database.get_film_by_genre(genre, page)
+    info = make_page(info, page, total_page)
+    return info
+
+
+
+# 更新或加入評分 OK
 def rating_func(rate, user_id, film_id):
     if user_id is None:
         print('NOPELPELE')
@@ -106,7 +144,7 @@ def rating_func(rate, user_id, film_id):
         }
 
 
-# 拿上次評分
+# 拿上次評分 OK
 def get_rate_func(user_id, movie_id):
     rate = review_database.get_rate_data(user_id, movie_id)
     if rate:
@@ -119,7 +157,7 @@ def get_rate_func(user_id, movie_id):
             'data': {'rate':None}
         }
 
-# 刪除評分
+# 刪除評分 OK
 def delete_rate_func(film_id, user_id):
     print('delete_rate_func control',film_id, user_id)
     data_deleted = review_database.delete_rate_data(film_id, user_id)
@@ -134,7 +172,7 @@ def delete_rate_func(film_id, user_id):
         }
 
 
-# 拿均分
+# 拿均分 OK
 def get_average_rate_func(film_id):
     data = review_database.get_average_rate_data(film_id)
     print('print data',data)

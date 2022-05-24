@@ -18,12 +18,3 @@
 .showRow > div > p > a {
   margin-right: 10px;
 }
-
-.pagesPlace {
-  width: 20%;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.pagesPlace > a {
-  padding: 5px;
-}
