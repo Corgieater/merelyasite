@@ -231,7 +231,7 @@ def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
 # 拿評論
 def get_reviews_func(user_name):
     data = review_database.get_reviews_data(user_name)
-    print(data)
+    print('get_revews_func',data)
     if data:
         return {
             'data': data

@@ -13,13 +13,16 @@ from models.databaseClass import pool as p
 
 class ReviewDatabase:
     # 寫/更新評論
-    def write_review(self, user_review, film_id, current_date, watched_date, user_id):
+    def write_review(self, user_review, movie_id, current_date, watched_date, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO reviews VALUES (%s, %s, %s ,%s, %s ,%s)',
-                           (None, user_review, film_id, current_date, watched_date, user_id))
+            cursor.execute('INSERT INTO reviews (review_id, user_review,'
+                           'movie_id, today, watched_date, user_id)'
+                           'VALUES(DEFAULT, %s, %s ,%s, %s, %s)',
+                           (user_review, movie_id, current_date, watched_date, user_id))
         except Exception as e:
+            print('write_review reviewData')
             print(e)
             connection.rollback()
             return False
@@ -53,16 +56,20 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT user.id, reviews.id, reviews.user_review, reviews.film_id, '
-                           'reviews.today, reviews.watched_date, movie_info.title, movie_info.year, '
-                           'rates.rate '
-                           'FROM user '
-                           'INNER JOIN reviews ON reviews.user_id = user.id '
-                           'INNER JOIN movie_info ON reviews.film_id = movie_info.id '
-                           'LEFT JOIN rates ON rates.user_id = reviews.user_id '
-                           'AND rates.film_id = movie_info.id '
-                           'WHERE user.name = %s '
-                           'ORDER BY reviews.id DESC '
+            cursor.execute('SELECT reviews.user_review, reviews.today, reviews.watched_date,\n'
+                           'reviews.review_id,\n'
+                           'movies_info.movie_id, movies_info.title, movies_info.year,\n'
+                           'rates.rate\n'
+                           'FROM users\n'
+                           'INNER JOIN reviews\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = reviews.user_id\n'
+                           'INNER JOIN movies_info \n'
+                           'ON reviews.movie_id = movies_info.movie_id\n'
+                           'LEFT JOIN rates\n'
+                           'ON users.user_id = rates.rate_user_id\n'
+                           'AND reviews.movie_id = rates.rate_film_id\n'
+                           'ORDER BY review_id DESC\n'
                            'LIMIT 5', (user_name,))
             results = cursor.fetchall()
         except Exception as e:

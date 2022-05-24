@@ -182,7 +182,7 @@ def film_delete():
 def render_films_page():
     return render_template('publicFilms.html')
 
-
+# 加入電影
 @films_blueprint.route('/api/addFilm')
 def get_movie_from_omdb():
     title = request.args.get('t').replace('+', ' ')

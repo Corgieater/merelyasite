@@ -8,20 +8,22 @@ movie_database = MovieDatabase()
 review_database = ReviewDatabase()
 
 
-def make_dic(data):
+def make_review_dic(data):
     data_dic = {
         'data':[]
     }
 
     for info in data:
+        print(data)
         dic = {
-            'review': info[2],
-            'filmId': info[3],
-            'reviewDay': info[4],
-            'watchedDay': info[5],
-            'filmTitle': info[6],
-            'filmYear': info[7],
-            'userRate': info[8]
+            'review': info[0],
+            'reviewDay': info[1],
+            'watchedDay': info[2],
+            'reviewId': info[3],
+            'filmId': info[4],
+            'filmTitle': info[5],
+            'filmYear': info[6],
+            'userRate': info[7]
         }
         data_dic['data'].append(dic)
     return data_dic
@@ -30,6 +32,6 @@ def make_dic(data):
 def get_user_latest_five_reviews_func(user_name):
     data = review_database.get_reviews_data(user_name)
     print(data)
-    data_dic = make_dic(data)
+    data_dic = make_review_dic(data)
     print(data_dic)
     return data_dic
