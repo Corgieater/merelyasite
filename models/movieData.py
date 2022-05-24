@@ -83,6 +83,7 @@ class MovieDatabase:
                            'movies_info.movie_id = directors_movies.dm_movie_id\n'
                            'INNER JOIN directors\n'
                            'ON directors_movies.dm_director_id = directors.director_id\n'
+                           'GROUP BY title\n'
                            'LIMIT %s, 20',
                            ('%'+user_input+'%', start_index))
             all_movies = cursor.fetchall()
@@ -96,23 +97,36 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    def get_total_data_count_from_type(self, user_input, type):
+    def get_total_data_count_from_type(self, user_input, input_type):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            if type == 'movie':
+            if input_type == 'movie':
                 cursor.execute('SELECT count(*) FROM movies_info Where title like %s',
                                ('%'+user_input+'%',))
                 result = cursor.fetchone()
                 if result == 0:
                     return None
-            if type == 'actor':
+            if input_type == 'actor':
                 cursor.execute('SELECT count(*) FROM actors Where name like %s',
                                ('%' + user_input + '%',))
                 result = cursor.fetchone()
                 if result == 0:
                     return None
+            if input_type == 'director':
+                cursor.execute('SELECT COUNT(movies_info.title) AS movie_count\n'
+                               'FROM directors\n'   
+                               'INNER JOIN directors_movies\n'
+                               'ON directors.name LIKE %s\n'
+                               'AND directors.director_id = directors_movies.dm_director_id\n'
+                               'INNER JOIN movies_info\n'
+                               'ON directors_movies.dm_movie_id = movies_info.movie_id',
+                               ('%' + user_input + '%',))
+                result = cursor.fetchone()
+                if result == 0:
+                    return None
         except Exception as e:
+            print('get_total_data_count_from_type from movie Data')
             print(e)
             return False
         else:
@@ -168,8 +182,11 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    # 用導演拿電影(通常導演不會導太多就不Limit)
-    def get_film_by_director(self, director):
+    # 用導演拿電影
+    def get_film_by_director(self, director, start_index):
+        start_index = int(start_index) * 20
+        print(start_index)
+        print(director)
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
@@ -177,9 +194,11 @@ class MovieDatabase:
                            'directors_movies.dm_movie_id\n'
                            'FROM directors\n'
                            'INNER JOIN directors_movies\n'
-                           'ON directors.name like %s'
-                           'AND directors.director_id = directors_movies.dm_director_id',
-                           ('%'+director+'%',))
+                           'ON directors.name LIKE %s\n'
+                           'AND directors.director_id = directors_movies.dm_director_id\n'
+                           'ORDER BY director_id\n'
+                           'LIMIT %s,20',
+                           ('%'+director+'%', start_index))
             result = cursor.fetchall()
             print('movieData get_film_by_director', result)
             # director_id, name, movie_id
@@ -187,6 +206,7 @@ class MovieDatabase:
             if result is None:
                 return None
         except Exception as e:
+            print('get_film_by_director from movieData')
             print(e)
             return False
         else:

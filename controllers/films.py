@@ -29,7 +29,7 @@ def make_page(data, page, total_page):
     page = int(page) + 1
     data['data']['currentPage'] = page
     data['data']['nextPage'] = None
-    data['data']['totalPages'] = total_page
+    data['totalPages'] = total_page
 
     if page < total_page:
         data['nextPage'] = page + 1
@@ -50,16 +50,22 @@ def get_film_by_id_func(film_id):
 
 
 # 用導演拿電影 OK
-def get_films_by_director_func(director):
-    data = movie_database.get_film_by_director(director)
-    print(data)
-    if data is None:
+def get_films_by_director_func(director, page):
+    data_count = movie_database.get_total_data_count_from_type(director, 'director')[0]
+    print('datacount', data_count)
+    if data_count is None:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
         }
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = movie_database.get_film_by_director(director, page)
+    info = make_page(info, page,total_page)
 
-    return data
+    return info
 
 
 # 演員拿電影 OK

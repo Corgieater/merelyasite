@@ -140,7 +140,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿均分資料+總共多少人平分
+    # 拿均分資料+總共多少人平分 OK
     def get_average_rate_data(self, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -176,21 +176,21 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-#     用ID拿單一資料
-    def get_film_by_id(self, film_id):
-        connection = p.get_connection()
-        cursor = connection.cursor()
-        try:
-            cursor.execute('SELECT * FROM movies_info WHERE id = %s',
-                           (film_id,))
-            result = cursor.fetchone()
-            if result is None:
-                return None
-        except Exception as e:
-            print(e)
-            return False
-        else:
-            return result
-        finally:
-            cursor.close()
-            connection.close()
+#     用ID拿單一資料 看起來沒用
+#     def get_film_by_id(self, film_id):
+#         connection = p.get_connection()
+#         cursor = connection.cursor()
+#         try:
+#             cursor.execute('SELECT * FROM movies_info WHERE id = %s',
+#                            (film_id,))
+#             result = cursor.fetchone()
+#             if result is None:
+#                 return None
+#         except Exception as e:
+#             print(e)
+#             return False
+#         else:
+#             return result
+#         finally:
+#             cursor.close()
+#             connection.close()

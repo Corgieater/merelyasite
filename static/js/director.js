@@ -1,5 +1,5 @@
 "use strict";
-let director = cutUserInputInMiddle("r/", "&");
+let director = cutUserInputAtLast("r=");
 console.log(director, "directorjs");
 let posterPlace = document.querySelector(".posterPlace");
 
@@ -16,10 +16,12 @@ async function makePosterLi(directorMovieId) {
   }
 }
 async function getMovieByDirector() {
-  let req = await fetch(`/api/director/${director}`);
+  let req = await fetch(`/api/director?director=${director}&page=1`);
   let res = await req.json();
   console.log(res);
   let idList = await res["data"]["directorMovieId"];
   makePosterLi(idList);
+  makePageTags(director, data["totalPages"]);
 }
+
 getMovieByDirector();

@@ -29,16 +29,19 @@ def render_film_page(film_id):
 
 
 # director搜電影 OK
-# 導演導的片通常不多就不Limit了
-@films_blueprint.route('/api/director/<director>')
-def search_by_director(director):
-    print('director',director.replace('+', ' '))
-    director = director.replace('+', ' ')
-    return get_films_by_director_func(director)
+@films_blueprint.route('/api/director')
+def search_by_director():
+    director = request.args.get('director').replace('+', ' ')
+    print('director', director)
+    page = request.args.get('page')
+    print(page)
+    if page is None:
+        page = 1
+    return get_films_by_director_func(director, page)
 
 # render template director
-@films_blueprint.route('/director/<director>')
-def render_director_page(director):
+@films_blueprint.route('/director')
+def render_director_page():
     #參數沒用到還是要填
     return render_template('director.html')
 

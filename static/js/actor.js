@@ -4,8 +4,8 @@ console.log(actor);
 // let page = cutUserInputAtLast("ge=");
 let posterPlace = document.querySelector(".posterPlace");
 
-async function makePosterLi(movieDat) {
-  for (let data of movieDat) {
+async function makePosterLi(movieData) {
+  for (let data of movieData) {
     let movieId = data["movieId"];
     let li = document.createElement("li");
     let img = document.createElement("img");

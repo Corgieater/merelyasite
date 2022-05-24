@@ -61,7 +61,7 @@ async function makeShowRow(data, userInputAndPage) {
       div3.append(div2);
       div3.classList.add("showRow");
       div3.classList.add("flex");
-      makeAlinkAndAppend(p, "/director/", directors);
+      makeAlinkAndAppend(p, "/director?director=", directors);
       li.append(div3);
       showPlace.append(li);
     }
@@ -70,21 +70,5 @@ async function makeShowRow(data, userInputAndPage) {
 }
 
 // 小功能
-// 做頁碼
-async function makePageTags(userInputAndPage, totalPages) {
-  console.log("usrinpiut", userInputAndPage);
-  // 這裡的問題 改一下
-  for (let i = 0; i < totalPages; i++) {
-    // 找出要切哪
-    let sliceIndex = userInputAndPage.indexOf("e=");
-    console.log("slice Index", sliceIndex);
-    // 切到底拿到除了page以外的querystring
-    let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
-    let a = document.createElement("a");
-    a.href = `/search?keyword=${querystringWithoutPage}${i + 1}`;
-    a.textContent = i + 1;
-    pagesPlace.append(a);
-  }
-}
 
 renderDataInfo();

@@ -88,3 +88,20 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
 //   const res = await req.json();
 //   return res;
 // }
+
+// 做頁碼
+async function makePageTags(userInputAndPage, totalPages) {
+  console.log("usrinpiut", userInputAndPage);
+  // 這裡的問題 改一下
+  for (let i = 0; i < totalPages; i++) {
+    // 找出要切哪
+    let sliceIndex = userInputAndPage.indexOf("e=");
+    console.log("slice Index", sliceIndex);
+    // 切到底拿到除了page以外的querystring
+    let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
+    let a = document.createElement("a");
+    a.href = `/search?keyword=${querystringWithoutPage}${i + 1}`;
+    a.textContent = i + 1;
+    pagesPlace.append(a);
+  }
+}
