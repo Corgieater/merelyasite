@@ -10,7 +10,7 @@ review_database = ReviewDatabase()
 
 def make_review_dic(data):
     data_dic = {
-        'data':[]
+        'data': []
     }
 
     for info in data:

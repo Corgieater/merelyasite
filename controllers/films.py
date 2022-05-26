@@ -133,11 +133,23 @@ def get_films_by_genre_func(genre, page):
 # 更新或加入評分 OK
 def rating_func(rate, user_id, film_id):
     if user_id is None:
-        print('NOPELPELE')
+        return {
+            'error': True,
+            'message': 'Please log in'
+        }
     print('rating_func from controllers', rate, user_id, film_id)
-    rate_updated = review_database.rating(rate, user_id, film_id)
-    if rate_updated:
+    result = review_database.rating(rate, user_id, film_id)
+    if result is True:
         return {'ok': True}
+    # elif type(result) is int:
+    #     rates_users_relation_added =\
+    #         review_database.add_rates_users_relation(user_id, result)
+    #     if rates_users_relation_added:
+    #         return {'ok': True}
+    #     else: return{
+    #         'error':'Something went wrong, please try again'
+    #     }
+
     else:
         return{
             'error':'Something went wrong, please try again'
@@ -149,7 +161,7 @@ def get_rate_func(user_id, movie_id):
     rate = review_database.get_rate_data(user_id, movie_id)
     if rate:
         data = {
-            'data': {'rate': rate[0]}
+            'data': {'rate': rate}
         }
         return data
     else:

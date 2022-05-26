@@ -8,6 +8,7 @@ console.log("hi from filmjs");
 let poster = document.querySelector(".posterPlace > img");
 let title = document.querySelector(".headArea > section :nth-child(1)");
 let year = document.querySelector(".headArea > section :nth-child(2)");
+let tagline = document.querySelector(".headArea > section :nth-child(3)");
 let directors = document.querySelector(".directorsPlace");
 let plot = document.querySelector(".plot > p");
 let casts = document.querySelector(".casts");
@@ -70,8 +71,18 @@ showProperReviewBox();
 // 打開評論區
 reviewBt.addEventListener("click", function (e) {
   e.preventDefault();
+  let userLog = document.querySelector("#review");
   hideOrShow(reviewBox);
   show(mask);
+  spoilersCheckBox.disabled = true;
+  // 如果沒打心得不給勾spoiler
+  userLog.addEventListener("input", function () {
+    if (userLog.value !== "") {
+      spoilersCheckBox.disabled = false;
+    } else {
+      spoilersCheckBox.disabled = true;
+    }
+  });
 });
 
 // 顯示日期按鈕
@@ -305,6 +316,7 @@ async function getAverageRate() {
 async function getFilm() {
   const req = await fetch(`/api/film/${filmId}`);
   const res = await req.json();
+  console.log("getFIlm", res);
   return res;
 }
 
@@ -312,9 +324,9 @@ async function getFilm() {
 async function showFilmInfo() {
   let data = await getFilm();
   data = data["data"];
-  console.log(data);
   let filmId = data["movieId"];
   let filmTitle = data["title"];
+  let filmTagline = data["tagline"];
   reviewTitle.textContent = data["title"];
   let filmYear = data["year"];
   let filmDirectors = data["directors"];
@@ -325,6 +337,7 @@ async function showFilmInfo() {
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   title.textContent = filmTitle;
   year.textContent = filmYear;
+  tagline.textContent = filmTagline;
   year.href = `/year?year=${filmYear}`;
   plot.textContent = filmPlot;
   makeAlinkAndAppend(directors, "/director/", filmDirectors);

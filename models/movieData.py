@@ -2,13 +2,14 @@ from models.databaseClass import pool as p
 
 
 def make_movie_info_dic(movie, directors, actors, genres):
+    print(movie)
     dic = {
         'data': {
             'movieId': movie[0],
-            'title': movie[1],
-            'year': movie[2],
-            'story': movie[3],
-            'tagline': movie[4],
+            'title': movie[2],
+            'year': movie[3],
+            'story': movie[4],
+            'tagline': movie[5],
             'directors': [],
             'actors': [],
             'genres': []
@@ -244,6 +245,7 @@ class MovieDatabase:
                            'LIMIT %s,20',
                            ('%'+director+'%', start_index))
             result = cursor.fetchall()
+            print(result)
             print('movieData get_film_by_director', result)
             # director_id, name, movie_id
             director_movie_dic = make_director_movie_dic(result)

@@ -29,6 +29,7 @@ section > a {
   text-decoration: underline;
   text-decoration-color: antiquewhite;
 }
+
 /* head area */
 .headArea {
   width: 100%;
@@ -45,6 +46,14 @@ section > a {
 .headArea > section > p {
   font-size: 25px;
   font-weight: bold;
+}
+/* .headArea > section :nth-child(2) {
+  margin-bottom: 20px;
+} */
+/* tagling */
+.headArea > section :nth-child(3) {
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 
 /* body area */

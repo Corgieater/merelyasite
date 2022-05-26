@@ -84,24 +84,59 @@ class ReviewDatabase:
 
     # 更新評分 先找有沒有舊的 有就更新 沒有就加入 OK
     def rating(self, rate, user_id, film_id):
-        print('reviewData rating')
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            print('trying finding')
-            cursor.execute('SELECT rate FROM rates WHERE rate_film_id = %s AND rate_user_id = %s', (film_id, user_id))
-            result = cursor.fetchone()
-            print(result)
-            if result is None:
-                print('trying insert')
-                cursor.execute('INSERT INTO rates(rate_id, rate, rate_user_id, rate_film_id) VALUES(%s, %s, %s, %s)',
-                               (None, rate, user_id, film_id))
+            cursor.execute('SELECT rates.rate_id\n'
+                           'FROM rates_users\n'
+                           'INNER JOIN users\n'
+                           'ON rates_users.ru_user_id = %s\n'
+                           'AND rates_users.ru_user_id = users.user_id\n'
+                           'INNER JOIN rates\n'
+                           'ON rates_users.ru_rate_id=rates.rate_id\n'
+                           'INNER JOIN movies_info\n'
+                           'ON rates.rate_movie_id = %s\n'
+                           'AND rates.rate_movie_id = movies_info.movie_id', (user_id, film_id))
+            exist_rate_id = cursor.fetchone()
+            # 這裡不能+[0] 如果是NONE會跳錯
+            if exist_rate_id is None:
+                cursor.execute('INSERT INTO rates(rate_id, rate, rate_movie_id) VALUES(DEFAULT, %s, %s)',
+                               (rate, film_id))
+                cursor.execute('SELECT LAST_INSERT_ID()')
+                result = cursor.fetchone()[0]
+
             else:
                 print('trying update')
-                cursor.execute('UPDATE rates SET rate = %s WHERE rate_user_id = %s AND rate_film_id = %s',
-                               (rate, user_id, film_id,))
+                cursor.execute('UPDATE rates SET rate = %s WHERE rate_id = %s',
+                               (rate, exist_rate_id[0]))
+                result = True
 
         except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            if result is True:
+                return True
+            if type(result) is int:
+                return self.add_rates_users_relation(user_id, result)
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # 加入評分與使用者關聯
+    def add_rates_users_relation(self, user_id, rate_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            # rate和user關聯
+            cursor.execute('INSERT INTO rates_users(ru_id, ru_user_id, ru_rate_id) VALUES(DEFAULT, %s, %s)',
+                           (user_id, rate_id))
+
+        except Exception as e:
+            print('add_rates_users_relation reviewData')
             print(e)
             connection.rollback()
             return False
@@ -117,9 +152,19 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT rate FROM rates Where rate_film_id = %s AND rate_user_id = %s',
-                           (film_id, user_id,))
-            results = cursor.fetchone()
+            cursor.execute('SELECT rates.rate_id, rates.rate, movies_info.title\n'
+                           'FROM rates_users\n'
+                           'INNER JOIN users\n'
+                           'ON rates_users.ru_user_id = %s\n'
+                           'AND rates_users.ru_user_id = users.user_id\n'
+                           'INNER JOIN rates\n'
+                           'ON rates_users.ru_rate_id=rates.rate_id\n'
+                           'INNER JOIN movies_info\n'
+                           'ON rates.rate_movie_id = %s\n'
+                           'AND rates.rate_movie_id = movies_info.movie_id;\n'
+                           '            ',
+                           (user_id, film_id))
+            results = cursor.fetchone()[1]
         except Exception as e:
             print(e)
             return False
@@ -133,11 +178,19 @@ class ReviewDatabase:
     def delete_rate_data(self, film_id, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('in delete rate data from reviewData')
         try:
-            cursor.execute('DELETE FROM rates WHERE rate_film_id = %s AND rate_user_id = %s',
-                           (film_id, user_id))
+            cursor.execute('SELECT rates.rate_id\n'
+                           'FROM rates\n'
+                           'INNER join rates_users\n'
+                           'ON rates_users.ru_user_id = %s\n'
+                           'AND rates.rate_movie_id = %s\n'
+                           'AND rates_users.ru_rate_id = rates.rate_id;',
+                           (user_id, film_id))
+            rate_id = cursor.fetchone()[0]
+            cursor.execute('DELETE FROM rates WHERE rate_id = %s', (rate_id,))
+
         except Exception as e:
+            print('delete rate data from reviewData')
             print(e)
             connection.rollback()
             return False
@@ -153,7 +206,7 @@ class ReviewDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*), ROUND(AVG(rate),1) FROM rates AS total_count WHERE rate_film_id = %s',
+            cursor.execute('SELECT count(*), ROUND(AVG(rate),1) FROM rates AS total_count WHERE rate_movie_id = %s',
                            (film_id,))
             results = cursor.fetchone()
         except Exception as e:
