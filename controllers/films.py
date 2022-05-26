@@ -39,7 +39,7 @@ def make_page(data, page, total_page):
 
 # NAME拿導演
 def get_director_by_name_func(director, page):
-    data_count = movie_database.get_total_data_count_from_type(director, 'only_director')[0]
+    data_count = movie_database.get_total_data_count_from_type(director, 'director')[0]
     print(data_count)
     if data_count is 0:
         return {
@@ -51,6 +51,23 @@ def get_director_by_name_func(director, page):
         page = 1
     page = int(page) - 1
     info = movie_database.get_director_by_name(director, page)
+    info = make_page(info, page, total_page)
+    return info
+
+# NAME拿演員
+def get_actor_by_name_func(actor, page):
+    data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
+    print(data_count)
+    if data_count is 0:
+        return {
+            'error': True,
+            'message': 'There is no such id, please check it again'
+        }
+    total_page = math.ceil(data_count / 20)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = movie_database.get_actor_by_name(actor, page)
     info = make_page(info, page, total_page)
     return info
 
@@ -67,7 +84,7 @@ def get_film_by_id_func(film_id):
 
 # 用導演拿電影 OK
 def get_films_by_director_func(director, page):
-    data_count = movie_database.get_total_data_count_from_type(director, 'director')[0]
+    data_count = movie_database.get_total_data_count_from_type(director, 'director_movies')[0]
     print('datacount', data_count)
     if data_count is 0:
         return {
@@ -79,14 +96,20 @@ def get_films_by_director_func(director, page):
         page = 1
     page = int(page) - 1
     info = movie_database.get_film_by_director(director, page)
-    info = make_page(info, page,total_page)
+    if info is False:
+        return {
+            'error': True,
+            'message': 'Wrong keyword, please try again'
+        }
+    info = make_page(info, page, total_page)
 
     return info
 
 
-# 演員拿電影 OK
+# 演員拿電影 HERE
 def get_films_by_actor_func(actor, page):
     data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
+    print('datacount',data_count)
     # 這邊是算出演員有多少叫OO的
     # 那下面就要改成秀出演員
     print('data count get_films_by_actor_func', data_count)
@@ -100,15 +123,13 @@ def get_films_by_actor_func(actor, page):
         page = 1
     page = int(page) - 1
     info = movie_database.get_film_by_actor(actor, page)
+    if info is False:
+        return {
+            'error': True,
+            'message': 'Wrong keyword, please try again'
+        }
     info = make_page(info, page, total_page)
     return info
-    # data = movie_database.get_film_by_actor(actor, start_index)
-    # data_dic = {'data': {
-    #     'movieId': [],
-    # }}
-    # for film_id in data:
-    #     data_dic['data']['movieId'].append(film_id[2])
-    # return data_dic
 
 
 # GENRE拿電影 HERE

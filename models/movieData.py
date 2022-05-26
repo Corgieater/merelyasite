@@ -68,7 +68,7 @@ def make_genre_movie_dic(search_results):
         main_dic['data']['data'].append(clean_data)
     return main_dic
 
-# 做導演DIC含幾部作品
+# 做導演演員DIC含幾部作品
 def make_director_dic(search_results, movie_counts_list):
     main_dic = {
         'data': {
@@ -76,21 +76,22 @@ def make_director_dic(search_results, movie_counts_list):
         }
     }
     for result in search_results:
+        print(result,' from make_director_dic')
         clean_data = {
             'directorId': result[0],
             'directorName': result[1],
             'directorMovieCount': None
         }
         main_dic['data']['data'].append(clean_data)
-    for i in range(len(main_dic)+1):
+    for i in range(len(search_results)):
         main_dic['data']['data'][i]['directorMovieCount'] = movie_counts_list[i]
+        print(main_dic['data']['data'][i]['directorMovieCount'])
     return main_dic
 
 
 class MovieDatabase:
     def get_info(self, user_input, start_index=0):
         # 全搜尋東西太多 只先提供電影搜尋
-        # 之後要做成可以搜尋USER ACTOR DIRECTOR
         print('get_info from movieData')
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -131,24 +132,24 @@ class MovieDatabase:
                 result = cursor.fetchone()
                 if result == 0:
                     return None
+
+            # 算actor人名有幾個差不多的
             if input_type == 'actor':
                 cursor.execute('SELECT count(*) FROM actors Where name like %s',
                                ('%' + user_input + '%',))
                 result = cursor.fetchone()
                 if result == 0:
                     return None
+
+             # 算導演人名有幾個差不多的
             if input_type == 'director':
-                cursor.execute('SELECT COUNT(movies_info.title) AS movie_count\n'
-                               'FROM directors\n'   
-                               'INNER JOIN directors_movies\n'
-                               'ON directors.name LIKE %s\n'
-                               'AND directors.director_id = directors_movies.dm_director_id\n'
-                               'INNER JOIN movies_info\n'
-                               'ON directors_movies.dm_movie_id = movies_info.movie_id',
+                cursor.execute('''SELECT COUNT(*) FROM directors WHERE name LIKE %s''',
                                ('%' + user_input + '%',))
                 result = cursor.fetchone()
+                print('result in get genre count', result)
                 if result == 0:
                     return None
+
             if input_type == 'genre':
                 cursor.execute('select count(movies_info.title) as count\n'
                                'from genres\n'
@@ -163,13 +164,31 @@ class MovieDatabase:
                 if result == 0:
                     return None
 
-            if input_type == 'only_director':
-                cursor.execute('''SELECT COUNT(*) FROM directors WHERE name LIKE %s''',
+            # 算導演拍幾部電影
+            if input_type == 'director_movies':
+                cursor.execute('SELECT COUNT(directors_movies.dm_director_id) AS movie_count\n'
+                               'FROM directors\n'
+                               'INNER JOIN directors_movies\n'
+                               'ON directors.name LIKE %s\n'
+                               'AND directors.director_id = directors_movies.dm_director_id\n',
                                ('%' + user_input + '%',))
                 result = cursor.fetchone()
-                print('result in get genre count', result)
                 if result == 0:
                     return None
+
+            # 算演員拍幾部電影
+            if input_type == 'actor_movies':
+                cursor.execute('SELECT COUNT(actors_movies.am_actor_id) AS movie_count\n'
+                               'FROM actors\n'
+                               'INNER JOIN actors_movies\n'
+                               'ON actors.name LIKE %s\n'
+                               'AND actors.actor_id = actors_movies.am_actor_id',
+                               ('%' + user_input + '%',))
+                result = cursor.fetchone()
+                if result == 0:
+                    return None
+
+
         except Exception as e:
             print('get_total_data_count_from_type from movie Data')
             print(e)
@@ -246,7 +265,9 @@ class MovieDatabase:
                            ('%'+director+'%', start_index))
             result = cursor.fetchall()
             print(result)
-            print('movieData get_film_by_director', result)
+            print('movieData get_film_by_director', len(result))
+            if len(result) == 0:
+                return False
             # director_id, name, movie_id
             director_movie_dic = make_director_movie_dic(result)
             if result is None:
@@ -327,12 +348,13 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
+    # 名字拿導演
     def get_director_by_name(self, director, start_index):
         start_index = int(start_index) * 20
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
-            cursor.execute('SELECT directors.*\n'
+            cursor.execute('SELECT directors.director_id, directors.name\n'
                            'FROM directors\n'
                            'INNER JOIN directors_movies\n'
                            'ON directors.name LIKE %s\n'
@@ -340,6 +362,7 @@ class MovieDatabase:
                            'INNER JOIN movies_info\n'
                            'ON directors_movies.dm_movie_id = movies_info.movie_id\n'
                            'GROUP BY director_id\n'
+                           'ORDER BY name\n'
                            'LIMIT %s, 20',
                            ('%' + director + '%', start_index))
             print(director, start_index)
@@ -355,6 +378,45 @@ class MovieDatabase:
                 return None
         except Exception as e:
             print('get_director_by_name from movieData')
+            print(e)
+            return False
+        else:
+            return director_dic
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # 名字拿演員
+    def get_actor_by_name(self, actor, start_index):
+        start_index = int(start_index) * 20
+        try:
+            connection = p.get_connection()
+            cursor = connection.cursor()
+            cursor.execute('SELECT actors.actor_id, actors.name,\n'
+                           'actors_movies.am_movie_id\n'
+                           'FROM actors\n'
+                           'INNER JOIN actors_movies\n'
+                           'ON actors.name like %s \n'
+                           'AND actors.actor_id = actors_movies.am_actor_id\n'
+                           'GROUP BY actor_id\n'
+                           'ORDER BY name\n'
+                           'LIMIT %s,20', ('%'+actor+'%', start_index))
+            print(actor, start_index)
+            result = cursor.fetchall()
+            if len(result) == 0:
+                return False
+            movie_counts = []
+            for actor_id in result:
+                cursor.execute('SELECT COUNT(*) FROM actors_movies WHERE am_actor_id =%s',
+                               (actor_id[0],))
+                movie_counts.append(cursor.fetchone()[0])
+            director_dic = make_director_dic(result, movie_counts)
+            print('movieData make_actor_dic ', result)
+            if len(result) is 0:
+                return False
+        except Exception as e:
+            print('get_actor_by_name from movieData')
             print(e)
             return False
         else:

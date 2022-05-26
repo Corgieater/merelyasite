@@ -340,7 +340,7 @@ async function showFilmInfo() {
   tagline.textContent = filmTagline;
   year.href = `/year?year=${filmYear}`;
   plot.textContent = filmPlot;
-  makeAlinkAndAppend(directors, "/director/", filmDirectors);
+  makeAlinkAndAppend(directors, "/director?director=", filmDirectors);
   makeAlinkAndAppend(casts, `/actor?actor=`, filmStars);
   makeAlinkAndAppend(genres, "/genre?genre=", filmGenres);
 }

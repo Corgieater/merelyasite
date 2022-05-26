@@ -1,7 +1,10 @@
 "use strict";
 let director = cutUserInputAtLast("r=");
+// this need to be take care, include actor's part and actor's html
+// actor's message showing
 console.log(director, "directorjs");
 let posterPlace = document.querySelector(".posterPlace");
+let frame = document.querySelector(".frame");
 
 async function makePosterLi(directorMovieId) {
   for (let id of directorMovieId) {
@@ -19,11 +22,15 @@ async function getMovieByDirector() {
   let req = await fetch(`/api/director?director=${director}&page=1`);
   let res = await req.json();
   if (res.data) {
+    let idList = await res["data"]["directorMovieId"];
+    makePosterLi(idList);
+    let userInputAndPage = cutUserInputAtLast("r=");
+    makePageTags("director?director", userInputAndPage, res["totalPages"]);
+  } else {
+    console.log(res);
+    console.log(frame);
+    makeMessage(frame, res.message);
   }
-  let idList = await res["data"]["directorMovieId"];
-  makePosterLi(idList);
-  let userInputAndPage = cutUserInputAtLast("r=");
-  makePageTags("director?director", userInputAndPage, res["totalPages"]);
 }
 
 async function makeShowRow(data, userInputAndPage) {

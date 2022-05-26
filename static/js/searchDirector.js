@@ -13,12 +13,13 @@ let directorsCollectionsBt = document.querySelector(
 let actorsCollectionsBt = document.querySelector(
   ".searchCollections > a:nth-child(4)"
 );
-let keyword = cutUserInputInMiddle("d=", "&");
+let keyword = cutUserInputInMiddle("r=", "&");
+
 movieCollectionsBt.href = `/search?keyword=${keyword}&page=1`;
 reviewsCollectionsBt.href = `/review?${keyword}&page=1`;
 // review要考慮show什麼
 directorsCollectionsBt.href = `/search/director?director=${keyword}&page=1`;
-actorsCollectionsBt.href = `/actor?actor=${keyword}&page=1`;
+actorsCollectionsBt.href = `/search/actor?actor=${keyword}&page=1`;
 
 // 做資料
 async function renderDataInfo() {
@@ -67,7 +68,13 @@ async function makeShowRow(data, userInputAndPage) {
       img.src = `../static/images/film.svg`;
       a1.href = `/director?director=${noSpaceName}&page=1`;
       a1.textContent = directorName + " ";
-      p.textContent = `Director of ${totalMoiesCount} movies`;
+
+      if (totalMoiesCount === 1) {
+        p.textContent = `Director of 1 movie`;
+      } else {
+        p.textContent = `Director of ${totalMoiesCount} movies`;
+      }
+
       div1.append(img);
       div2.append(a1);
       div2.append(p);

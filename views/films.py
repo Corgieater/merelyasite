@@ -27,7 +27,7 @@ def search_by_id(film_id):
 def render_film_page(film_id):
     return render_template('film.html')
 
-
+# 找導演
 @films_blueprint.route('/api/search/director')
 def get_director():
     director = request.args.get('director').replace('+', ' ')
@@ -42,6 +42,23 @@ def get_director():
 def render_search_Director_page():
     director = request.args.get('director').replace('+', ' ')
     return render_template('searchDirector.html', director=director)
+
+
+# 找演員
+@films_blueprint.route('/api/search/actor')
+def get_actor():
+    actor = request.args.get('actor').replace('+', ' ')
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    return get_actor_by_name_func(actor, page)
+
+
+# render search actor page
+@films_blueprint.route('/search/actor')
+def render_search_actor_page():
+    actor = request.args.get('actor').replace('+', ' ')
+    return render_template('searchActor.html', director=actor)
 
 
 # director搜電影 OK
