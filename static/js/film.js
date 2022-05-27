@@ -121,7 +121,7 @@ saveBt.addEventListener("click", async function () {
     }
     today = yyyy + "/" + mm + "/" + dd;
     let data = {
-      userReview: userLog.value,
+      movieReview: userLog.value,
       filmId: filmId,
       currentDate: today,
       watchedDate: watchedDate.value,

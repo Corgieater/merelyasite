@@ -22,7 +22,7 @@ def get_movie_from_omdb_func(title, year):
     database = ImportDatabase()
     title = title.replace(' ', '+')
     url = f'http://www.omdbapi.com/?apikey={omdb_key}&t={title}&y={year}&plot=full'
-    data_exist = database.find_in_database(title)
+    data_exist = database.find_in_database(title, year)
     if data_exist:
         return False
     else:
@@ -34,13 +34,14 @@ def get_movie_from_omdb_func(title, year):
         genre = data['Genre']
         director = data['Director']
         actors = data['Actors']
-        plot = data['Plot']
+        story_line = data['Plot']
+        tagline
         poster = data['Poster']
         cut_point = poster.find('_S')
         # 換成大張的海報
         poster = poster[:cut_point] + '_FMjpg_UX674_.jpg'
-        print(movie_id, title, year, genre, director, actors, plot, poster)
-        movie_input = (movie_id, title, year, director, actors, genre, plot)
+        print(movie_id, title, year, genre, director, actors, story_line, poster)
+        movie_input = (movie_id, movie_id,title, year, story_line, tagline)
         print(movie_input)
         try:
             database.add_to_database(movie_input)

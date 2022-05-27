@@ -42,15 +42,13 @@
           <li><a href="#">CREATE ACCOUNT</a></li>
           <li><a href="/search?keyword=&page=1">FILMS</a></li>
           <!-- 如果films沒辦法用爬蟲抓出最新電影之類的 那還有必要ㄇ -->
-          <li><a href="#">NOTES</a></li>
+          <!-- <li><a href="#">NOTES</a></li> -->
           <li class="hide"><a href="#">LOG OUT</a></li>
           <!-- 如果有東西不會動 就是因為ADD MOIVE本來應該加在最後的關係:( -->
           <li><a href="#">ADD MOVIE</a></li>
           <li class="searchForm">
             <input type="text" id="userInput" />
-            <a href="#"
-              ><img src="../static/images/glass.png" alt="search"
-            /></a>
+            <a href="#"><img src="/static/images/glass.png" alt="search" /></a>
           </li>
         </ul>
       </nav>
@@ -114,10 +112,9 @@
       </div>
       {% block content %}{% endblock %}
     </div>
-
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <script src="{{ url_for('static', filename='js/navScript.js') }}"></script>
     <script src="{{ url_for('static', filename='js/public.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/navScript.js') }}"></script>
     {% block script %}{% endblock %}
   </body>
 </html>

@@ -112,16 +112,17 @@ section > a {
   border-radius: 5px;
   position: absolute;
   background-color: lightslategrey;
-  width: 70%;
+  width: 50%;
   height: 550px;
-  left: 15%;
+  left: 25%;
   z-index: 3;
 }
 .reviewBox > section {
   padding: 30px;
 }
 .reviewBox > section > img {
-  max-width: 65%;
+  /* max-width: 50%; */
+  max-height: 80%;
 }
 .reviewBox > section:nth-child(2) {
   line-height: 1.5;

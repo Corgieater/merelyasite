@@ -3,11 +3,6 @@ from flask import *
 from controllers.getMovie import *
 
 
-# from moviePro.spiders import movieSpy
-# from scrapy.crawler import CrawlerProcess
-# from scrapy.settings import Settings
-# from moviePro import settings as my_settings
-
 films_blueprint = Blueprint(
     'films_Blueprint',
     __name__,
@@ -15,6 +10,9 @@ films_blueprint = Blueprint(
     template_folder='templates'
 )
 
+# 導演演員的確定路徑(全名)一定要是類似這樣
+#  https://letterboxd.com/actor/tom-cruise/
+# 顯示電影的方式就用下滑打API
 
 # ID搜電影 OK
 @films_blueprint.route('/api/film/<film_id>')
@@ -34,7 +32,7 @@ def get_director():
     page = request.args.get('page')
     if page is None:
         page = 1
-    return get_director_by_name_func(director, page)
+    return get_data_by_type_func(director, page, 'director')
 
 
 # render search director page
@@ -51,7 +49,7 @@ def get_actor():
     page = request.args.get('page')
     if page is None:
         page = 1
-    return get_actor_by_name_func(actor, page)
+    return get_data_by_type_func(actor, page, 'actor')
 
 
 # render search actor page
@@ -99,7 +97,7 @@ def render_actor_page():
     return render_template('actor.html')
 
 
-# genre搜電影 HERE
+# genre搜電影 HERE--------------------
 @films_blueprint.route('/api/genre')
 def search_by_genre():
     genre = request.args.get('genre')
@@ -172,7 +170,7 @@ def get_average_rate():
 @films_blueprint.route('/api/review', methods=['PATCH'])
 def film_review():
     data = request.get_json()
-    user_review = data['userReview']
+    movie_review = data['movieReview']
     film_id = data['filmId']
     current_date = data['currentDate']
     watched_date = data['watchedDate']
@@ -181,8 +179,7 @@ def film_review():
     user_id = data['userId']
     spoilers = data['spoilers']
     print('from vews films',spoilers)
-
-    return film_review_func(user_review, film_id, current_date, watched_date, user_id, spoilers)
+    return film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
 
 # 刪評論 *********** 寫到使用者頁面的時候回頭來檢查
@@ -201,7 +198,7 @@ def film_delete():
 def render_films_page():
     return render_template('publicFilms.html')
 
-# 加入電影
+# 加入電影   ****************要修 想辦法去爬IMDB 不然 TAGLINE就爆了
 @films_blueprint.route('/api/addFilm')
 def get_movie_from_omdb():
     title = request.args.get('t').replace('+', ' ')

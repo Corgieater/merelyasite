@@ -101,7 +101,7 @@ async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
     // 切到底拿到除了page以外的querystring
     let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
     let a = document.createElement("a");
-    a.href = `/${pageAndQuery}=${querystringWithoutPage}${i + 1}`;
+    a.href = `/${pageAndQuery}${querystringWithoutPage}${i + 1}`;
     a.textContent = i + 1;
     pagesPlace.append(a);
   }

@@ -37,39 +37,36 @@ def make_page(data, page, total_page):
         data['nextPage'] = None
     return data
 
-# NAME拿導演
-def get_director_by_name_func(director, page):
-    data_count = movie_database.get_total_data_count_from_type(director, 'director')[0]
-    print(data_count)
-    if data_count is 0:
-        return {
-            'error': True,
-            'message': 'There is no such id, please check it again'
-        }
-    total_page = math.ceil(data_count / 20)
+# 用TYPE拿資料(導演演員GENRE)
+def get_data_by_type_func(query, page, data_type):
+    data_count = 0
     if page is None:
         page = 1
     page = int(page) - 1
-    info = movie_database.get_director_by_name(director, page)
+    if data_type == 'director':
+        data_count = movie_database.get_total_data_count_from_type(query, 'director')
+        print(data_count, 'director')
+
+    if data_type == 'actor':
+        data_count = movie_database.get_total_data_count_from_type(query, 'actor')
+        print(data_count, 'actor')
+
+    if data_count is False:
+        return {
+            'error': True,
+            'message': 'There is no such keyword, please check it again'
+        }
+
+    total_page = math.ceil(data_count[0] / 20)
+
+    info = None
+    if data_type == 'director':
+        info = movie_database.get_director_by_name(query, page)
+    if data_type == 'actor':
+        info = movie_database.get_actor_by_name(query, page)
     info = make_page(info, page, total_page)
     return info
 
-# NAME拿演員
-def get_actor_by_name_func(actor, page):
-    data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
-    print(data_count)
-    if data_count is 0:
-        return {
-            'error': True,
-            'message': 'There is no such id, please check it again'
-        }
-    total_page = math.ceil(data_count / 20)
-    if page is None:
-        page = 1
-    page = int(page) - 1
-    info = movie_database.get_actor_by_name(actor, page)
-    info = make_page(info, page, total_page)
-    return info
 
 # 用ID拿電影 OK
 def get_film_by_id_func(film_id):
@@ -84,14 +81,14 @@ def get_film_by_id_func(film_id):
 
 # 用導演拿電影 OK
 def get_films_by_director_func(director, page):
-    data_count = movie_database.get_total_data_count_from_type(director, 'director_movies')[0]
+    data_count = movie_database.get_total_data_count_from_type(director, 'director_movies')
     print('datacount', data_count)
     if data_count is 0:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
         }
-    total_page = math.ceil(data_count / 20)
+    total_page = math.ceil(data_count[0] / 20)
     if page is None:
         page = 1
     page = int(page) - 1
@@ -108,7 +105,7 @@ def get_films_by_director_func(director, page):
 
 # 演員拿電影 HERE
 def get_films_by_actor_func(actor, page):
-    data_count = movie_database.get_total_data_count_from_type(actor, 'actor')[0]
+    data_count = movie_database.get_total_data_count_from_type(actor, 'actor')
     print('datacount',data_count)
     # 這邊是算出演員有多少叫OO的
     # 那下面就要改成秀出演員
@@ -118,7 +115,7 @@ def get_films_by_actor_func(actor, page):
             'error': True,
             'message': 'There is no such person, please check it again'
         }
-    total_page = math.ceil(data_count / 20)
+    total_page = math.ceil(data_count[0] / 20)
     if page is None:
         page = 1
     page = int(page) - 1
@@ -141,7 +138,7 @@ def get_films_by_genre_func(genre, page):
             'error': True,
             'message': 'There is no such person, please check it again'
         }
-    total_page = math.ceil(data_count / 20)
+    total_page = math.ceil(data_count[0] / 20)
     if page is None:
         page = 1
     page = int(page) - 1
@@ -221,11 +218,14 @@ def get_average_rate_func(film_id):
 
 # 評論相關
 # 留評論
-def film_review_func(user_review, film_id, current_date, watched_date, user_id, spoilers):
-    review_added = review_database.write_review(user_review, film_id, current_date, watched_date, user_id, spoilers)
-    print(review_added)
-    print('controllers films')
-    if review_added:
+def film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers):
+    if user_id is None:
+        return {
+            'error': True,
+            'message': 'Please log in'
+        }
+    result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
+    if result is True:
         return {
             'ok': True
         }
@@ -234,6 +234,7 @@ def film_review_func(user_review, film_id, current_date, watched_date, user_id, 
             'error': False,
             'message': 'Review failed, please try again'
         }
+
 
 
 # 刪除評論

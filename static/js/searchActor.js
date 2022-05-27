@@ -54,10 +54,10 @@ async function makeShowRow(data, userInputAndPage) {
     //   use for of for async func
     for (const info of data.data) {
       console.log(info);
-      let id = info["directorId"];
-      let directorName = info["directorName"];
-      let noSpaceName = directorName.replaceAll(" ", "+");
-      let totalMoiesCount = info["directorMovieCount"];
+      let id = info["actorId"];
+      let actorName = info["actorName"];
+      let noSpaceName = actorName.replaceAll(" ", "+");
+      let totalMoiesCount = info["actorMovieCount"];
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");
@@ -66,8 +66,8 @@ async function makeShowRow(data, userInputAndPage) {
       let a1 = document.createElement("a");
       let p = document.createElement("p");
       img.src = `../static/images/actor.svg`;
-      a1.href = `/director?director=${noSpaceName}&page=1`;
-      a1.textContent = directorName + " ";
+      a1.href = `/actor?actor=${noSpaceName}&page=1`;
+      a1.textContent = actorName + " ";
 
       if (totalMoiesCount === 1) {
         p.textContent = `Star of 1 movie`;
@@ -86,7 +86,7 @@ async function makeShowRow(data, userInputAndPage) {
       showPlace.append(li);
     }
   }
-  makePageTags("search?keyword", userInputAndPage, data["totalPages"]);
+  makePageTags("search?keyword=", userInputAndPage, data["totalPages"]);
 }
 
 // 小功能

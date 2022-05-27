@@ -1,5 +1,9 @@
 "use strict";
-const userName = cutUserInputAtLast("e/");
+let userName = cutUserInputAtLast("e/");
+let userNameWithNoPlus = userName.replaceAll("+", " ");
+let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
+let userProfileWatchlist = document.querySelector(".userProfileWatchlist");
+userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_latest_reviews/${userName}`);
@@ -17,23 +21,19 @@ async function redirectIfNotLogin() {
 async function showRecentlyReviews() {
   let data = await getLatestFiveReviews();
   let reviewdPlace = document.querySelector(".reviewdPlace");
-  console.log(data);
 
   for (let i = 0; i < data["data"].length; i++) {
     let li = document.createElement("li");
     li.classList.add("flex");
     let info = data["data"][i];
-    console.log(info);
     let watchedDay = info["watchedDay"];
     let reviewDay = info["reviewDay"];
     let date = null;
-    console.log("watchedDay", watchedDay);
     const filmId = info["filmId"];
     const filmTitle = info["filmTitle"];
     const review = info["review"];
     const reviewId = info["reviewId"];
     const spoilers = info["spoilers"];
-    console.log("spoilers", typeof spoilers);
     // 把後面的時間切掉
     if (watchedDay !== null) {
       console.log("use watched day");
@@ -63,6 +63,7 @@ async function showRecentlyReviews() {
     li.innerHTML = content;
     reviewdPlace.append(li);
     let userRate = info["userRate"];
+    console.log(userRate, "userrate");
     let starPlace = document.querySelectorAll(".starPlace");
     let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
@@ -75,7 +76,8 @@ async function showRecentlyReviews() {
           starPlace[i].append(img);
         }
       }
-      let halfStarRate = userRate.search(".5");
+      console.log(userRate, "beffor finding fhasl");
+      let halfStarRate = userRate.toString().search(".5");
       if (halfStarRate !== -1) {
         let img = document.createElement("img");
         img.src = "../static/images/half_star.png";
@@ -99,11 +101,8 @@ async function showRecentlyReviews() {
 
       reviewBody.insertBefore(spoilerAlert, reviewText);
       reviewBody.insertBefore(alert, spoilerAlert);
-    } else {
-      console.log("we are good");
     }
   }
 }
-getLatestFiveReviews();
 redirectIfNotLogin();
 showRecentlyReviews();

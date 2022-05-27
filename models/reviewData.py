@@ -1,27 +1,20 @@
 from models.databaseClass import pool as p
-# import os
-# from dotenv import load_dotenv
-# from mysql.connector import pooling
-#
-# load_dotenv()
-#
-# MYSQL_HOST = os.getenv('MYSQL_HOST')
-# MYSQL_USER = os.getenv('MYSQL_USER')
-# MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
-# MYSQL_DATABASE = 'movie'
 
 
 class ReviewDatabase:
     # 寫/更新評論 renew not yet done
-    def write_review(self, user_review, movie_id, current_date, watched_date, user_id, spoilers):
+
+    def write_review(self, movie_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('reviewData',user_review, movie_id, current_date, watched_date, user_id, spoilers)
+        print('reviewData',movie_review, movie_id, current_date, watched_date, user_id, spoilers)
         try:
-            cursor.execute('INSERT INTO reviews (review_id, user_review,'
-                           'movie_id, today, watched_date, user_id, spoilers)'
-                           'VALUES(DEFAULT, %s, %s ,%s, %s, %s, %s)',
-                           (user_review, movie_id, current_date, watched_date, user_id, spoilers))
+            cursor.execute('INSERT INTO reviews (review_id, review_movie_id, movie_review,'
+                           'today, watched_date, spoilers)'
+                           'VALUES(DEFAULT, %s, %s ,%s, %s, %s)',
+                           (movie_id, movie_review, current_date, watched_date, spoilers))
+            cursor.execute('SELECT LAST_INSERT_ID()')
+            last_insert_review_id = cursor.fetchone()[0]
         except Exception as e:
             print('write_review reviewData')
             print(e)
@@ -29,10 +22,33 @@ class ReviewDatabase:
             return False
         else:
             connection.commit()
-            return True
+            # added_review_movie_relation = self.add_rates_users_relation(user_id, last_insert_review_id)
+            self.add_relation_between_tables('reviews_users', user_id, last_insert_review_id)
+
         finally:
             cursor.close()
             connection.close()
+
+    # def add_reviews_movies_relation(self, user_id, review_id):
+    #     connection = p.get_connection()
+    #     cursor = connection.cursor()
+    #     try:
+    #         cursor.execute('INSERT INTO reviews_users (reu_id, reu_user_id, reu_review_id)\n'
+    #                        'VALUES(DEFAULT, %s, %s)',
+    #                        (user_id, review_id))
+    #     except Exception as e:
+    #         print('write_review reviewData')
+    #         print(e)
+    #         connection.rollback()
+    #         return False
+    #     else:
+    #         connection.commit()
+    #         return True
+    #     finally:
+    #         cursor.close()
+    #         connection.close()
+
+
 
     # 刪除評論
     def delete_review(self, film_id, user_id):
@@ -52,28 +68,64 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評論 (看可不可以改寫成if else然後可以處理5或多個)
-    def get_reviews_data(self, user_name):
+    # 拿評論
+    def get_reviews_data(self, user_name, page=0):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT reviews.user_review, reviews.today, reviews.watched_date,\n'
-                           'reviews.review_id, reviews.spoilers,\n'
-                           'movies_info.movie_id, movies_info.title, movies_info.year,\n'
-                           'rates.rate\n'
-                           'FROM users\n'
-                           'INNER JOIN reviews\n'
-                           'ON users.name = %s\n'
-                           'AND users.user_id = reviews.user_id\n'
-                           'INNER JOIN movies_info \n'
-                           'ON reviews.movie_id = movies_info.movie_id\n'
-                           'LEFT JOIN rates\n'
-                           'ON users.user_id = rates.rate_user_id\n'
-                           'AND reviews.movie_id = rates.rate_film_id\n'
-                           'ORDER BY review_id DESC\n'
-                           'LIMIT 5', (user_name,))
+            if int(page) > 0:
+                page = int(page) - 1
+                start_index = int(page)*20
+                cursor.execute('SELECT reviews_users.reu_user_id,\n'
+                               'users.name , \n'
+                               'reviews.review_movie_id, reviews.movie_review, reviews.today,\n'
+                               'reviews.watched_date, reviews.spoilers, \n'
+                               'movies_info.title, movies_info.year,\n'
+                               'reviews_users.reu_review_id\n'
+                               'FROM users\n'
+                               'INNER JOIN reviews_users\n'
+                               'ON users.name = %s\n'
+                               'AND users.user_id = reviews_users.reu_user_id\n'
+                               'INNER JOIN reviews\n'
+                               'INNER JOIN movies_info\n'
+                               'ON reviews_users.reu_review_id = reviews.review_id\n'
+                               'AND reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews_users.reu_review_id DESC\n'
+                               'LIMIT %s, 20', (user_name, start_index))
+
+            else:
+                cursor.execute('SELECT reviews_users.reu_user_id,\n'
+                               'users.name , \n'
+                               'reviews.review_movie_id, reviews.movie_review, reviews.today,\n'
+                               'reviews.watched_date, reviews.spoilers, \n'
+                               'movies_info.title, movies_info.year,\n'
+                               'reviews_users.reu_review_id\n'
+                               'FROM users\n'
+                               'INNER JOIN reviews_users\n'
+                               'ON users.name = %s\n'
+                               'AND users.user_id = reviews_users.reu_user_id\n'
+                               'INNER JOIN reviews\n'
+                               'INNER JOIN movies_info\n'
+                               'ON reviews_users.reu_review_id = reviews.review_id\n'
+                               'AND reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews_users.reu_review_id DESC\n'
+                               'LIMIT 5', (user_name,))
             results = cursor.fetchall()
+            print('get_reviews_data', results)
+            # new_tuple_list_with_rate = []
+            # for result in results:
+            #     user_rating = self.get_rate_data(result[0], result[2])
+            #     if user_rating is False:
+            #         user_rating = None
+            #     result += (user_rating,)
+            #     new_tuple_list_with_rate.append(result)
+            #
+            #     print(result)
+            #     print('user rating', user_rating)
+            # print('total result after +=rating', new_tuple_list_with_rate)
+
         except Exception as e:
+            print('get_reviews_data from reviewData')
             print(e)
             return False
         else:
@@ -120,23 +172,29 @@ class ReviewDatabase:
             if result is True:
                 return True
             if type(result) is int:
-                return self.add_rates_users_relation(user_id, result)
+                # return self.add_rates_users_relation(user_id, result)
+                return self.add_relation_between_tables('rates_users', user_id, result)
         finally:
             cursor.close()
             connection.close()
 
 
-    # 加入評分與使用者關聯
-    def add_rates_users_relation(self, user_id, rate_id):
+    # 加入關聯
+    def add_relation_between_tables(self, table, first_id, second_id):
         connection = p.get_connection()
         cursor = connection.cursor()
+
         try:
-            # rate和user關聯
-            cursor.execute('INSERT INTO rates_users(ru_id, ru_user_id, ru_rate_id) VALUES(DEFAULT, %s, %s)',
-                           (user_id, rate_id))
+            # 關聯兩張表
+            if table == 'rates_users':
+                cursor.execute('INSERT INTO rates_users VALUES(DEFAULT, %s, %s)',
+                               (first_id, second_id))
+            if table == 'reviews_users':
+                cursor.execute('INSERT INTO reviews_users VALUES(DEFAULT, %s, %s)',
+                               (first_id, second_id))
 
         except Exception as e:
-            print('add_rates_users_relation reviewData')
+            print('add_relation_between_tables reviewData')
             print(e)
             connection.rollback()
             return False
@@ -218,24 +276,45 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 算資料幾筆
-    def get_total_data_count(self, user_input):
+    def get_user_reviews_count_and_user_id(self, user_name):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT count(*) FROM movies_info Where title LIKE %s',
-                           ('%'+user_input+'%',))
-            result = cursor.fetchone()
-            if result == 0:
-                return None
+            cursor.execute('SELECT count(users.name) as review_count,\n'
+                           'users.user_id\n'
+                           'FROM users\n'
+                           'INNER JOIN reviews_users\n'
+                           'ON users.name = %s\n'
+                           'AND reviews_users.reu_user_id = users.user_id', (user_name,))
+            results = cursor.fetchone()
+            print(results, 'from get_user_reviews_count_and_user_id')
         except Exception as e:
             print(e)
             return False
         else:
-            return result
+            return results
         finally:
             cursor.close()
             connection.close()
+
+    # 算資料幾筆
+    # def get_total_data_count(self, user_input):
+    #     connection = p.get_connection()
+    #     cursor = connection.cursor()
+    #     try:
+    #         cursor.execute('SELECT count(*) FROM movies_info Where title LIKE %s',
+    #                        ('%'+user_input+'%',))
+    #         result = cursor.fetchone()
+    #         if result == 0:
+    #             return None
+    #     except Exception as e:
+    #         print(e)
+    #         return False
+    #     else:
+    #         return result
+    #     finally:
+    #         cursor.close()
+    #         connection.close()
 
 #     用ID拿單一資料 看起來沒用
 #     def get_film_by_id(self, film_id):

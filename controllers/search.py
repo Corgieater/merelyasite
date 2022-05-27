@@ -28,6 +28,7 @@ def make_dic(info, page, total_page):
 
 # 目前只能找電影 看之後可不可以改成找全部
 def get_info_func(user_input, page):
+    print(user_input, 'userInput')
     data_count = database.get_total_data_count_from_type(user_input, 'movie')[0]
     if data_count is 0:
         return {

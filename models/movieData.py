@@ -24,52 +24,54 @@ def make_movie_info_dic(movie, directors, actors, genres):
     return dic
 
 
-def make_director_movie_dic(search_results):
+# 做general search後面的秀海報頁面(導演演員)
+def make_poster_showing_dic(search_results, data_type):
     dic = {
         'data': {
-            'directorID': search_results[0][0],
-            'directorName': search_results[0][1],
-            'directorMovieId':[]
+            f'{data_type}ID': search_results[0][0],
+            f'{data_type}Name': search_results[0][1],
+            f'{data_type}MovieId':[]
         }
     }
 
     for result in search_results:
-        dic['data']['directorMovieId'].append(result[2])
+        dic['data'][f'{data_type}MovieId'].append(result[2])
     return dic
 
 
-def make_actor_movie_dic(search_results):
-    main_dic = {
-        'data':{
-            'data':[]
-        }
-    }
-    for result in search_results:
-        clean_data= {
-            'actorId': result[0],
-            'actorName': result[1],
-            'movieId': result[2]
-        }
-        main_dic['data']['data'].append(clean_data)
-    return main_dic
+# def make_actor_movie_dic(search_results):
+#     main_dic = {
+#         'data':{
+#             'data':[]
+#         }
+#     }
+#     for result in search_results:
+#         clean_data= {
+#             'actorId': result[0],
+#             'actorName': result[1],
+#             'movieId': result[2]
+#         }
+#         main_dic['data']['data'].append(clean_data)
+#     return main_dic
+#
+# def make_genre_movie_dic(search_results):
+#     main_dic = {
+#         'data':{
+#             'data':[]
+#         }
+#     }
+#     for result in search_results:
+#         clean_data= {
+#             'genreId': result[0],
+#             'genreType': result[1],
+#             'movieId': result[2]
+#         }
+#         main_dic['data']['data'].append(clean_data)
+#     return main_dic
 
-def make_genre_movie_dic(search_results):
-    main_dic = {
-        'data':{
-            'data':[]
-        }
-    }
-    for result in search_results:
-        clean_data= {
-            'genreId': result[0],
-            'genreType': result[1],
-            'movieId': result[2]
-        }
-        main_dic['data']['data'].append(clean_data)
-    return main_dic
 
-# 做導演演員DIC含幾部作品
-def make_director_dic(search_results, movie_counts_list):
+# 做導演演員DIC含幾部作品 GENERAL搜尋bar
+def make_dic_by_type_for_general_search(search_results, movie_counts_list, data_type):
     main_dic = {
         'data': {
             'data': []
@@ -78,14 +80,14 @@ def make_director_dic(search_results, movie_counts_list):
     for result in search_results:
         print(result,' from make_director_dic')
         clean_data = {
-            'directorId': result[0],
-            'directorName': result[1],
-            'directorMovieCount': None
+            f'{data_type}Id': result[0],
+            f'{data_type}Name': result[1],
+            f'{data_type}MovieCount': None
         }
         main_dic['data']['data'].append(clean_data)
     for i in range(len(search_results)):
-        main_dic['data']['data'][i]['directorMovieCount'] = movie_counts_list[i]
-        print(main_dic['data']['data'][i]['directorMovieCount'])
+        main_dic['data']['data'][i][f'{data_type}MovieCount'] = movie_counts_list[i]
+        print(main_dic['data']['data'][i][f'{data_type}MovieCount'])
     return main_dic
 
 
@@ -127,7 +129,7 @@ class MovieDatabase:
         cursor = connection.cursor()
         try:
             if input_type == 'movie':
-                cursor.execute('SELECT count(*) FROM movies_info Where title like %s',
+                cursor.execute('SELECT count(*) FROM movies_info Where title LIKE %s',
                                ('%'+user_input+'%',))
                 result = cursor.fetchone()
                 if result == 0:
@@ -232,7 +234,7 @@ class MovieDatabase:
                            'FROM genres_movies\n'
                            'INNER JOIN genres\n'
                            'ON genres_movies.gm_movie_id = %s\n'
-                           'AND genres_movies.gm_movie_id = genre_id',
+                           'AND genres_movies.gm_genre_id = genres.genre_id ',
                            (film_id,))
             genres = cursor.fetchall()
             new_dic = make_movie_info_dic(movie, directors, actors, genres)
@@ -269,7 +271,7 @@ class MovieDatabase:
             if len(result) == 0:
                 return False
             # director_id, name, movie_id
-            director_movie_dic = make_director_movie_dic(result)
+            director_movie_dic = make_poster_showing_dic(result, 'director')
             if result is None:
                 return None
         except Exception as e:
@@ -300,7 +302,7 @@ class MovieDatabase:
                                 LIMIT %s,20
                                 ''', ('%'+actor+'%', start_index))
             result = cursor.fetchall()
-            actor_movie_dic = make_actor_movie_dic(result)
+            actor_movie_dic = make_poster_showing_dic(result, 'actor')
             print('movieData get_film_by_actor ', result)
             if len(result) is 0:
                 return None
@@ -313,42 +315,42 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    # 演員拿電影(通常滿多的要LIMIT) OK
-    def get_film_by_genre(self, genre, start_index):
-        start_index = int(start_index) * 20
-        print('movieData get_film_by_actor ', genre)
-        print(type(start_index))
-        try:
-            connection = p.get_connection()
-            cursor = connection.cursor()
-            cursor.execute('select genres.type, \n'
-                           'genres_movies.gm_movie_id,\n'
-                           'movies_info.movie_id\n'
-                           'from genres\n'
-                           'inner join genres_movies \n'
-                           'ON genres.type like %s\n'
-                           'AND genres.genre_id = genres_movies.gm_genre_id\n'
-                           'inner join movies_info\n'
-                           'ON genres_movies.gm_movie_id = movies_info.movie_id\n'
-                           'order by movies_info.title\n'
-                           'limit %s, 20\n',
-                           ('%' + genre + '%', start_index))
-            result = cursor.fetchall()
-            actor_movie_dic = make_genre_movie_dic(result)
-            print('movieData get_film_by_actor ', result)
-            if len(result) is 0:
-                return None
-        except Exception as e:
-            print('get_film_by_genre from movieData')
-            print(e)
-            return False
-        else:
-            return actor_movie_dic
-        finally:
-            cursor.close()
-            connection.close()
+    # # GENRE拿電影(通常滿多的要LIMIT)
+    # def get_film_by_genre(self, genre, start_index):
+    #     start_index = int(start_index) * 20
+    #     print('movieData get_film_by_actor ', genre)
+    #     print(type(start_index))
+    #     try:
+    #         connection = p.get_connection()
+    #         cursor = connection.cursor()
+    #         cursor.execute('select genres.type, \n'
+    #                        'genres_movies.gm_movie_id,\n'
+    #                        'movies_info.movie_id\n'
+    #                        'from genres\n'
+    #                        'inner join genres_movies \n'
+    #                        'ON genres.type like %s\n'
+    #                        'AND genres.genre_id = genres_movies.gm_genre_id\n'
+    #                        'inner join movies_info\n'
+    #                        'ON genres_movies.gm_movie_id = movies_info.movie_id\n'
+    #                        'order by movies_info.title\n'
+    #                        'limit %s, 20\n',
+    #                        ('%' + genre + '%', start_index))
+    #         result = cursor.fetchall()
+    #         actor_movie_dic = make_genre_movie_dic(result)
+    #         print('movieData get_film_by_actor ', result)
+    #         if len(result) is 0:
+    #             return None
+    #     except Exception as e:
+    #         print('get_film_by_genre from movieData')
+    #         print(e)
+    #         return False
+    #     else:
+    #         return actor_movie_dic
+    #     finally:
+    #         cursor.close()
+    #         connection.close()
 
-    # 名字拿導演
+    # general搜尋bar 名字拿導演
     def get_director_by_name(self, director, start_index):
         start_index = int(start_index) * 20
         try:
@@ -372,7 +374,7 @@ class MovieDatabase:
                 cursor.execute('SELECT COUNT(*) FROM directors_movies WHERE dm_director_id =%s',
                                (director_id[0],))
                 movie_counts.append(cursor.fetchone()[0])
-            director_dic = make_director_dic(result, movie_counts)
+            general_search_dic = make_dic_by_type_for_general_search(result, movie_counts, 'director')
             print('movieData make_director_dic ', result)
             if len(result) is 0:
                 return None
@@ -381,13 +383,13 @@ class MovieDatabase:
             print(e)
             return False
         else:
-            return director_dic
+            return general_search_dic
         finally:
             cursor.close()
             connection.close()
 
 
-    # 名字拿演員
+    # general搜尋bar 名字拿演員
     def get_actor_by_name(self, actor, start_index):
         start_index = int(start_index) * 20
         try:
@@ -411,7 +413,7 @@ class MovieDatabase:
                 cursor.execute('SELECT COUNT(*) FROM actors_movies WHERE am_actor_id =%s',
                                (actor_id[0],))
                 movie_counts.append(cursor.fetchone()[0])
-            director_dic = make_director_dic(result, movie_counts)
+            general_search_dic = make_dic_by_type_for_general_search(result, movie_counts, "actor")
             print('movieData make_actor_dic ', result)
             if len(result) is 0:
                 return False
@@ -420,7 +422,7 @@ class MovieDatabase:
             print(e)
             return False
         else:
-            return director_dic
+            return general_search_dic
         finally:
             cursor.close()
             connection.close()

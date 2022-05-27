@@ -31,8 +31,8 @@ class ImportDatabase:
             print('---add to database callllllll------\n')
             connection = p.get_connection()
             cursor = connection.cursor()
-            cursor.execute('')
-            cursor.execute('INSERT INTO movie_info VALUES(%s,%s,%s,%s,%s,%s,%s)', movie_input)
+            cursor.execute('INSERT INTO movies_info(movie_id, sq_movie_id, title, year, story_line, tagline)'
+                           ' VALUES(DEFAULT,%s,%s,%s,%s,%s)', movie_input)
         except Exception as e:
             print(e)
             connection.rollback()
@@ -44,12 +44,12 @@ class ImportDatabase:
             cursor.close()
             connection.close()
 
-    def find_in_database(self, title):
+    def find_in_database(self, title, year):
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
             title = title.replace('+', ' ')
-            cursor.execute('SELECT id FROM movie_info WHERE title like %s', ('%'+title+'%',))
+            cursor.execute('SELECT id FROM movies_info WHERE title like %s and year = %s', ('%'+title+'%', year))
             result = cursor.fetchone()
             if result is not None:
                 return True

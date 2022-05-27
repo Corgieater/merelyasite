@@ -86,7 +86,7 @@ async function makeShowRow(data, userInputAndPage) {
       showPlace.append(li);
     }
   }
-  makePageTags("search?keyword", userInputAndPage, data["totalPages"]);
+  makePageTags("search?keyword=", userInputAndPage, data["totalPages"]);
 }
 
 // 小功能

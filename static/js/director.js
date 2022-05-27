@@ -25,7 +25,7 @@ async function getMovieByDirector() {
     let idList = await res["data"]["directorMovieId"];
     makePosterLi(idList);
     let userInputAndPage = cutUserInputAtLast("r=");
-    makePageTags("director?director", userInputAndPage, res["totalPages"]);
+    makePageTags("director?director=", userInputAndPage, res["totalPages"]);
   } else {
     console.log(res);
     console.log(frame);
@@ -76,7 +76,7 @@ async function makeShowRow(data, userInputAndPage) {
       showPlace.append(li);
     }
   }
-  makePageTags("search?keyword", userInputAndPage, data["totalPages"]);
+  makePageTags("search?keyword=", userInputAndPage, data["totalPages"]);
 }
 
 getMovieByDirector();

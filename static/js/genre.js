@@ -25,6 +25,6 @@ async function getMovieByDirector() {
   let userInputAndPage = cutUserInputAtLast("e=");
   console.log(res);
   console.log(userInputAndPage);
-  makePageTags("genre?genre", userInputAndPage, res["totalPages"]);
+  makePageTags("genre?genre=", userInputAndPage, res["totalPages"]);
 }
 getMovieByDirector();

@@ -13,7 +13,6 @@ user_blueprint = Blueprint(
 @user_blueprint.route('/api/user', methods=['POST'])
 def sign_up_func():
     data = request.get_json()
-    print(data)
     return sign_up(data['email'], data['password'], data['name'])
 
 

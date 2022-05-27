@@ -4,9 +4,9 @@ console.log(actor);
 // let page = cutUserInputAtLast("ge=");
 let posterPlace = document.querySelector(".posterPlace");
 
-async function makePosterLi(movieData) {
-  for (let data of movieData) {
-    let movieId = data["movieId"];
+async function makePosterLi(movieIds) {
+  for (let id of movieIds) {
+    let movieId = id;
     let li = document.createElement("li");
     let img = document.createElement("img");
     let aLink = document.createElement("a");
@@ -21,9 +21,11 @@ async function getMovieByDirector() {
   let req = await fetch(`/api/actor?actor=${actor}&page=1`);
   let res = await req.json();
   console.log(res);
-  let movieData = await res["data"]["data"];
-  makePosterLi(movieData);
-  let userInputAndPage = cutUserInputAtLast("r=");
-  makePageTags("actor?actor", userInputAndPage, res["totalPages"]);
+  if (res.data) {
+    let movieIds = await res["data"]["actorMovieId"];
+    makePosterLi(movieIds);
+    let userInputAndPage = cutUserInputAtLast("r=");
+    makePageTags("actor?actor=", userInputAndPage, res["totalPages"]);
+  }
 }
 getMovieByDirector();

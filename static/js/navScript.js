@@ -4,7 +4,7 @@ let globalMessagePlace = document.querySelector(".globalMessagePlace");
 let mask = document.querySelector(".mask");
 // nav按鈕
 let logInBt = document.querySelector(".logInPlace > button");
-let logOutBt = document.querySelector("nav > ul > li:nth-child(6)");
+let logOutBt = document.querySelector("nav > ul > li:nth-child(5)");
 let profileBt = document.querySelector("nav > ul > li:nth-child(1)");
 let searchFormBt = document.querySelector(".searchForm > a");
 let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
@@ -18,7 +18,7 @@ let signUpBt = document.querySelector(".signUpBt");
 const signUpPlaceBt = document.querySelector("nav > ul > li:nth-child(3) > a");
 const logInPlaceBt = document.querySelector("nav > ul > li:nth-child(2) > a");
 let addMovieNavBt = document.querySelector(
-  "body > header > nav > ul > li:nth-child(7) > a"
+  "body > header > nav > ul > li:nth-child(6) > a"
 );
 
 // 關閉特定區域用的按鈕
@@ -114,11 +114,12 @@ async function checkIfLogged() {
   const req = await fetch("/api/user");
   const res = await req.json();
   if (res.userName) {
+    let userName = res.userName.replaceAll(" ", "+");
     profileBt.firstChild.textContent = res.userName;
     // 把user profile button加上href
-    userProfileHref.href = `/user_profile/${res.userName}`;
-    changingNav();
+    userProfileHref.href = `/user_profile/${userName}`;
     currentUserId = res["userId"];
+    changingNav();
     return true;
   } else {
     return false;
