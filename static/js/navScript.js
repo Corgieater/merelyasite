@@ -180,3 +180,4 @@ function changingNav() {
 }
 
 checkIfLogged();
+getUserData();

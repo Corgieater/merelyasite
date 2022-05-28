@@ -43,8 +43,8 @@ def make_page(data, page, total_page):
     return data
 
 
-def get_user_profile_review_each_func(user_name, movie_name, review_id):
-    data = review_database.get_review_by_review_id(user_name, movie_name, review_id)
+def get_user_profile_review_each_func(review_id):
+    data = review_database.get_review_by_review_id(review_id)
     print(data)
     if data is None:
         return {'error':True,
@@ -57,9 +57,9 @@ def get_user_profile_review_each_func(user_name, movie_name, review_id):
             'reviewDate': data[3],
             'watchedDate': data[4],
             'spoiler': data[5],
-            'movieTitle': data[7],
-            'movieYear': data[8],
-            'movieRate': data[9]
+            'movieTitle': data[6],
+            'movieYear': data[7],
+            'movieRate': data[8]
         }
     }
     return make_data_dic
@@ -81,4 +81,18 @@ def get_reviews_by_page_func(user_name, page):
     data_dic = make_review_dic(data)
     make_page(data_dic, page, total_page)
     return data_dic
+
+
+# update user review
+def update_user_profile_review_func(review_id, movie_review, watched_date, spoilers):
+    review_updated = review_database.update_review(review_id, movie_review, watched_date, spoilers)
+    if review_updated:
+        return {
+            'ok':True,
+        }
+    else:
+        return{
+            'error':True,
+            'message': 'Something goes wrong, please try again'
+        }
 

@@ -116,6 +116,7 @@ def render_genre_page():
 @films_blueprint.route('/api/rate', methods=['PATCH'])
 def rating():
     data = request.get_json()
+    print(data)
     try:
         rate = data['rate']
         user_id = data['userId']
@@ -166,7 +167,7 @@ def get_average_rate():
     return get_average_rate_func(film_id)
 
 
-# 寫/更新評論 寫到使用者頁面的時候回頭來寫
+# 寫評論
 @films_blueprint.route('/api/review', methods=['PATCH'])
 def film_review():
     data = request.get_json()

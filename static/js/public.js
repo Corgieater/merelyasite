@@ -71,19 +71,8 @@ function cutUserInputInMiddle(targetHead, targetTail) {
   return userInput;
 }
 
-// 偵測資料庫要資料可用的數字
-function detectReviewId(uncleanUrl) {
-  let id = "";
-  let movieTitle = "";
-  for (let s of uncleanUrl) {
-    if (isNaN(s)) {
-      movieTitle += s;
-    } else {
-      id += s;
-    }
-  }
-  return [movieTitle, id];
-}
+// 拿最後的數字
+function cutDownLastNumber(url) {}
 
 // 特別用來建名字中有空格的a link
 function makeAlinkAndAppend(area, prefix, iterableData) {
@@ -96,12 +85,12 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
   }
 }
 
-// 拿使用者資料 no use:(
-// async function getUserData() {
-//   const req = await fetch("/api/user");
-//   const res = await req.json();
-//   return res;
-// }
+// 拿使用者資料
+async function getUserData() {
+  const req = await fetch("/api/user");
+  const res = await req.json();
+  return res;
+}
 
 // 做頁碼
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {

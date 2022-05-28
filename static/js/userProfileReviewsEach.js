@@ -1,20 +1,36 @@
 "use strict";
+// 一些表單用的資料
+let filmId = null;
+let lastTimeLogMessage = null;
+let lastTimeSpoilers = null;
+let lastTimeWatched = null;
+let watchedDate = document.querySelector(
+  '.reviewBox > section > input[type="date"]'
+);
 // // 查詢用
-let uncleanUrl = cutUserInputAtLast("/films");
-let userName = cutUserInputInMiddle("e/", "/r");
-let cuttingMomvieNameAndReviewId = detectReviewId(uncleanUrl);
-let movieName = cuttingMomvieNameAndReviewId[0].replaceAll("/", "");
-let reviewId = cuttingMomvieNameAndReviewId[1];
 
-console.log(userName, movieName, reviewId);
+// 把這邊處理成一個功能丟到public? 等後續有差不多的東西再做
+let uncleanUrlForReviewId = cutUserInputAtLast("/films");
+let uncleanUrlForMovieName = cutUserInputAtLast("/reviews");
+let userName = cutUserInputInMiddle("e/", "/r");
+// 拿最後一個/然後找reviewID
+let indexOfLastSlash = uncleanUrlForReviewId.lastIndexOf("/");
+let reviewId = uncleanUrlForReviewId.slice(indexOfLastSlash + 1);
+// 切MovieName超麻煩
+let indexOfStartMovieName = uncleanUrlForMovieName.indexOf("s/");
+let endIndexOfMovieName = uncleanUrlForMovieName.lastIndexOf("/");
+let movieName = uncleanUrlForMovieName.substring(
+  indexOfStartMovieName + 2,
+  endIndexOfMovieName
+);
 
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
 let title = document.querySelector(
-  ".textPlace > div > section:nth-child(1) > h2 > a"
+  ".textPlace > div > section:nth-child(1) > section > h2 > a"
 );
 let year = document.querySelector(
-  ".textPlace > div > section:nth-child(1) > p > a"
+  ".textPlace > div > section:nth-child(1) > section > p > a"
 );
 
 // action區
@@ -32,7 +48,9 @@ let reviewBox = document.querySelector(".reviewBox");
 let dateCheckBox = document.querySelector("#watched");
 let spoilersCheckBox = document.querySelector("#spoilers");
 let dateInputPlace = document.querySelector("#watchedDay");
-let saveBt = document.querySelector(".reviewBox > section > button");
+let saveBt = document.querySelector(
+  ".reviewBox > section:nth-child(2) > button:nth-child(9)"
+);
 let closeBt = document.querySelector(".closeBt");
 let reviewTitle = document.querySelector(
   ".reviewBox > section:nth-child(2) > h2"
@@ -40,6 +58,7 @@ let reviewTitle = document.querySelector(
 let reviewPoster = document.querySelector(
   ".reviewBox > section:nth-child(1) > img"
 );
+let userLogPlace = document.querySelector("#review");
 
 // 沒登入就把reviewBox的東西都藏起來吧
 // 這邊變成要檢查如果不是該ID的人就不要給他改東西?
@@ -71,22 +90,31 @@ async function showProperReviewBox() {
 
 showProperReviewBox();
 
-// 寫評分按鈕
+// 更新評分按鈕
 // 打開評論區
-reviewBt.addEventListener("click", function (e) {
-  e.preventDefault();
-  let userLog = document.querySelector("#review");
-  userLog = hideOrShow(reviewBox);
+reviewBt.addEventListener("click", function () {
+  userLogPlace.value = lastTimeLogMessage;
+  hideOrShow(reviewBox);
   show(mask);
-  spoilersCheckBox.disabled = true;
-  // 如果沒打心得不給勾spoiler
-  userLog.addEventListener("input", function () {
-    if (userLog.value !== "") {
-      spoilersCheckBox.disabled = false;
-    } else {
-      spoilersCheckBox.disabled = true;
-    }
-  });
+  // 看上次spoiler是不是true
+  spoilersCheckBox.checked = lastTimeSpoilers;
+  console.log(lastTimeSpoilers);
+  // 上次看過東西就要維持一樣
+  if (lastTimeWatched) {
+    dateCheckBox.checked = true;
+    dateCheckBox.value = lastTimeWatched;
+    show(dateInputPlace);
+    lastTimeWatched = turnDatabaseDateToStringDate(lastTimeWatched);
+    watchedDate.value = lastTimeWatched;
+  }
+});
+
+userLogPlace.addEventListener("input", function () {
+  if (userLogPlace.value !== "") {
+    spoilersCheckBox.disabled = false;
+  } else {
+    spoilersCheckBox.disabled = true;
+  }
 });
 
 // 顯示日期按鈕
@@ -94,28 +122,16 @@ dateCheckBox.addEventListener("click", function () {
   hideOrShow(dateInputPlace);
 });
 
-// 儲存評論
+// 更新評論
 saveBt.addEventListener("click", async function () {
-  let userLog = document.querySelector("textarea");
   let messagePlace = document.querySelector(
     ".reviewBox > section:nth-child(2)"
   );
+  let spoilers = false;
   deleteMessage();
-  if (userLog.value === "") {
+  if (userLogPlace.value === "") {
     makeMessage(messagePlace, "Type something, please");
   } else {
-    const req = await fetch("/api/user");
-    const res = await req.json();
-    let id = res["userId"];
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() + 1).padStart(2, "0");
-    let yyyy = today.getFullYear();
-    let watchedDate = document.querySelector(
-      '.reviewBox > section > input[type="date"]'
-    );
-    let spoilers = false;
-
     watchedDate.value.replaceAll("-", "/");
     if (watchedDate.value === "") {
       watchedDate.value = null;
@@ -123,24 +139,23 @@ saveBt.addEventListener("click", async function () {
     if (spoilersCheckBox.checked === true) {
       spoilers = true;
     }
-    today = yyyy + "/" + mm + "/" + dd;
+
     let data = {
-      movieReview: userLog.value,
-      filmId: filmId,
-      currentDate: today,
+      movieReview: userLogPlace.value,
       watchedDate: watchedDate.value,
-      userId: id,
       spoilers: spoilers,
     };
-    console.log("datatata", data);
-    sendDataToBackend("PATCH", data, "/api/review");
-    hide(reviewBox);
-    hide(mask);
-    userLog.value = "";
-    dateCheckBox.checked = false;
-    watchedDate.value = "";
-    spoilersCheckBox.checked = false;
-    hide(watchedDate);
+
+    let reviewUpdateMessage = await sendDataToBackend(
+      "PATCH",
+      data,
+      `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
+    );
+    if (reviewUpdateMessage === true) {
+      window.location.reload();
+    } else {
+      makeMessage(messagePlace, reviewUpdateMessage);
+    }
   }
 });
 
@@ -174,29 +189,14 @@ rateBts.forEach((bt) => {
   });
 });
 
-// 拿該使用者對該電影的評分;
-// async function getUserRate() {
-//   const req = await fetch("/api/user");
-//   const res = await req.json();
-//   let id = res["userId"];
-//   let data = {
-//     filmId: filmId,
-//     userId: id,
-//   };
-//   console.log("拿該使用者評分: 資料", data);
-//   let score = await sendDataToBackend("POST", data, "/api/rate");
-//   console.log("last time rate", score);
-//   return score;
-// }
-
 // 顯示之前的評分星星
 async function showPreviousRate(rate) {
-  if (data.rate === null) {
+  if (rate === null) {
     hide(cancelBt);
     console.log(rate);
     return (rate = 0);
   } else {
-    rate = data.rate;
+    rate = rate;
     console.log(rate);
     show(cancelBt);
   }
@@ -321,7 +321,7 @@ async function getReview() {
     `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
   );
   const res = await req.json();
-  console.log("getFIlm", res);
+  console.log("get review", res);
   return res;
 }
 
@@ -330,13 +330,19 @@ async function showFilmInfo() {
   let data = await getReview();
   let userReview = document.querySelector(".userReview > p");
   data = data["data"];
-  let filmId = data["movieId"];
+  filmId = data["movieId"];
   let filmTitle = data["movieTitle"];
   reviewTitle.textContent = filmTitle;
   let filmReview = data["movieReview"];
   let filmYear = data["movieYear"];
   let filmRate = data["movieRate"];
+  let filmWatchedDate = data["watchedDate"];
+  let filmSpoiler = data["spoiler"];
+  lastTimeWatched = filmWatchedDate;
+
+  lastTimeLogMessage = filmReview;
   userReview.textContent = filmReview;
+  lastTimeSpoilers = filmSpoiler;
   poster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   title.textContent = filmTitle;
@@ -344,6 +350,22 @@ async function showFilmInfo() {
   year.textContent = filmYear;
   year.href = `/year?year=${filmYear}`;
   showPreviousRate(filmRate);
+}
+
+// 小功能
+function turnDatabaseDateToStringDate(dabataseDate) {
+  let newDate = new Date(dabataseDate);
+  let year = newDate.getFullYear();
+  let month = newDate.getMonth() + 1;
+  if (month < 10) {
+    month = `0${month}`;
+  }
+  let date = newDate.getDate();
+  if (date < 10) {
+    date = `0${date}`;
+  }
+  newDate = `${year}-${month}-${date}`;
+  return newDate;
 }
 
 showFilmInfo();

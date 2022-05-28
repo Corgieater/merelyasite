@@ -2,8 +2,8 @@ from models.databaseClass import pool as p
 
 
 class ReviewDatabase:
-    # 寫/更新評論 renew not yet done
 
+    # 寫評論
     def write_review(self, movie_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -22,8 +22,33 @@ class ReviewDatabase:
             return False
         else:
             connection.commit()
-            # added_review_movie_relation = self.add_rates_users_relation(user_id, last_insert_review_id)
             self.add_relation_between_tables('reviews_users', user_id, last_insert_review_id)
+
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 更新評論
+    def update_review(self, review_id, movie_review, watched_date, spoilers):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        print('update review reviewData',movie_review, watched_date, spoilers, review_id)
+        try:
+            cursor.execute('UPDATE reviews \n'
+                           'SET \n'
+                           'reviews.movie_review = %s,\n'
+                           'reviews.watched_date = %s,\n'
+                           'reviews.spoilers = %s\n'
+                           'WHERE review_id = %s',
+                           (movie_review, watched_date, spoilers, review_id,))
+        except Exception as e:
+            print('update_review reviewData')
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
 
         finally:
             cursor.close()
@@ -70,26 +95,22 @@ class ReviewDatabase:
 
 
     # 拿單一評論by reviewId, user_name, movie_name
-    def get_review_by_review_id(self, user_name, movie_name, review_id):
+    def get_review_by_review_id(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('select reviews.*, users.name, \n'
+            cursor.execute('SELECT reviews.*, \n'
                            'movies_info.title, movies_info.year,\n'
                            'rates.rate\n'
-                           'from reviews\n'
-                           'inner join reviews_users\n'
-                           'on reviews.review_id = %s\n'
-                           'and reviews.review_id = reviews_users.reu_review_id\n'
-                           'inner join users\n'
-                           'on users.name = %s\n'
-                           'inner join movies_info\n'
-                           'on movies_info.title = %s\n'
-                           'inner join rates\n'
-                           'left join rates_users\n'
-                           'on rates_users.ru_rate_id = rates.rate_id\n'
-                           'on rates.rate_movie_id = movies_info.movie_id',
-                           (review_id, user_name, movie_name))
+                           'FROM reviews\n'
+                           'INNER JOIN reviews_users\n'
+                           'INNER JOIN movies_info\n'
+                           'ON reviews.review_id = %s\n'
+                           'AND reviews.review_id = reviews_users.reu_review_id\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'LEFT JOIN rates\n'
+                           'ON movies_info.movie_id = rates.rate_movie_id',
+                           (review_id,))
             result = cursor.fetchone()
         except Exception as e:
             print('get_review_by_review_id in reviewData')

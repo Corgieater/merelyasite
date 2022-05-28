@@ -23,6 +23,7 @@ let averageRatePlace = document.querySelector(
   ".actionBox > ul > li:nth-child(4)"
 );
 let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
+let userLogPlace = document.querySelector("#review");
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
@@ -71,13 +72,12 @@ showProperReviewBox();
 // 打開評論區
 reviewBt.addEventListener("click", function (e) {
   e.preventDefault();
-  let userLog = document.querySelector("#review");
   hideOrShow(reviewBox);
   show(mask);
   spoilersCheckBox.disabled = true;
   // 如果沒打心得不給勾spoiler
-  userLog.addEventListener("input", function () {
-    if (userLog.value !== "") {
+  userLogPlace.addEventListener("input", function () {
+    if (userLogPlace.value !== "") {
       spoilersCheckBox.disabled = false;
     } else {
       spoilersCheckBox.disabled = true;
@@ -92,12 +92,11 @@ dateCheckBox.addEventListener("click", function () {
 
 // 儲存評論
 saveBt.addEventListener("click", async function () {
-  let userLog = document.querySelector("textarea");
   let messagePlace = document.querySelector(
     ".reviewBox > section:nth-child(2)"
   );
   deleteMessage();
-  if (userLog.value === "") {
+  if (userLogPlace.value === "") {
     makeMessage(messagePlace, "Type something, please");
   } else {
     const req = await fetch("/api/user");
@@ -121,7 +120,7 @@ saveBt.addEventListener("click", async function () {
     }
     today = yyyy + "/" + mm + "/" + dd;
     let data = {
-      movieReview: userLog.value,
+      movieReview: userLogPlace.value,
       filmId: filmId,
       currentDate: today,
       watchedDate: watchedDate.value,
@@ -132,7 +131,7 @@ saveBt.addEventListener("click", async function () {
     sendDataToBackend("PATCH", data, "/api/review");
     hide(reviewBox);
     hide(mask);
-    userLog.value = "";
+    userLogPlace.value = "";
     dateCheckBox.checked = false;
     watchedDate.value = "";
     spoilersCheckBox.checked = false;

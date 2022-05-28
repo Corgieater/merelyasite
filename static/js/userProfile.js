@@ -31,6 +31,7 @@ async function showRecentlyReviews() {
     let date = null;
     const filmId = info["filmId"];
     const filmTitle = info["filmTitle"];
+    const filmTitleForHref = filmTitle.replaceAll(" ", "+");
     const review = info["review"];
     const reviewId = info["reviewId"];
     const spoilers = info["spoilers"];
@@ -43,7 +44,8 @@ async function showRecentlyReviews() {
       // 如果使用者沒填watched day 就拿填表日期來用
       date = `Reviewd on ${reviewDay.substring(0, 16)}`;
     }
-    const reviewPage = `/user_profile/${userName}/films/${filmTitle}/${reviewId}`;
+    const reviewPage = `/user_profile/${userName}/reviews/films/${filmTitleForHref}/${reviewId}`;
+    // ("/user_profile/<user_name>/reviews/films/<movie_name>/<review_id></review_id>");
     let content = `
       <div>
       <img
@@ -52,7 +54,7 @@ async function showRecentlyReviews() {
       />
     </div>
     <div class='reviewBody'>
-      <a href="/film/${reviewPage}">${filmTitle}</a>
+      <a href="${reviewPage}">${filmTitle}</a>
       <a href="#">${info["filmYear"]}</a>
       <section class="starPlace"></section>
       <p>${date}</p>

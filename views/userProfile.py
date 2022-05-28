@@ -34,6 +34,7 @@ def get_reviews_by_page(user_name):
         page = 1
     return get_reviews_by_page_func(user_name, page)
 
+
 # render user profile reviews page
 @user_profile_blueprint.route('/user_profile/<user_name>/reviews')
 def render_user_profile_reviews(user_name):
@@ -41,13 +42,26 @@ def render_user_profile_reviews(user_name):
 
 
 # get user's own review
-@user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>')
+@user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
+                              methods=['GET'])
 def get_user_profile_review_each(user_name, movie_name, review_id):
     user_name = user_name.replace('+', ' ')
-    print(user_name)
-    return get_user_profile_review_each_func(user_name, movie_name, review_id)
+    print(user_name, movie_name, review_id, 'from get use profile review each views')
+    return get_user_profile_review_each_func(review_id)
+
 
 # render user's own review
+@user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
+                              methods=['PATCH'])
+def update_user_profile_review(user_name, movie_name, review_id):
+    data = request.get_json()
+    print(data)
+    movie_review = data['movieReview']
+    watched_date = data['watchedDate']
+    spoilers = data['spoilers']
+    return update_user_profile_review_func(review_id, movie_review, watched_date, spoilers)
+
+
 @user_profile_blueprint.route('/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>')
 def render_user_profile_reviews_each(user_name, movie_name, review_id):
     user_name = user_name.replace('+', ' ')

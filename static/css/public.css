@@ -119,7 +119,11 @@ nav > h1 > a {
 
 /* nav bar */
 nav > ul {
-  width: 60%;
+  position: absolute;
+  align-items: flex-end;
+  width: 50%;
+  border: solid white 1px;
+  right: 20%;
 }
 nav > ul > li {
   padding: 0 10px;
@@ -147,7 +151,11 @@ nav > ul > li > input {
 }
 .searchForm > a {
   position: absolute;
-  left: 79%;
+  right: 20px;
+  bottom: 1px;
+}
+.searchForm > input {
+  width: 250px;
 }
 
 /* signUpPlace */
