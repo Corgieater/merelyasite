@@ -1,0 +1,226 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+section > a {
+  margin-right: 10px;
+}
+/* poster */
+.posterPlace > img {
+  max-width: 300px;
+  margin-right: 50px;
+}
+
+/* text */
+.textPlace > .headArea > section:nth-child(1) {
+  /* max-width: 30%; */
+}
+.textPlace {
+  line-height: 1.5;
+}
+
+/* text area body */
+.headArea,
+.directorsPlace,
+.bodyArea,
+.casts {
+  margin-bottom: 20px;
+}
+.headArea a,
+.footArea a {
+  text-decoration: underline;
+  text-decoration-color: antiquewhite;
+}
+
+/* head area */
+.headArea {
+  width: 100%;
+  /* justify-content: space-between; */
+}
+.headArea > section > h2 {
+  font-size: 35px;
+  font-weight: bold;
+  color: white !important;
+}
+.headArea > * {
+  margin-right: 10px;
+}
+.headArea > section > p {
+  font-size: 25px;
+  font-weight: bold;
+}
+.headArea > section:nth-child(1) {
+  width: 300px;
+}
+
+/* body area */
+.bodyArea {
+  margin: 20px 0;
+}
+.bodyArea > .plot {
+  font-size: 20px;
+  line-height: 1.5;
+  width: 50%;
+}
+
+/* foot area */
+.casts > p,
+.genres > p {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+/* actionBox */
+.actionBox {
+  border-radius: 5px;
+  min-width: 35%;
+  margin-left: 10px;
+  height: 350px;
+  background-color: #264653;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+.actionBox > ul > * {
+  padding: 15px;
+}
+/* 取消星星評分的按鈕 */
+.actionBox > ul > li:nth-child(3) > fieldset > a {
+  font-size: 30px;
+  position: absolute;
+  left: 10px;
+  bottom: 125px;
+  text-decoration: none;
+}
+.actionBox > ul > li:nth-child(4) {
+  font-size: 25px;
+  text-decoration-color: antiquewhite;
+}
+/* reviewBox */
+.closeBt {
+  font-size: 25px;
+  color: antiquewhite;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.reviewBox {
+  /* border: 1px white solid; */
+  border-radius: 5px;
+  position: absolute;
+  background-color: lightslategrey;
+  width: 50%;
+  height: 550px;
+  left: 25%;
+  z-index: 3;
+}
+.reviewBox > section {
+  padding: 30px;
+}
+.reviewBox > section > img {
+  /* max-width: 50%; */
+  max-height: 80%;
+}
+.reviewBox > section:nth-child(2) {
+  line-height: 1.5;
+  width: 80%;
+}
+.reviewBox > section > p {
+  color: lightblue;
+  font-weight: bold;
+  font-size: 20px;
+}
+.reviewBox > section > h2 {
+  color: white;
+  font-weight: bold;
+  font-size: 30px;
+}
+.reviewBox > section:nth-child(2) > input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+.reviewBox > section:nth-child(2) > label {
+  color: lightblue !important;
+}
+
+.reviewBox > section > label {
+  color: black;
+}
+
+/* 別人寫的星星 */
+/* thanks Ahmed Nefzaoui */
+/* Ratings widget */
+.rate {
+  display: inline-block;
+  border: 0;
+}
+/* Hide radio */
+.rate > input {
+  display: none;
+}
+/* Order correctly by floating highest to the right */
+.rate > label {
+  float: right;
+}
+/* The star of the show */
+.rate > label:before {
+  display: inline-block;
+  font-size: 2rem;
+  padding: 0.3rem 0.2rem;
+  margin: 0;
+  cursor: pointer;
+  font-family: FontAwesome;
+  content: "\f005 "; /* full star */
+}
+
+/* Half star trick */
+.rate .half:before {
+  content: "\f089 "; /* half star no outline */
+  position: absolute;
+  padding-right: 0;
+}
+/* Click + hover color */
+input:checked ~ label, /* color current and previous stars on checked */
+label:hover,  label:hover ~label {
+  color: gold;
+} /* color previous stars on hover */
+
+/* Hover highlights */
+input:checked +label:hover,input:checked ~label:hover, /* highlight current and previous stars */
+input:checked ~ label:hover ~ label, /* highlight previous selected stars for new rating */
+label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
+  color: gold;
+}
+/* 別人寫的星星 */
+.mouseTextPlace {
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: antiquewhite;
+  color: #264653;
+  position: absolute;
+  right: 23%;
+  top: 460px;
+}
+.mouseTextPlace:after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 13px solid transparent;
+  border-top-color: #faebd7;
+  border-bottom: 0;
+  border-left: 0;
+  margin-left: -6.5px;
+  margin-bottom: -13px;
+}
+
+/* review user */
+.userNameTag {
+  font-weight: bold;
+}
+
+.userReview > p {
+  color: antiquewhite;
+}

@@ -71,6 +71,20 @@ function cutUserInputInMiddle(targetHead, targetTail) {
   return userInput;
 }
 
+// 偵測資料庫要資料可用的數字
+function detectReviewId(uncleanUrl) {
+  let id = "";
+  let movieTitle = "";
+  for (let s of uncleanUrl) {
+    if (isNaN(s)) {
+      movieTitle += s;
+    } else {
+      id += s;
+    }
+  }
+  return [movieTitle, id];
+}
+
 // 特別用來建名字中有空格的a link
 function makeAlinkAndAppend(area, prefix, iterableData) {
   for (let info of iterableData) {

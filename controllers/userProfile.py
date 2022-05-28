@@ -32,8 +32,6 @@ def make_review_dic(data):
 
 def make_page(data, page, total_page):
     page = int(page)
-    print('makepage-----',data, page)
-    print('the type of ', page, type(page))
     data['currentPage'] = page
     data['nextPage'] = None
     data['totalPages'] = total_page
@@ -45,25 +43,42 @@ def make_page(data, page, total_page):
     return data
 
 
-# 評分另外拿 get latest 5 reviews
+def get_user_profile_review_each_func(user_name, movie_name, review_id):
+    data = review_database.get_review_by_review_id(user_name, movie_name, review_id)
+    print(data)
+    if data is None:
+        return {'error':True,
+                'message':'Something is wrong, please try again'
+                }
+    make_data_dic = {
+        'data':{
+            'movieId': data[1],
+            'movieReview': data[2],
+            'reviewDate': data[3],
+            'watchedDate': data[4],
+            'spoiler': data[5],
+            'movieTitle': data[7],
+            'movieYear': data[8],
+            'movieRate': data[9]
+        }
+    }
+    return make_data_dic
+
+
+
+# get lasted reviews by 5
 def get_user_latest_five_reviews_func(user_name):
     data = review_database.get_reviews_data(user_name)
     data_dic = make_review_dic(data)
     return data_dic
 
-# 另外拿太浪費資源 要怎辦呢~"~
-# 評分另外拿 get all reviews
+# get all reviews
 def get_reviews_by_page_func(user_name, page):
-    print('page = ', page)
-    data = review_database.get_user_reviews_count_and_user_id(user_name)
+    data = review_database.get_user_reviews_count(user_name)
     review_counts = data[0]
-    user_id = data[1]
-    print('from get review by page func ', review_counts, user_id)
     data = review_database.get_reviews_data(user_name, page)
-    print('get_reviews_by_page_func', data)
     total_page = math.ceil(review_counts/20)
     data_dic = make_review_dic(data)
-    print('page = ', page)
     make_page(data_dic, page, total_page)
     return data_dic
 

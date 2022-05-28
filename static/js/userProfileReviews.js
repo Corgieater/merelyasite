@@ -13,9 +13,12 @@
 // let actorsCollectionsBt = document.querySelector(
 //   ".searchCollections > a:nth-child(4)"
 // );
-let userName = cutUserInputAtLast("e/");
+// let userName = cutUserInputAtLast("e/");
+let userNameAngPage = cutUserInputAtLast("e/");
+let userName = cutUserInputInMiddle("e/", "/r");
+
 let page = cutUserInputAtLast("e=");
-console.log(userName, page);
+// console.log(userName, page, userNameAngPage);
 // movieCollectionsBt.href = `/search?keyword=${keyword}&page=1`;
 // reviewsCollectionsBt.href = `/review?${keyword}&page=1`;
 // // review要考慮show什麼
@@ -24,7 +27,7 @@ console.log(userName, page);
 
 async function getLatestFiveReviews() {
   // /api/get_reviews_by_page/<user_name>/reviews
-  const req = await fetch(`/api/get_reviews_by_page/${userName}`);
+  const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
   const res = await req.json();
   console.log("resdata", res);
   return res;
@@ -62,7 +65,7 @@ async function showRecentlyReviews() {
       // 如果使用者沒填watched day 就拿填表日期來用
       date = `Reviewd on ${reviewDay.substring(0, 16)}`;
     }
-    const reviewPage = `/user_profile/${userName}/films/${filmTitleForHref}/${reviewId}`;
+    const reviewPage = `/user_profile/${userName}/reviews/films/${filmTitleForHref}/${reviewId}`;
     let content = `
       <div>
       <img
