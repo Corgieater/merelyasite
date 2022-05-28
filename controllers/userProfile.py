@@ -16,15 +16,15 @@ def make_review_dic(data):
     for info in data:
         print(info, 'from controller user profile')
         dic = {
-            'review': info[3],
-            'reviewDay': info[4],
-            'watchedDay': info[5],
-            'spoilers': info[6],
-            'filmId': info[2],
-            'filmTitle': info[7],
-            'filmYear': info[8],
-            'userRate': None,
-            'reviewId':info[9]
+            'review': info[5],
+            'reviewDay': info[6],
+            'watchedDay': info[7],
+            'spoilers': info[8],
+            'filmId': info[4],
+            'filmTitle': info[1],
+            'filmYear': info[2],
+            'userRate': info[9],
+            'reviewId': info[0]
         }
         data_dic['data'].append(dic)
     return data_dic
@@ -49,9 +49,6 @@ def make_page(data, page, total_page):
 def get_user_latest_five_reviews_func(user_name):
     data = review_database.get_reviews_data(user_name)
     data_dic = make_review_dic(data)
-    for i in range(len(data)):
-        user_movie_rate = review_database.get_rate_data(data[i][0], data[i][2])
-        data_dic['data'][i]['userRate'] = user_movie_rate
     return data_dic
 
 # 另外拿太浪費資源 要怎辦呢~"~
@@ -66,9 +63,6 @@ def get_reviews_by_page_func(user_name, page):
     print('get_reviews_by_page_func', data)
     total_page = math.ceil(review_counts/20)
     data_dic = make_review_dic(data)
-    for i in range(len(data)):
-        user_movie_rate = review_database.get_rate_data(data[i][0], data[i][2])
-        data_dic['data'][i]['userRate'] = user_movie_rate
     print('page = ', page)
     make_page(data_dic, page, total_page)
     return data_dic

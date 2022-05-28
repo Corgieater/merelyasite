@@ -76,53 +76,45 @@ class ReviewDatabase:
             if int(page) > 0:
                 page = int(page) - 1
                 start_index = int(page)*20
-                cursor.execute('SELECT reviews_users.reu_user_id,\n'
-                               'users.name , \n'
-                               'reviews.review_movie_id, reviews.movie_review, reviews.today,\n'
-                               'reviews.watched_date, reviews.spoilers, \n'
+                cursor.execute('SELECT reviews_users.reu_id, \n'
                                'movies_info.title, movies_info.year,\n'
-                               'reviews_users.reu_review_id\n'
+                               'reviews.*,\n'
+                               'rates.rate\n'
                                'FROM users\n'
                                'INNER JOIN reviews_users\n'
+                               'INNER JOIN reviews\n'
                                'ON users.name = %s\n'
                                'AND users.user_id = reviews_users.reu_user_id\n'
-                               'INNER JOIN reviews\n'
+                               'AND reviews_users.reu_review_id = reviews.review_id\n'
+                               'LEFT JOIN rates\n'
+                               'ON reviews.review_movie_id = rates.rate_movie_id\n'
                                'INNER JOIN movies_info\n'
-                               'ON reviews_users.reu_review_id = reviews.review_id\n'
-                               'AND reviews.review_movie_id = movies_info.movie_id\n'
-                               'ORDER BY reviews_users.reu_review_id DESC\n'
-                               'LIMIT %s, 20', (user_name, start_index))
+                               'ON reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews_users.reu_id DESC\n'
+                               'LIMIT %s, 20',
+                               (user_name, start_index))
 
             else:
-                cursor.execute('SELECT reviews_users.reu_user_id,\n'
-                               'users.name , \n'
-                               'reviews.review_movie_id, reviews.movie_review, reviews.today,\n'
-                               'reviews.watched_date, reviews.spoilers, \n'
+                cursor.execute('SELECT reviews_users.reu_id, \n'
                                'movies_info.title, movies_info.year,\n'
-                               'reviews_users.reu_review_id\n'
+                               'reviews.*,\n'
+                               'rates.rate\n'
                                'FROM users\n'
                                'INNER JOIN reviews_users\n'
+                               'INNER JOIN reviews\n'
                                'ON users.name = %s\n'
                                'AND users.user_id = reviews_users.reu_user_id\n'
-                               'INNER JOIN reviews\n'
+                               'AND reviews_users.reu_review_id = reviews.review_id\n'
+                               'LEFT JOIN rates\n'
+                               'ON reviews.review_movie_id = rates.rate_movie_id\n'
                                'INNER JOIN movies_info\n'
-                               'ON reviews_users.reu_review_id = reviews.review_id\n'
-                               'AND reviews.review_movie_id = movies_info.movie_id\n'
-                               'ORDER BY reviews_users.reu_review_id DESC\n'
-                               'LIMIT 5', (user_name,))
+                               'ON reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews_users.reu_id DESC\n'
+                               'LIMIT 5'
+                               '', (user_name,))
             results = cursor.fetchall()
             print('get_reviews_data', results)
-            # new_tuple_list_with_rate = []
-            # for result in results:
-            #     user_rating = self.get_rate_data(result[0], result[2])
-            #     if user_rating is False:
-            #         user_rating = None
-            #     result += (user_rating,)
-            #     new_tuple_list_with_rate.append(result)
-            #
-            #     print(result)
-            #     print('user rating', user_rating)
-            # print('total result after +=rating', new_tuple_list_with_rate)
+
 
         except Exception as e:
             print('get_reviews_data from reviewData')
