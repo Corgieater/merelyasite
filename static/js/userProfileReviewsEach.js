@@ -43,9 +43,11 @@ let lastTimeWatchPlace = document.querySelector(
 let rateBtsWrap = document.querySelector(".rate");
 let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
-let editBt = document.querySelector(".actionBox>ul>li:nth-child(1)>a");
+let editBt = document.querySelector(
+  ".textPlace > div > section.actionBox > ul > li:nth-child(1) > a"
+);
 let reviewAgainBt = document.querySelector(
-  ".actionBox > ul > li:nth-child(3) > a"
+  ".textPlace > div > section.actionBox > ul > li:nth-child(3) > a"
 );
 let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 
@@ -55,10 +57,11 @@ let dateCheckBox = document.querySelector("#watched");
 let spoilersCheckBox = document.querySelector("#spoilers");
 let dateInputPlace = document.querySelector("#watchedDay");
 let messagePlace = document.querySelector(".reviewBox > section:nth-child(2)");
-let saveBt = document.querySelector(
-  ".reviewBox > section:nth-child(2) > button:nth-child(9)"
-);
+
+let editSaveBt = document.querySelector(".editSaveBt");
+let reviewAgainSaveBt = document.querySelector(".reviewAgainSaveBt");
 let closeBt = document.querySelector(".closeBt");
+
 let reviewTitle = document.querySelector(
   ".reviewBox > section:nth-child(2) > h2"
 );
@@ -91,7 +94,7 @@ async function showProperReviewBox() {
     let averageRate = document.querySelector(
       ".actionBox > ul > li:nth-child(4)"
     );
-    averageRate.title = "hi";
+    averageRate.title = "";
     actionBox.insertBefore(li, averageRate);
   }
 }
@@ -99,11 +102,14 @@ async function showProperReviewBox() {
 showProperReviewBox();
 
 // 更新評分按鈕
-// 打開評論區 - EDIT
+// 打開評論區 - 編輯或更新上次的評分
 editBt.addEventListener("click", function () {
+  // 因為跟revewi again共用空間 按鈕要分出來
   userLogPlace.value = lastTimeLogMessage;
   hideOrShow(reviewBox);
   show(mask);
+  show(editSaveBt);
+  hide(reviewAgainSaveBt);
   // 看上次spoiler是不是true
   spoilersCheckBox.checked = lastTimeSpoilers;
   console.log(lastTimeSpoilers);
@@ -115,15 +121,18 @@ editBt.addEventListener("click", function () {
     lastTimeWatched = turnDatabaseDateToStringDate(lastTimeWatched);
     watchedDate.value = lastTimeWatched;
   }
-  saveBt.addEventListener("click", async function () {
-    updateReviewFun();
+  editSaveBt.addEventListener("click", async function () {
+    console.log("update");
+    updateReviewFunc();
   });
 });
-// 打開評論區 - REVIEW MOVIE AGAIN
-reviewAgainBt.addEventListener("click", function (e) {
-  e.preventDefault();
+// 打開評論區 - 再寫一次評論
+reviewAgainBt.addEventListener("click", function () {
+  // 因為跟EDIT共用空間 按鈕要分出來
   hideOrShow(reviewBox);
   show(mask);
+  show(reviewAgainSaveBt);
+  hide(editSaveBt);
   userLogPlace.value = "";
   spoilersCheckBox.disabled = true;
   spoilersCheckBox.checked = false;
@@ -131,8 +140,9 @@ reviewAgainBt.addEventListener("click", function (e) {
   hide(watchedDate);
   watchedDate.value = "";
   hide(deleteReviewBt);
-  saveBt.addEventListener("click", async function () {
-    reviewAgainFun();
+  reviewAgainSaveBt.addEventListener("click", async function () {
+    console.log("review again");
+    reviewAgainFunc();
   });
 });
 
@@ -216,72 +226,60 @@ rateBts.forEach((bt) => {
 async function showPreviousRate(rate) {
   if (rate === null) {
     hide(cancelBt);
-    console.log(rate);
     return (rate = 0);
   } else {
     rate = rate;
-    console.log(rate);
     show(cancelBt);
   }
 
   switch (rate) {
     case "0.5": {
       let star = document.querySelector("#rating1");
-      console.log(0.5);
       star.checked = true;
       break;
     }
     case "1.0": {
       let star = document.querySelector("#rating2");
-      console.log(1);
       star.checked = true;
       break;
     }
     case "1.5": {
       let star = document.querySelector("#rating3");
-      console.log(1.5);
       star.checked = true;
       break;
     }
     case "2.0": {
       let star = document.querySelector("#rating4");
-      console.log(2);
       star.checked = true;
       break;
     }
     case "2.5": {
       let star = document.querySelector("#rating5");
-      console.log(2.5);
       star.checked = true;
       break;
     }
     case "3.0": {
       let star = document.querySelector("#rating6");
-      console.log(3);
       star.checked = true;
       break;
     }
     case "3.5": {
       let star = document.querySelector("#rating7");
-      console.log(3.5);
       star.checked = true;
       break;
     }
     case "4.0": {
       let star = document.querySelector("#rating8");
-      console.log(4);
       star.checked = true;
       break;
     }
     case "4.5": {
       let star = document.querySelector("#rating9");
-      console.log(4.5);
       star.checked = true;
       break;
     }
     case "5.0": {
       let star = document.querySelector("#rating10");
-      console.log(5);
       star.checked = true;
       break;
     }
@@ -316,26 +314,6 @@ cancelBt.addEventListener("click", async function (e) {
     makeMessage(averageRatePlace, deleteRatingMessage);
   }
 });
-
-// // 拿電影均分
-// async function getAverageRate() {
-//   let data = {
-//     filmId: filmId,
-//   };
-//   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
-//   let mouseTextPlace = document.querySelector(".mouseTextPlace");
-//   if (averageRate !== undefined) {
-//     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
-//     averageRatePlace.style.cursor = "pointer";
-
-//     mouseTextPlace.textContent = `Based on ${averageRate["totalCount"]} ratings`;
-//     averageRatePlace.addEventListener("click", function () {
-//       hideOrShow(mouseTextPlace);
-//     });
-//   } else {
-//     averageRatePlace.textContent = `No one rated yet`;
-//   }
-// }
 
 // 拿review資料
 async function getReview() {
@@ -434,8 +412,9 @@ function turnDatabaseDateToStringDate(dabataseDate) {
   return newDate;
 }
 
+// 我覺得應該要做三顆按鈕:( 綁不一樣的功能
 // 更新按鈕裡的功能
-async function updateReviewFun() {
+async function updateReviewFunc() {
   let spoilers = false;
   deleteMessage();
   if (userLogPlace.value === "") {
@@ -454,14 +433,14 @@ async function updateReviewFun() {
       watchedDate: watchedDate.value,
       spoilers: spoilers,
     };
-
+    console.log("for update review", data);
     let reviewUpdateMessage = await sendDataToBackend(
       "PATCH",
       data,
       `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
     );
     if (reviewUpdateMessage === true) {
-      // window.location.reload();
+      window.location.reload();
     } else {
       makeMessage(messagePlace, reviewUpdateMessage);
     }
@@ -469,7 +448,7 @@ async function updateReviewFun() {
 }
 
 // 再寫一次的功能
-async function reviewAgainFun() {
+async function reviewAgainFunc() {
   let spoilers = false;
   deleteMessage();
   if (userLogPlace.value === "") {
@@ -502,7 +481,7 @@ async function reviewAgainFun() {
       "/api/review"
     );
     if (reviewUpdateMessage === true) {
-      // window.location.reload();
+      window.location.reload();
     } else {
       makeMessage(messagePlace, reviewUpdateMessage);
     }

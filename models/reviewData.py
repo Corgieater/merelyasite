@@ -7,7 +7,8 @@ class ReviewDatabase:
     def write_review(self, movie_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('reviewData',movie_review, movie_id, current_date, watched_date, user_id, spoilers)
+        print('wrtie review from reviewData, movie_review, movie_id, current_date, watched_date, user_id, spoilers')
+        print(movie_review, movie_id, current_date, watched_date, user_id, spoilers)
         try:
             cursor.execute('INSERT INTO reviews (review_id, review_movie_id, movie_review,'
                            'today, watched_date, spoilers)'
@@ -22,7 +23,13 @@ class ReviewDatabase:
             return False
         else:
             connection.commit()
-            self.add_relation_between_tables('reviews_users', user_id, last_insert_review_id)
+            print('write_review add review sucess try adding relation')
+            add_relation = self.add_relation_between_tables('reviews_users', user_id, last_insert_review_id)
+            if add_relation:
+                return True
+            else:
+                print('write_review review data add relation failed')
+                return False
 
         finally:
             cursor.close()
@@ -213,19 +220,23 @@ class ReviewDatabase:
         try:
             # 關聯兩張表
             if table == 'rates_users':
+                print('relation between rates_users')
                 cursor.execute('INSERT INTO rates_users VALUES(DEFAULT, %s, %s)',
                                (first_id, second_id))
             if table == 'reviews_users':
+                print('relation between reviews_users')
                 cursor.execute('INSERT INTO reviews_users VALUES(DEFAULT, %s, %s)',
                                (first_id, second_id))
 
         except Exception as e:
             print('add_relation_between_tables reviewData')
+            print('add_relation_between_tables reviewData fail')
             print(e)
             connection.rollback()
             return False
         else:
             connection.commit()
+            print('add_relation_between_tables reviewData success')
             return True
         finally:
             cursor.close()
@@ -323,13 +334,13 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    #  從REVIEW ID拿到電影跟使用者ID
-    #  給從USER PROFILE REVIEW AGAIN用
+    # #  從REVIEW ID拿到電影跟使用者ID
+    # #  給從USER PROFILE REVIEW AGAIN用
     def get_movie_id_and_user_id_for_review_again(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT reviews.review_id, reviews_users.reu_user_id\n'
+            cursor.execute('SELECT reviews.review_movie_id, reviews_users.reu_user_id\n'
                            'FROM reviews\n'
                            'INNER JOIN reviews_users\n'
                            'ON reviews.review_id = %s\n'

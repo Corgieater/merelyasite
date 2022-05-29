@@ -88,11 +88,11 @@ section > a {
   padding: 15px;
 }
 /* 取消星星評分的按鈕 */
-.actionBox > ul > li:nth-child(3) > fieldset > a {
+.actionBox > ul > li:nth-child(4) > fieldset > a {
   font-size: 30px;
   position: absolute;
-  left: 10px;
-  bottom: 125px;
+  left: 5px;
+  bottom: 60px;
   text-decoration: none;
 }
 .actionBox > ul > li:nth-child(4) {

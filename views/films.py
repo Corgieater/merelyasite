@@ -179,8 +179,17 @@ def film_review():
         watched_date = None
     user_id = data['userId']
     spoilers = data['spoilers']
-    return film_review_func\
-        (movie_review, film_id, current_date, watched_date, user_id, spoilers)
+    try:
+        if data['reviewId']:
+            review_id = data['reviewId']
+            from_place = data['from']
+            print('from place', from_place)
+            return film_review_func\
+                (movie_review, film_id, current_date, watched_date, user_id, spoilers,
+                 review_id=review_id, from_where=from_place)
+    # 如果沒填review id = 從film來的
+    except KeyError:
+        return film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
 
 # nav 上的films
