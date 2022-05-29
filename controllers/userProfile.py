@@ -96,3 +96,16 @@ def update_user_profile_review_func(review_id, movie_review, watched_date, spoil
             'message': 'Something goes wrong, please try again'
         }
 
+
+# delete user review
+def delete_user_profile_review_func(review_id):
+    review_deleted = review_database.delete_review(review_id)
+    if review_deleted:
+        return {
+            'ok': True
+        }
+    else:
+        return {
+            'error': False,
+            'message': 'Review deleting failed, please try again'
+        }

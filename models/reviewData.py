@@ -54,34 +54,14 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # def add_reviews_movies_relation(self, user_id, review_id):
-    #     connection = p.get_connection()
-    #     cursor = connection.cursor()
-    #     try:
-    #         cursor.execute('INSERT INTO reviews_users (reu_id, reu_user_id, reu_review_id)\n'
-    #                        'VALUES(DEFAULT, %s, %s)',
-    #                        (user_id, review_id))
-    #     except Exception as e:
-    #         print('write_review reviewData')
-    #         print(e)
-    #         connection.rollback()
-    #         return False
-    #     else:
-    #         connection.commit()
-    #         return True
-    #     finally:
-    #         cursor.close()
-    #         connection.close()
-
-
 
     # 刪除評論
-    def delete_review(self, film_id, user_id):
+    def delete_review(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('DELETE FROM reviews WHERE film_id = %s AND user_id = %s;',
-                           (film_id, user_id))
+            cursor.execute('''DELETE FROM reviews WHERE review_id = %s''',
+                           (review_id,))
         except Exception as e:
             print(e)
             connection.rollback()
@@ -322,6 +302,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
+    #  算使用者REVIEWS有幾篇
     def get_user_reviews_count(self, user_name):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -342,40 +323,26 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 算資料幾筆
-    # def get_total_data_count(self, user_input):
-    #     connection = p.get_connection()
-    #     cursor = connection.cursor()
-    #     try:
-    #         cursor.execute('SELECT count(*) FROM movies_info Where title LIKE %s',
-    #                        ('%'+user_input+'%',))
-    #         result = cursor.fetchone()
-    #         if result == 0:
-    #             return None
-    #     except Exception as e:
-    #         print(e)
-    #         return False
-    #     else:
-    #         return result
-    #     finally:
-    #         cursor.close()
-    #         connection.close()
+    #  從REVIEW ID拿到電影跟使用者ID
+    #  給從USER PROFILE REVIEW AGAIN用
+    def get_movie_id_and_user_id_for_review_again(self, review_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT reviews.review_id, reviews_users.reu_user_id\n'
+                           'FROM reviews\n'
+                           'INNER JOIN reviews_users\n'
+                           'ON reviews.review_id = %s\n'
+                           'AND reviews.review_id = reviews_users.reu_review_id',
+                           (review_id,))
+            results = cursor.fetchone()
+            print(results, 'get_movie_id_and_user_id_for_review_again')
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()
 
-#     用ID拿單一資料 看起來沒用
-#     def get_film_by_id(self, film_id):
-#         connection = p.get_connection()
-#         cursor = connection.cursor()
-#         try:
-#             cursor.execute('SELECT * FROM movies_info WHERE id = %s',
-#                            (film_id,))
-#             result = cursor.fetchone()
-#             if result is None:
-#                 return None
-#         except Exception as e:
-#             print(e)
-#             return False
-#         else:
-#             return result
-#         finally:
-#             cursor.close()
-#             connection.close()

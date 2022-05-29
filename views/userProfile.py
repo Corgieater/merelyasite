@@ -50,7 +50,7 @@ def get_user_profile_review_each(user_name, movie_name, review_id):
     return get_user_profile_review_each_func(review_id)
 
 
-# render user's own review
+# update user review
 @user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
                               methods=['PATCH'])
 def update_user_profile_review(user_name, movie_name, review_id):
@@ -61,7 +61,25 @@ def update_user_profile_review(user_name, movie_name, review_id):
     spoilers = data['spoilers']
     return update_user_profile_review_func(review_id, movie_review, watched_date, spoilers)
 
+# review again func 要怎麼改呢??
+@user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
+                              methods=['PATCH'])
+def user_profile_review_again(user_name, movie_name, review_id):
+    data = request.get_json()
+    print(data)
+    movie_review = data['movieReview']
+    watched_date = data['watchedDate']
+    spoilers = data['spoilers']
+    return user_profile_review_again_func(review_id, movie_review, watched_date, spoilers)
 
+
+# delete review
+@user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
+                              methods=['DELETE'])
+def delete_user_profile_review(user_name, movie_name, review_id):
+    return delete_user_profile_review_func(review_id)
+
+# render user profile review each
 @user_profile_blueprint.route('/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>')
 def render_user_profile_reviews_each(user_name, movie_name, review_id):
     user_name = user_name.replace('+', ' ')

@@ -179,19 +179,8 @@ def film_review():
         watched_date = None
     user_id = data['userId']
     spoilers = data['spoilers']
-    print('from vews films',spoilers)
-    return film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers)
-
-
-# 刪評論 *********** 寫到使用者頁面的時候回頭來檢查
-@films_blueprint.route('/api/review', methods=['DELETE'])
-def film_delete():
-    data = request.get_json()
-    print(data)
-    film_id = data['filmId']
-    user_id = data['userId']
-
-    return film_delete_func(film_id, user_id)
+    return film_review_func\
+        (movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
 
 # nav 上的films

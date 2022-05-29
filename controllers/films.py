@@ -235,44 +235,29 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
             'message': 'Review failed, please try again'
         }
 
+# # 改評論
+# def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
+#     review_edited = review_database.edit_review(user_review, film_id, current_date, watched_date, user_id)
+#     if review_edited:
+#         return {
+#             'ok': True
+#         }
+#     else:
+#         return {
+#             'error': False,
+#             'message': 'Review failed, please try again'
+#         }
 
 
-# 刪除評論
-def film_delete_func(film_id, user_id):
-    review_deleted = review_database.delete_review(film_id, user_id)
-    if review_deleted:
-        return {
-            'ok': True
-        }
-    else:
-        return {
-            'error': False,
-            'message': 'Review deleting failed, please try again'
-        }
-
-# 改評論
-def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
-    review_edited = review_database.edit_review(user_review, film_id, current_date, watched_date, user_id)
-    if review_edited:
-        return {
-            'ok': True
-        }
-    else:
-        return {
-            'error': False,
-            'message': 'Review failed, please try again'
-        }
-
-
-# 拿評論
-def get_reviews_func(user_name):
-    data = review_database.get_reviews_data(user_name)
-    print('get_revews_func',data)
-    if data:
-        return {
-            'data': data
-        }
-    else:
-        return {
-            'error': False
-        }
+# # 拿評論
+# def get_reviews_func(user_name):
+#     data = review_database.get_reviews_data(user_name)
+#     print('get_revews_func',data)
+#     if data:
+#         return {
+#             'data': data
+#         }
+#     else:
+#         return {
+#             'error': False
+#         }

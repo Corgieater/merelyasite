@@ -101,11 +101,9 @@ saveBt.addEventListener("click", async function () {
   } else {
     const req = await fetch("/api/user");
     const res = await req.json();
+
     let id = res["userId"];
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, "0");
-    let mm = String(today.getMonth() + 1).padStart(2, "0");
-    let yyyy = today.getFullYear();
+
     let watchedDate = document.querySelector(
       '.reviewBox > section > input[type="date"]'
     );
@@ -118,7 +116,7 @@ saveBt.addEventListener("click", async function () {
     if (spoilersCheckBox.checked === true) {
       spoilers = true;
     }
-    today = yyyy + "/" + mm + "/" + dd;
+    let today = makeDateString();
     let data = {
       movieReview: userLogPlace.value,
       filmId: filmId,

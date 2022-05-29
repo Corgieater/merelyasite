@@ -229,3 +229,11 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
 .userReview > p {
   color: antiquewhite;
 }
+
+/* lastTimeStarPlace */
+.textPlace > div > section:nth-child(1) > section:nth-child(2) > section > img {
+  width: 25px;
+}
+.textPlace > div > section:nth-child(1) > section:nth-child(2) > p {
+  font-size: 18px;
+}
