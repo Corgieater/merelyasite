@@ -1,17 +1,17 @@
 "use strict";
 let frame = document.querySelector(".frame");
-// colletions
+// other colletions
 let movieCollectionsBt = document.querySelector(
-  ".searchCollections > a:nth-child(1)"
+  ".otherCollections > li:nth-child(2) > a"
 );
 let reviewsCollectionsBt = document.querySelector(
-  ".searchCollections > a:nth-child(2)"
+  ".otherCollections > li:nth-child(3) > a"
 );
 let directorsCollectionsBt = document.querySelector(
-  ".searchCollections > a:nth-child(3)"
+  ".otherCollections > li:nth-child(4) > a"
 );
 let actorsCollectionsBt = document.querySelector(
-  ".searchCollections > a:nth-child(4)"
+  ".otherCollections > li:nth-child(5) > a"
 );
 let keyword = cutUserInputInMiddle("r=", "&");
 
@@ -48,7 +48,7 @@ async function makeShowRow(data, userInputAndPage) {
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
-    let showPlace = document.querySelector(".frame > ul");
+    let showPlace = document.querySelector(".showPlace");
     data = data[0]["data"];
 
     //   use for of for async func

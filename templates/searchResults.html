@@ -5,13 +5,25 @@
   href="{{url_for('static', filename='css/searchResults.css')}}"
 />{% endblock %} {% block content %}
 <div class="frame">
+  <h2>RESULTS FOR MOVIE - {{ director }}</h2>
+  <ul class="otherCollections flex">
+    <li>SHOW RESULTS FOR</li>
+    <li><a href="#">Movies</a></li>
+    <li><a href="#">Reviews</a></li>
+    <li><a href="#">Directors</a></li>
+    <li><a href="#">Actors</a></li>
+  </ul>
+  <ul class="showPlace"></ul>
+</div>
+
+<!-- <div class="frame">
   <h2>Show specific results</h2>
   <ul class="searchCollections">
     <a href="#">Movies</a>
     <a href="#">Reviews</a>
     <a href="#">Directors</a>
     <a href="#">Actors</a>
-  </ul>
+  </ul> -->
   <ul>
     <!-- <li>
       <div class="showRow flex">

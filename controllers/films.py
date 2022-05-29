@@ -51,7 +51,7 @@ def get_data_by_type_func(query, page, data_type):
         data_count = movie_database.get_total_data_count_from_type(query, 'actor')
         print(data_count, 'actor')
 
-    if data_count is False:
+    if data_count is False or data_count[0] is 0:
         return {
             'error': True,
             'message': 'There is no such keyword, please check it again'

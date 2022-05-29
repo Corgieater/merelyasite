@@ -1,5 +1,11 @@
+.wrap > h2 {
+  margin-top: 100px;
+  border-bottom: 1px solid antiquewhite;
+}
+
 .posterPlace {
   flex-wrap: wrap;
+  margin-top: 50px;
 }
 .posterPlace > li {
   width: 300px;

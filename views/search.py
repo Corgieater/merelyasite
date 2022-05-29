@@ -39,3 +39,20 @@ def get_director():
 def render_search_Director_page():
     director = request.args.get('director').replace('+', ' ')
     return render_template('searchDirector.html', director=director)
+
+
+# 找演員
+@search_blueprint.route('/api/search/actor')
+def get_actor():
+    actor = request.args.get('actor').replace('+', ' ')
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    return get_data_by_type_func(actor, page, 'actor')
+
+
+# 找演員 page render(有可愛logo那個)
+@search_blueprint.route('/search/actor')
+def render_search_actor_page():
+    actor = request.args.get('actor').replace('+', ' ')
+    return render_template('searchActor.html', actor=actor)

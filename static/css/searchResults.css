@@ -2,6 +2,23 @@
   border: white 1px solid;
 }
 
+/* 旁邊顯示其他搜尋的小框框 */
+.otherCollections {
+  position: absolute;
+  flex-direction: column;
+  right: 300px;
+}
+.otherCollections.flex > li:nth-child(1) {
+  border-bottom: 1px solid antiquewhite;
+  color: antiquewhite;
+}
+.otherCollections > li {
+  margin-bottom: 15px;
+}
+
+.showPlace {
+  margin-top: 50px;
+}
 .showRow {
   padding: 10px;
 }

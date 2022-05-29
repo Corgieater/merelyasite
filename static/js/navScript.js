@@ -143,29 +143,22 @@ searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
   let userOption = searchSelect.value;
   console.log(userOption);
-  // let movieUrl = `/search?keyword=${userInput.value.replaceAll(
-  //   " ",
-  //   "+"
-  // )}&page=1`;
-  // let directorUrl = `/search?keyword=${userInput.value.replaceAll(
-  //   " ",
-  //   "+"
-  // )}&page=1`;
   let userInput = document.querySelector("#userInput");
+  let userInputForHref = userInput.value.replaceAll(" ", "+");
+
+  let movieUrl = `/search?keyword=${userInputForHref}&page=1`;
+  let directorUrl = `/search/director?director=${userInputForHref}&page=1`;
+  let actorUrl = `/search/actor?actor=${userInputForHref}&page=1`;
+  // let genreUrl = `/search/director?director=${userInputForHref}&page=1`;
   if (userInput.value === "") {
     userInput.focus();
   } else {
     if (userOption === "movie") {
-      window.location.replace(
-        `/search?keyword=${userInput.value.replaceAll(" ", "+")}&page=1`
-      );
+      window.location.replace(movieUrl);
     } else if (userOption === "director") {
-      window.location.replace(
-        `/search/director?director=${userInput.value.replaceAll(
-          " ",
-          "+"
-        )}&page=1`
-      );
+      window.location.replace(directorUrl);
+    } else if (userOption == "actor") {
+      window.location.replace(actorUrl);
     }
   }
 });
