@@ -22,3 +22,20 @@ def search():
 @search_blueprint.route('/search')
 def render_search_page():
     return render_template('searchResults.html')
+
+
+# 找導演
+@search_blueprint.route('/api/search/director')
+def get_director():
+    director = request.args.get('director').replace('+', ' ')
+    page = request.args.get('page')
+    if page is None:
+        page = 1
+    return get_data_by_type_func(director, page, 'director')
+
+
+# 找導演page render(有可愛logo那個)
+@search_blueprint.route('/search/director')
+def render_search_Director_page():
+    director = request.args.get('director').replace('+', ' ')
+    return render_template('searchDirector.html', director=director)

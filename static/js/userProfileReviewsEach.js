@@ -160,38 +160,6 @@ dateCheckBox.addEventListener("click", function () {
   hideOrShow(dateInputPlace);
 });
 
-// 更新評論
-// saveBt.addEventListener("click", async function () {
-// let spoilers = false;
-// deleteMessage();
-// if (userLogPlace.value === "") {
-//   makeMessage(messagePlace, "Type something, please");
-// } else {
-//   watchedDate.value.replaceAll("-", "/");
-//   if (watchedDate.value === "") {
-//     watchedDate.value = null;
-//   }
-//   if (spoilersCheckBox.checked === true) {
-//     spoilers = true;
-//   }
-//   let data = {
-//     movieReview: userLogPlace.value,
-//     watchedDate: watchedDate.value,
-//     spoilers: spoilers,
-//   };
-//   let reviewUpdateMessage = await sendDataToBackend(
-//     "PATCH",
-//     data,
-//     `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
-//   );
-//   if (reviewUpdateMessage === true) {
-//     // window.location.reload();
-//   } else {
-//     makeMessage(messagePlace, reviewUpdateMessage);
-//   }
-// }
-// });
-
 // 關閉評論區
 closeBt.addEventListener("click", function (e) {
   e.preventDefault();
@@ -413,6 +381,7 @@ function turnDatabaseDateToStringDate(dabataseDate) {
 }
 
 // 我覺得應該要做三顆按鈕:( 綁不一樣的功能
+// 下面要修 但我沒時間= =
 // 更新按鈕裡的功能
 async function updateReviewFunc() {
   let spoilers = false;
@@ -489,5 +458,3 @@ async function reviewAgainFunc() {
 }
 
 showFilmInfo();
-// showPreviousRate();
-// getAverageRate();

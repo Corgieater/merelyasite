@@ -7,6 +7,21 @@ key = os.getenv('JWT_SECRET_KEY')
 database = MovieDatabase()
 
 
+# films controller也有
+def make_page(data, page, total_page):
+    print(data,data)
+    page = int(page) + 1
+    data['currentPage'] = page
+    data['nextPage'] = None
+    data['totalPages'] = total_page
+
+    if page < total_page:
+        data['nextPage'] = page + 1
+    else:
+        data['nextPage'] = None
+    return data
+
+
 def make_dic(info, page, total_page):
     page = int(page)+1
     searched_data = {'data': [], 'currentPage': page, 'nextPage': None, 'totalPages': total_page}
@@ -56,3 +71,32 @@ def get_info_func(user_input, page):
     #     }
     return dic_data
 
+# 拿演員導演資料 films/controller也有一個
+def get_data_by_type_func(query, page, data_type):
+    data_count = 0
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    if data_type == 'director':
+        data_count = database.get_total_data_count_from_type(query, 'director')
+        print(data_count, 'director')
+
+    if data_type == 'actor':
+        data_count = database.get_total_data_count_from_type(query, 'actor')
+        print(data_count, 'actor')
+
+    if data_count is False:
+        return {
+            'error': True,
+            'message': 'There is no such keyword, please check it again'
+        }
+
+    total_page = math.ceil(data_count[0] / 20)
+
+    info = None
+    if data_type == 'director':
+        info = database.get_director_by_name(query, page)
+    if data_type == 'actor':
+        info = database.get_actor_by_name(query, page)
+    info = make_page(info, page, total_page)
+    return info

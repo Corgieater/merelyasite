@@ -7,6 +7,7 @@ let logInBt = document.querySelector(".logInPlace > button");
 let logOutBt = document.querySelector("nav > ul > li:nth-child(5)");
 let profileBt = document.querySelector("nav > ul > li:nth-child(1)");
 let searchFormBt = document.querySelector(".searchForm > a");
+let searchSelect = document.querySelector(".searchSelect");
 let userProfileHref = document.querySelector("nav > ul > li:nth-child(1) > a");
 const addMovieBt = document.querySelector(".addMovieBt");
 
@@ -137,16 +138,35 @@ async function logOut(e) {
 }
 
 let dataForShowrow = {};
-// 搜尋
+// 搜尋  HERE
 searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
+  let userOption = searchSelect.value;
+  console.log(userOption);
+  // let movieUrl = `/search?keyword=${userInput.value.replaceAll(
+  //   " ",
+  //   "+"
+  // )}&page=1`;
+  // let directorUrl = `/search?keyword=${userInput.value.replaceAll(
+  //   " ",
+  //   "+"
+  // )}&page=1`;
   let userInput = document.querySelector("#userInput");
   if (userInput.value === "") {
     userInput.focus();
   } else {
-    window.location.replace(
-      `/search?keyword=${userInput.value.replaceAll(" ", "+")}&page=1`
-    );
+    if (userOption === "movie") {
+      window.location.replace(
+        `/search?keyword=${userInput.value.replaceAll(" ", "+")}&page=1`
+      );
+    } else if (userOption === "director") {
+      window.location.replace(
+        `/search/director?director=${userInput.value.replaceAll(
+          " ",
+          "+"
+        )}&page=1`
+      );
+    }
   }
 });
 

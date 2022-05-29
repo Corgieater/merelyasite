@@ -64,7 +64,8 @@ button,
 img,
 textarea,
 .signUpPlace,
-.addMoviePlace {
+.addMoviePlace,
+.searchSelect {
   border-radius: 5px;
 }
 
@@ -121,7 +122,7 @@ nav > h1 > a {
 nav > ul {
   position: absolute;
   align-items: flex-end;
-  width: 50%;
+  /* width: 50%; */
   border: solid white 1px;
   right: 20%;
 }
@@ -141,7 +142,17 @@ nav > ul > li > input {
 .logInPlace > button {
   height: 35px;
 }
-
+/* searchSelect */
+.searchSelect {
+  position: absolute;
+  height: 100%;
+  outline: none;
+  border: none;
+}
+.searchSelect:focus {
+  border: none;
+  outline: none;
+}
 /* searchForm */
 .searchForm {
   position: relative;
@@ -155,7 +166,8 @@ nav > ul > li > input {
   bottom: 1px;
 }
 .searchForm > input {
-  width: 250px;
+  width: 350px;
+  padding-left: 120px;
 }
 
 /* signUpPlace */

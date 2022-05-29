@@ -37,7 +37,7 @@ def make_page(data, page, total_page):
         data['nextPage'] = None
     return data
 
-# 用TYPE拿資料(導演演員GENRE)
+# 用TYPE拿資料(導演演員GENRE) search controller 也有一個
 def get_data_by_type_func(query, page, data_type):
     data_count = 0
     if page is None:
