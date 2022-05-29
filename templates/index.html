@@ -1,1 +1,12 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/index.css')}}"
+/>
+{% endblock %} {% block content %}
+<h2 calss="newFromFriends"></h2>
+
+{% endblock %}{% block script %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

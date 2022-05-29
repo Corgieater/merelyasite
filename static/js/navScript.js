@@ -65,7 +65,6 @@ addMovieCloseBt.addEventListener("click", function (e) {
 // 申請帳號
 signUpBt.addEventListener("click", async function (e) {
   // 拿資料丟API
-  console.log("hi");
   e.preventDefault();
   deleteMessage();
   let email = document.querySelector(".signUpPlace>input[type='email']").value;

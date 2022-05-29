@@ -37,7 +37,7 @@ def sign_up(email, password, name):
 # 登入相關
 def log_in(email, password):
     # 先確認有沒有此email
-    database = UserDatabase()
+    print('log in', email, password)
     email_exist = database.get_email(email)
     if not email_exist:
         return {
@@ -46,12 +46,12 @@ def log_in(email, password):
         }
 
     user_info = database.check_user_log_in_info(email, password)
+    print(user_info)
     if user_info:
         print(user_info)
         user_data = {
             'userName': user_info[0],
-            'userEmail': user_info[1],
-            'userId': user_info[2]
+            'userId': user_info[1]
         }
 
         encoded_data = jwt.encode(user_data, key, algorithm="HS256")
@@ -64,11 +64,9 @@ def log_in(email, password):
             'message': "Can't find user, please check your email or password again"
         }
 
+
 # 檢查登入與否
-
-
 def user_checker():
-
     try:
         token = request.cookies.get('user_info')
         if token is None:
@@ -80,7 +78,6 @@ def user_checker():
         if data:
             return {
                     'userName': data['userName'],
-                    'userEmail': data['userEmail'],
                     'userId': data['userId']
                 }
 
@@ -92,8 +89,6 @@ def user_checker():
 
 
 # 登出
-
-
 def sign_out():
     res = make_response({'ok': True})
     res.set_cookie(key='user_info', value='', expires=0)

@@ -56,14 +56,15 @@ class UserDatabase:
             name = result[1]
             email = result[2]
             user_id = result[3]
+            # 檢查密碼
             passwords_are_the_same = bcrypt.check_password_hash(hashed_password, password)
             if passwords_are_the_same is not True:
                 return False
         except Exception as e:
             print(e)
         else:
-            print('user info', [name, email, user_id])
-            return [name, email, user_id]
+            print('user info', [name, user_id])
+            return [name, user_id]
         finally:
             cursor.close()
             connection.close()

@@ -357,3 +357,38 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
+
+    # 用使用者追蹤的對象拿review
+    def get_latest_five_reviews_from_follows(self, user_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT users.name,\n'
+                           'reviews.review_id, reviews.review_movie_id,reviews.today,\n'
+                           'movies_info.title\n'
+                           'FROM users_follows\n'
+                           'INNER JOIN reviews_users\n'
+                           'INNER JOIN reviews\n'
+                           'INNER JOIN users\n'
+                           'INNER JOIN movies_info\n'
+                           'ON users_follows.follower_user_id = %s\n'
+                           'AND users_follows.user_id_been_followed = reviews_users.reu_user_id\n'
+                           'AND reviews_users.reu_review_id = reviews.review_id\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'AND users_follows.user_id_been_followed = users.user_id\n'
+                           'ORDER BY reviews.review_id DESC\n'
+                           'LIMIT 5',
+                           (user_id,))
+            results = cursor.fetchall()
+            print('get_latest_five_reviews_from_follows', results)
+        except Exception as e:
+            print('get_latest_five_reviews_from_follows from reviewData')
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()
+
+

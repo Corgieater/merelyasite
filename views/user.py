@@ -1,6 +1,7 @@
 from flask import Blueprint
 import requests
 from controllers.auth import *
+from controllers.social import *
 
 user_blueprint = Blueprint(
     'user_blueprint',
@@ -30,3 +31,9 @@ def check_user_func():
 @user_blueprint.route('/api/user', methods=["DELETE"])
 def sign_out_func():
     return sign_out()
+
+
+# 從追蹤對象拿頭五篇reviews
+@user_blueprint.route('/api/user/follows/reviews')
+def get_latest_five_reviews_from_follows():
+    return get_latest_five_reviews_from_follows_func()
