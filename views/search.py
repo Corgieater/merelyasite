@@ -21,7 +21,8 @@ def search():
 
 @search_blueprint.route('/search')
 def render_search_page():
-    return render_template('searchResults.html')
+    movie = request.args.get('keyword').replace('+', ' ')
+    return render_template('searchResults.html', movie=movie)
 
 
 # 找導演
@@ -56,3 +57,18 @@ def get_actor():
 def render_search_actor_page():
     actor = request.args.get('actor').replace('+', ' ')
     return render_template('searchActor.html', actor=actor)
+
+# genre 找電影+director
+@search_blueprint.route('/api/search/genre')
+def search_by_genre():
+    genre = request.args.get('genre')
+    page = request.args.get('page')
+    print('genre', genre, page)
+    return get_films_by_genre_func(genre, page)
+
+
+# render template genre
+@search_blueprint.route('/search/genre')
+def render_genre_page():
+    genre = request.args.get('genre').replace('+', ' ')
+    return render_template('searchGenre.html', genre=genre)

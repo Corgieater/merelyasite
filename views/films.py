@@ -99,18 +99,18 @@ def render_actor_page():
 
 
 # genre搜電影 HERE--------------------
-@films_blueprint.route('/api/genre')
-def search_by_genre():
-    genre = request.args.get('genre')
-    page = request.args.get('page')
-    print('genre', genre, page)
-    return get_films_by_genre_func(genre, page)
-
-
-# render template genre
-@films_blueprint.route('/genre')
-def render_genre_page():
-    return render_template('genre.html')
+# @films_blueprint.route('/api/genre')
+# def search_by_genre():
+#     genre = request.args.get('genre')
+#     page = request.args.get('page')
+#     print('genre', genre, page)
+#     return get_films_by_genre_func(genre, page)
+#
+#
+# # render template genre
+# @films_blueprint.route('/genre')
+# def render_genre_page():
+#     return render_template('genre.html')
 
 
 # 評分

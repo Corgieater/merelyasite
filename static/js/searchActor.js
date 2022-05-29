@@ -46,6 +46,7 @@ async function getData() {
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
   console.log(data);
+  makePageTags("search/actor?actor=", userInputAndPage, data[0]["totalPages"]);
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
@@ -87,7 +88,6 @@ async function makeShowRow(data, userInputAndPage) {
       showPlace.append(li);
     }
   }
-  makePageTags("search?keyword=", userInputAndPage, data["totalPages"]);
 }
 
 // 小功能

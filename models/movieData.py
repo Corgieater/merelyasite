@@ -1,6 +1,6 @@
 from models.databaseClass import pool as p
 
-
+# 給詳細單頁Movie用的
 def make_movie_info_dic(movie, directors, actors, genres):
     print(movie)
     dic = {
@@ -315,40 +315,41 @@ class MovieDatabase:
             cursor.close()
             connection.close()
 
-    # # GENRE拿電影(通常滿多的要LIMIT)
-    # def get_film_by_genre(self, genre, start_index):
-    #     start_index = int(start_index) * 20
-    #     print('movieData get_film_by_actor ', genre)
-    #     print(type(start_index))
-    #     try:
-    #         connection = p.get_connection()
-    #         cursor = connection.cursor()
-    #         cursor.execute('select genres.type, \n'
-    #                        'genres_movies.gm_movie_id,\n'
-    #                        'movies_info.movie_id\n'
-    #                        'from genres\n'
-    #                        'inner join genres_movies \n'
-    #                        'ON genres.type like %s\n'
-    #                        'AND genres.genre_id = genres_movies.gm_genre_id\n'
-    #                        'inner join movies_info\n'
-    #                        'ON genres_movies.gm_movie_id = movies_info.movie_id\n'
-    #                        'order by movies_info.title\n'
-    #                        'limit %s, 20\n',
-    #                        ('%' + genre + '%', start_index))
-    #         result = cursor.fetchall()
-    #         actor_movie_dic = make_genre_movie_dic(result)
-    #         print('movieData get_film_by_actor ', result)
-    #         if len(result) is 0:
-    #             return None
-    #     except Exception as e:
-    #         print('get_film_by_genre from movieData')
-    #         print(e)
-    #         return False
-    #     else:
-    #         return actor_movie_dic
-    #     finally:
-    #         cursor.close()
-    #         connection.close()
+    # GENRE拿電影 director(通常滿多的要LIMIT)
+    def get_film_by_genre(self, genre, start_index):
+        start_index = int(start_index) * 20
+        print('movieData get_film_by_genre ', genre)
+        print(type(start_index))
+        try:
+            connection = p.get_connection()
+            cursor = connection.cursor()
+            cursor.execute('SELECT movies_info.movie_id,movies_info.title,\n'
+                           'movies_info.year, directors.name\n'
+                           'FROM genres\n'
+                           'INNER JOIN genres_movies\n'
+                           'INNER JOIN movies_info\n'
+                           'INNER JOIN directors_movies\n'
+                           'INNER JOIN directors\n'
+                           'ON genres.type like %s\n'
+                           'AND genres_movies.gm_genre_id = genres.genre_id\n'
+                           'AND genres_movies.gm_movie_id = movies_info.movie_id\n'
+                           'AND directors_movies.dm_movie_id = movies_info.movie_id\n'
+                           'AND directors_movies.dm_director_id = directors.director_id\n'
+                           'LIMIT %s, 20',
+                           ('%' + genre + '%', start_index))
+            result = cursor.fetchall()
+            print('get movies by genre', result)
+            if len(result) is 0:
+                return None
+        except Exception as e:
+            print('get_film_by_genre from movieData')
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
 
     # general搜尋bar 名字拿導演
     def get_director_by_name(self, director, start_index):

@@ -92,12 +92,12 @@ async function getUserData() {
   return res;
 }
 
-// 做頁碼
+// 做頁碼 先用成做13頁 不然有夠他媽多= =
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
   console.log("makePageTagds", userInputAndPage);
   let pagesPlace = document.querySelector(".pagesPlace");
   // 這裡的問題 改一下
-  for (let i = 0; i < totalPages; i++) {
+  for (let i = 0; i < 14; i++) {
     // 找出要切哪
     let sliceIndex = userInputAndPage.indexOf("e=");
     console.log("slice Index", sliceIndex);

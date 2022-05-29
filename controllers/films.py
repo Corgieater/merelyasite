@@ -103,7 +103,7 @@ def get_films_by_director_func(director, page):
     return info
 
 
-# 演員拿電影 HERE
+# 演員拿電影 OK?
 def get_films_by_actor_func(actor, page):
     data_count = movie_database.get_total_data_count_from_type(actor, 'actor')
     print('datacount',data_count)
@@ -129,22 +129,22 @@ def get_films_by_actor_func(actor, page):
     return info
 
 
-# GENRE拿電影 HERE
-def get_films_by_genre_func(genre, page):
-    data_count = movie_database.get_total_data_count_from_type(genre, 'genre')[0]
-    print('data count get_films_by_genre_func', data_count)
-    if data_count is 0:
-        return {
-            'error': True,
-            'message': 'There is no such person, please check it again'
-        }
-    total_page = math.ceil(data_count[0] / 20)
-    if page is None:
-        page = 1
-    page = int(page) - 1
-    info = movie_database.get_film_by_genre(genre, page)
-    info = make_page(info, page, total_page)
-    return info
+# # GENRE拿電影 HERE
+# def get_films_by_genre_func(genre, page):
+#     data_count = movie_database.get_total_data_count_from_type(genre, 'genre')[0]
+#     print('data count get_films_by_genre_func', data_count)
+#     if data_count is 0:
+#         return {
+#             'error': True,
+#             'message': 'There is no such person, please check it again'
+#         }
+#     total_page = math.ceil(data_count[0] / 20)
+#     if page is None:
+#         page = 1
+#     page = int(page) - 1
+#     info = movie_database.get_film_by_genre(genre, page)
+#     info = make_page(info, page, total_page)
+#     return info
 
 
 

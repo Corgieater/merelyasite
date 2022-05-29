@@ -149,7 +149,7 @@ searchFormBt.addEventListener("click", async function (e) {
   let movieUrl = `/search?keyword=${userInputForHref}&page=1`;
   let directorUrl = `/search/director?director=${userInputForHref}&page=1`;
   let actorUrl = `/search/actor?actor=${userInputForHref}&page=1`;
-  // let genreUrl = `/search/director?director=${userInputForHref}&page=1`;
+  let genreUrl = `/search/genre?genre=${userInputForHref}&page=1`;
   if (userInput.value === "") {
     userInput.focus();
   } else {
@@ -159,6 +159,8 @@ searchFormBt.addEventListener("click", async function (e) {
       window.location.replace(directorUrl);
     } else if (userOption == "actor") {
       window.location.replace(actorUrl);
+    } else if (userOption == "genre") {
+      window.location.replace(genreUrl);
     }
   }
 });
