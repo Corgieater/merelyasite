@@ -64,6 +64,7 @@ let messagePlace = document.querySelector(".reviewBox > section:nth-child(2)");
 
 let editSaveBt = document.querySelector(".editSaveBt");
 let reviewAgainSaveBt = document.querySelector(".reviewAgainSaveBt");
+let saveBtForOthers = document.querySelector(".saveBtForOthers");
 let closeBt = document.querySelector(".closeBt");
 
 let reviewTitle = document.querySelector(
@@ -111,7 +112,6 @@ async function showProperReviewBox() {
     if (isPageBelongsToLoggedUser === false) {
       editBt.textContent = "Write a review";
       // 這邊要打API去查這user是有沒有寫過這電影的評論
-
       show(reviewAgainBt);
       cancelBt.style.bottom = "90px";
     }
@@ -148,16 +148,11 @@ editBt.addEventListener("click", async function (e) {
       lastTimeWatched = turnDatabaseDateToStringDate(lastTimeWatched);
       watchedDate.value = lastTimeWatched;
     }
-    editSaveBt.addEventListener("click", async function (e) {
-      e.preventDefault();
-      console.log("update");
-      updateReviewFunc();
-    });
   } else if (isPageBelongsToLoggedUser === false) {
     hideOrShow(reviewBox);
     show(mask);
-    show(reviewAgainSaveBt);
-    hide(editSaveBt);
+    hide(reviewAgainSaveBt);
+    show(saveBtForOthers);
     userLogPlace.value = "";
     spoilersCheckBox.disabled = true;
     spoilersCheckBox.checked = false;
@@ -166,6 +161,14 @@ editBt.addEventListener("click", async function (e) {
     watchedDate.value = "";
     hide(deleteReviewBt);
   }
+  editSaveBt.addEventListener("click", async function () {
+    console.log("update");
+    updateReviewFunc();
+  });
+  saveBtForOthers.addEventListener("click", async function () {
+    console.log("save review for others");
+    saveReviewForOthers();
+  });
 });
 // 打開評論區 - 再寫一次評論
 reviewAgainBt.addEventListener("click", function (e) {
@@ -182,8 +185,7 @@ reviewAgainBt.addEventListener("click", function (e) {
   hide(watchedDate);
   watchedDate.value = "";
   hide(deleteReviewBt);
-  reviewAgainSaveBt.addEventListener("click", async function (e) {
-    e.preventDefault();
+  reviewAgainSaveBt.addEventListener("click", async function () {
     console.log("review again");
     reviewAgainFunc();
   });
@@ -199,8 +201,7 @@ userLogPlace.addEventListener("input", function () {
 });
 
 // 顯示日期按鈕
-dateCheckBox.addEventListener("click", function (e) {
-  e.preventDefault();
+dateCheckBox.addEventListener("click", function () {
   hideOrShow(dateInputPlace);
 });
 
@@ -397,7 +398,9 @@ async function showFilmInfo() {
     }
   }
   getAverageRate();
-  showPreviousRate(filmRate);
+  if (isPageBelongsToLoggedUser) {
+    showPreviousRate(filmRate);
+  }
 }
 
 deleteReviewBt.addEventListener("click", async function (e) {
@@ -434,7 +437,6 @@ function turnDatabaseDateToStringDate(dabataseDate) {
   return newDate;
 }
 
-// 我覺得應該要做三顆按鈕:( 綁不一樣的功能
 // 下面要修 但我沒時間= =
 // 更新按鈕裡的功能
 async function updateReviewFunc() {
@@ -450,7 +452,6 @@ async function updateReviewFunc() {
     if (spoilersCheckBox.checked === true) {
       spoilers = true;
     }
-
     let data = {
       movieReview: userLogPlace.value,
       watchedDate: watchedDate.value,
@@ -461,6 +462,48 @@ async function updateReviewFunc() {
       "PATCH",
       data,
       `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
+    );
+    if (reviewUpdateMessage === true) {
+      window.location.reload();
+    } else {
+      makeMessage(messagePlace, reviewUpdateMessage);
+    }
+  }
+}
+
+// save review for other func
+async function saveReviewForOthers() {
+  console.log("not page master 555");
+  let spoilers = false;
+  let loggedUser = await getUserData();
+  deleteMessage();
+  if (userLogPlace.value === "") {
+    makeMessage(messagePlace, "Type something, please");
+  } else {
+    watchedDate.value.replaceAll("-", "/");
+    if (watchedDate.value === "") {
+      watchedDate.value = null;
+    }
+    if (spoilersCheckBox.checked === true) {
+      spoilers = true;
+    }
+    // 不是page擁有者
+
+    let today = makeDateString();
+    let data = {
+      movieReview: userLogPlace.value,
+      filmId: filmId,
+      currentDate: today,
+      watchedDate: watchedDate.value,
+      userId: loggedUser["userId"],
+      spoilers: spoilers,
+      reviewId: reviewId,
+    };
+    console.log("for update review", data);
+    let reviewUpdateMessage = await sendDataToBackend(
+      "PATCH",
+      data,
+      `/api/review`
     );
     if (reviewUpdateMessage === true) {
       window.location.reload();
