@@ -47,7 +47,6 @@ async function showProperReviewBox() {
     hide(rateBtsWrap);
     hide(reviewBt);
     hide(addListBt);
-
     let actionBox = document.querySelector(".actionBox > ul");
     actionBox.style.height = "200px";
     let li = document.createElement("li");
@@ -61,7 +60,7 @@ async function showProperReviewBox() {
     let averageRate = document.querySelector(
       ".actionBox > ul > li:nth-child(4)"
     );
-    averageRate.title = "hi";
+    averageRate.title = "";
     actionBox.insertBefore(li, averageRate);
   }
 }
@@ -296,7 +295,7 @@ async function getAverageRate() {
   };
   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
   let mouseTextPlace = document.querySelector(".mouseTextPlace");
-  if (averageRate !== undefined) {
+  if (averageRate !== undefined && averageRate["average"] !== null) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
 

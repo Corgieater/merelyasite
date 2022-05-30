@@ -32,12 +32,12 @@
 
       <section class="actionBox">
         <ul>
-          <li><a href="#">Edit or delete this review</a></li>
-          <li><a href="#">Add to lists</a></li>
-          <li><a href="#">Review again</a></li>
+          <li><a class="hide" href="#">Edit or delete this review</a></li>
+          <li><a class="hide" href="#">Add to lists</a></li>
+          <li><a class="hide" href="#">Review again</a></li>
           <li>
             <!-- rating -->
-            <fieldset class="rate">
+            <fieldset class="rate hide">
               <p>Rate</p>
               <a class="cancelBt hide" href="#">X</a>
               <input type="radio" id="rating10" name="rating" value="5" /><label
@@ -95,6 +95,8 @@
           <li></li>
         </ul>
       </section>
+      <!-- 秀出多少人評分 -->
+      <div class="mouseTextPlace hide"></div>
     </div>
 
     <!-- <div class="bodyArea flex">
@@ -119,7 +121,7 @@
       <br />
       <section>
         <button class="editSaveBt hide">SAVE</button>
-        <button class="reviewAgainSaveBt hide">SAVE123</button>
+        <button class="reviewAgainSaveBt hide">SAVE</button>
       </section>
       <br />
       <input type="checkbox" name="spoilers" id="spoilers" />

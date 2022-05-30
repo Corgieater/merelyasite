@@ -49,6 +49,10 @@ let editBt = document.querySelector(
 let reviewAgainBt = document.querySelector(
   ".textPlace > div > section.actionBox > ul > li:nth-child(3) > a"
 );
+let averageRatePlace = document.querySelector(
+  ".actionBox > ul > li:nth-child(5)"
+);
+averageRatePlace.title = "";
 let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 
 // review區
@@ -74,60 +78,98 @@ let deleteReviewBt = document.querySelector(".deleteReviewBt");
 // 沒登入就把reviewBox的東西都藏起來吧
 // 這邊變成要檢查如果不是該ID的人就不要給他改東西?
 async function showProperReviewBox() {
+  // 看有沒有登入
   const userIsLogged = await checkIfLogged();
+  let isPageBelongsToLoggedUser = false;
   console.log(userIsLogged);
+  let actionBox = document.querySelector(".actionBox > ul");
+  // 沒登入接下來都不用看了
   if (!userIsLogged) {
-    hide(rateBtsWrap);
-    hide(editBt);
-    hide(addListBt);
-
-    let actionBox = document.querySelector(".actionBox > ul");
+    console.log("no user logged");
     actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
     p.textContent = "Log in to review or rate";
     li.append(p);
     p.style.cursor = "pointer";
-    p.addEventListener("click", function () {
+    p.addEventListener("click", function (e) {
+      e.preventDefault();
       hideOrShow(logInPlace);
     });
-    let averageRate = document.querySelector(
-      ".actionBox > ul > li:nth-child(4)"
+    actionBox.insertBefore(li, averageRatePlace);
+  } else {
+    // 有登入可以show starts rates wrap
+    show(editBt);
+    show(rateBtsWrap);
+    show(addListBt);
+    isPageBelongsToLoggedUser = await checkUserForPages(
+      userName.replaceAll("+", " ")
     );
-    averageRate.title = "";
-    actionBox.insertBefore(li, averageRate);
+    console.log(isPageBelongsToLoggedUser);
+
+    // page not belongs to logged user
+    if (isPageBelongsToLoggedUser === false) {
+      editBt.textContent = "Write a review";
+      // 這邊要打API去查這user是有沒有寫過這電影的評論
+
+      show(reviewAgainBt);
+      cancelBt.style.bottom = "90px";
+    }
+    if (isPageBelongsToLoggedUser) {
+      // 屬於頁面使用者所以會有 reviewAgainBt要改一下cancelBt位置
+      cancelBt.style.bottom = "90px";
+      show(reviewAgainBt);
+    }
   }
 }
 
-showProperReviewBox();
-
 // 更新評分按鈕
 // 打開評論區 - 編輯或更新上次的評分
-editBt.addEventListener("click", function () {
-  // 因為跟revewi again共用空間 按鈕要分出來
-  userLogPlace.value = lastTimeLogMessage;
-  hideOrShow(reviewBox);
-  show(mask);
-  show(editSaveBt);
-  hide(reviewAgainSaveBt);
-  // 看上次spoiler是不是true
-  spoilersCheckBox.checked = lastTimeSpoilers;
-  console.log(lastTimeSpoilers);
-  // 上次看過東西就要維持一樣
-  if (lastTimeWatched) {
-    dateCheckBox.checked = true;
-    dateCheckBox.value = lastTimeWatched;
-    show(dateInputPlace);
-    lastTimeWatched = turnDatabaseDateToStringDate(lastTimeWatched);
-    watchedDate.value = lastTimeWatched;
+editBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let isPageBelongsToLoggedUser = await checkUserForPages(
+    userName.replaceAll("+", " ")
+  );
+  if (isPageBelongsToLoggedUser) {
+    // 因為跟review again共用空間 按鈕要分出來
+    userLogPlace.value = lastTimeLogMessage;
+    hideOrShow(reviewBox);
+    show(mask);
+    show(editSaveBt);
+    hide(reviewAgainSaveBt);
+    // 看上次spoiler是不是true
+    spoilersCheckBox.checked = lastTimeSpoilers;
+    console.log(lastTimeSpoilers);
+    // 上次看過東西就要維持一樣
+    if (lastTimeWatched) {
+      dateCheckBox.checked = true;
+      dateCheckBox.value = lastTimeWatched;
+      show(dateInputPlace);
+      lastTimeWatched = turnDatabaseDateToStringDate(lastTimeWatched);
+      watchedDate.value = lastTimeWatched;
+    }
+    editSaveBt.addEventListener("click", async function (e) {
+      e.preventDefault();
+      console.log("update");
+      updateReviewFunc();
+    });
+  } else if (isPageBelongsToLoggedUser === false) {
+    hideOrShow(reviewBox);
+    show(mask);
+    show(reviewAgainSaveBt);
+    hide(editSaveBt);
+    userLogPlace.value = "";
+    spoilersCheckBox.disabled = true;
+    spoilersCheckBox.checked = false;
+    dateCheckBox.checked = false;
+    hide(watchedDate);
+    watchedDate.value = "";
+    hide(deleteReviewBt);
   }
-  editSaveBt.addEventListener("click", async function () {
-    console.log("update");
-    updateReviewFunc();
-  });
 });
 // 打開評論區 - 再寫一次評論
-reviewAgainBt.addEventListener("click", function () {
+reviewAgainBt.addEventListener("click", function (e) {
+  e.preventDefault();
   // 因為跟EDIT共用空間 按鈕要分出來
   hideOrShow(reviewBox);
   show(mask);
@@ -140,7 +182,8 @@ reviewAgainBt.addEventListener("click", function () {
   hide(watchedDate);
   watchedDate.value = "";
   hide(deleteReviewBt);
-  reviewAgainSaveBt.addEventListener("click", async function () {
+  reviewAgainSaveBt.addEventListener("click", async function (e) {
+    e.preventDefault();
     console.log("review again");
     reviewAgainFunc();
   });
@@ -156,7 +199,8 @@ userLogPlace.addEventListener("input", function () {
 });
 
 // 顯示日期按鈕
-dateCheckBox.addEventListener("click", function () {
+dateCheckBox.addEventListener("click", function (e) {
+  e.preventDefault();
   hideOrShow(dateInputPlace);
 });
 
@@ -170,6 +214,7 @@ closeBt.addEventListener("click", function (e) {
 // 評分星星 按評分會直送資料庫更新
 rateBts.forEach((bt) => {
   bt.addEventListener("click", async function (e) {
+    e.preventDefault();
     let rate = e.target.value;
     const req = await fetch("/api/user");
     const res = await req.json();
@@ -194,7 +239,6 @@ rateBts.forEach((bt) => {
 async function showPreviousRate(rate) {
   if (rate === null) {
     hide(cancelBt);
-    return (rate = 0);
   } else {
     rate = rate;
     show(cancelBt);
@@ -285,7 +329,6 @@ cancelBt.addEventListener("click", async function (e) {
 
 // 拿review資料
 async function getReview() {
-  // /api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>
   const req = await fetch(
     `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
   );
@@ -297,6 +340,11 @@ async function getReview() {
 // 顯示電影資料
 async function showFilmInfo() {
   let data = await getReview();
+  let isPageBelongsToLoggedUser = false;
+  isPageBelongsToLoggedUser = await checkUserForPages(
+    userName.replaceAll("+", " ")
+  );
+
   let userReview = document.querySelector(".userReview > p");
   data = data["data"];
   filmId = data["movieId"];
@@ -308,6 +356,7 @@ async function showFilmInfo() {
   let filmSpoiler = data["spoiler"];
   let filmWatchedDate = data["watchedDate"];
   let filmReviewDate = data["reviewDate"];
+
   if (filmWatchedDate === null) {
     filmWatchedDate = filmReviewDate;
   }
@@ -321,12 +370,14 @@ async function showFilmInfo() {
   title.href = `/film/${filmId}`;
   year.textContent = filmYear;
   year.href = `/year?year=${filmYear}`;
-  showPreviousRate(filmRate);
+  if (isPageBelongsToLoggedUser) {
+    show(rateBtsWrap);
+  } else if (isPageBelongsToLoggedUser === false) {
+    show(rateBtsWrap);
+  }
 
-  lastTimeWatchPlace.textContent = `Watched on ${filmWatchedDate.substring(
-    0,
-    16
-  )}`;
+  lastTimeWatchPlace.textContent = `Watched on 
+  ${filmWatchedDate.substring(0, 16)}`;
 
   // make starts
   if (filmRate !== null) {
@@ -345,9 +396,12 @@ async function showFilmInfo() {
       lastTimeStarPlace.append(img);
     }
   }
+  getAverageRate();
+  showPreviousRate(filmRate);
 }
 
-deleteReviewBt.addEventListener("click", async function () {
+deleteReviewBt.addEventListener("click", async function (e) {
+  e.preventDefault();
   console.log("delete");
   const req = await fetch(
     `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`,
@@ -457,4 +511,27 @@ async function reviewAgainFunc() {
   }
 }
 
+// 拿電影均分
+async function getAverageRate() {
+  let data = {
+    filmId: filmId,
+  };
+  console.log(data);
+  let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
+  console.log(averageRate, 156154);
+  let mouseTextPlace = document.querySelector(".mouseTextPlace");
+  if (averageRate !== undefined && averageRate["average"] !== null) {
+    averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
+    averageRatePlace.style.cursor = "pointer";
+
+    mouseTextPlace.textContent = `Based on ${averageRate["totalCount"]} ratings`;
+    averageRatePlace.addEventListener("click", function () {
+      hideOrShow(mouseTextPlace);
+    });
+  } else {
+    averageRatePlace.textContent = `No one rated yet`;
+  }
+}
+
+showProperReviewBox();
 showFilmInfo();

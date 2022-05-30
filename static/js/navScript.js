@@ -38,7 +38,8 @@ signUpPlaceBt.addEventListener("click", function (e) {
   hideOrShow(mask);
 });
 
-logInPlaceBt.addEventListener("click", function () {
+logInPlaceBt.addEventListener("click", function (e) {
+  e.preventDefault();
   hideOrShow(logInPlace);
 });
 

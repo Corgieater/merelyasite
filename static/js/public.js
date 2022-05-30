@@ -85,6 +85,14 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
   }
 }
 
+// user 沒登入就滾出去>:(
+async function redirectIfNotLogin() {
+  const userLoged = await checkIfLogged();
+  if (!userLoged) {
+    window.location.replace("/");
+  }
+}
+
 // 拿使用者資料
 async function getUserData() {
   const req = await fetch("/api/user");
@@ -96,6 +104,9 @@ async function getUserData() {
 async function checkUserForPages(pageMaster) {
   let loggedUser = await getUserData();
   loggedUser = loggedUser["userName"];
+  if (loggedUser === undefined) {
+    return undefined;
+  }
   console.log("now logged in", loggedUser["userName"]);
   console.log("page master", pageMaster);
   if (loggedUser !== pageMaster) {

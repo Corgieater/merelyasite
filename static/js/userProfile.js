@@ -18,7 +18,7 @@ async function checkUserBelongs() {
   if (isThePageBelongsToLoggedUser === false) {
     console.log("page not belong to the logger");
     show(followBt);
-  } else {
+  } else if (isThePageBelongsToLoggedUser === true) {
     console.log("yes master");
     show(editProfileBt);
   }
@@ -28,13 +28,6 @@ async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_latest_reviews/${userName}`);
   const res = await req.json();
   return res;
-}
-
-async function redirectIfNotLogin() {
-  const userLoged = await checkIfLogged();
-  if (!userLoged) {
-    window.location.replace("/");
-  }
 }
 
 async function showRecentlyReviews() {
@@ -110,7 +103,7 @@ async function showRecentlyReviews() {
       }
     }
     // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
-    if (spoilers && pageBelongsToLoggedUser === false) {
+    if (spoilers && pageBelongsToLoggedUser !== true) {
       reviewText.classList.add("hide");
       let alert = document.createElement("p");
       alert.textContent = "There are spoilers in this review!";
@@ -126,7 +119,7 @@ async function showRecentlyReviews() {
 
       reviewBody.insertBefore(spoilerAlert, reviewText);
       reviewBody.insertBefore(alert, spoilerAlert);
-    } else {
+    } else if (spoilers && pageBelongsToLoggedUser == true) {
       let p = document.createElement("p");
       p.textContent = "This review may contain spoilers.";
       reviewBody.insertBefore(p, reviewText);
@@ -134,5 +127,4 @@ async function showRecentlyReviews() {
   }
 }
 checkUserBelongs();
-redirectIfNotLogin();
 showRecentlyReviews();

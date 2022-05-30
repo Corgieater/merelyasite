@@ -23,13 +23,6 @@ async function getLatestFiveReviews() {
   return res;
 }
 
-async function redirectIfNotLogin() {
-  const userLoged = await checkIfLogged();
-  if (!userLoged) {
-    window.location.replace("/");
-  }
-}
-
 async function showRecentlyReviews() {
   let data = await getLatestFiveReviews();
   let reviewdPlace = document.querySelector(".reviewdPlace");
@@ -122,5 +115,4 @@ async function showRecentlyReviews() {
   }
   makePageTags("user_profile/", userName, data["totalPages"]);
 }
-redirectIfNotLogin();
 showRecentlyReviews();
