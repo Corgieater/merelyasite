@@ -313,7 +313,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    #  算使用者REVIEWS有幾篇
+    #  算使用者REVIEWS有幾篇 by name
     def get_user_reviews_count(self, user_name):
         connection = p.get_connection()
         cursor = connection.cursor()

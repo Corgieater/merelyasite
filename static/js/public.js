@@ -92,15 +92,30 @@ async function getUserData() {
   return res;
 }
 
+// 檢查現在loggin的user是不是該頁面的主人
+async function checkUserForPages(pageMaster) {
+  let loggedUser = await getUserData();
+  loggedUser = loggedUser["userName"];
+  console.log("now logged in", loggedUser["userName"]);
+  console.log("page master", pageMaster);
+  if (loggedUser !== pageMaster) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 // 做頁碼 先用成做13頁 不然有夠他媽多= =
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
   console.log("makePageTagds", userInputAndPage);
   let pagesPlace = document.querySelector(".pagesPlace");
   // 這裡的問題 改一下
-  for (let i = 0; i < 14; i++) {
+  if (totalPages >= 14) {
+    totalPages = 14;
+  }
+  for (let i = 0; i < totalPages; i++) {
     // 找出要切哪
     let sliceIndex = userInputAndPage.indexOf("e=");
-    console.log("slice Index", sliceIndex);
     // 切到底拿到除了page以外的querystring
     let querystringWithoutPage = userInputAndPage.slice(0, sliceIndex + 2);
     let a = document.createElement("a");

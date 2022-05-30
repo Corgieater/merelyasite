@@ -1,9 +1,28 @@
 "use strict";
 let userName = cutUserInputAtLast("e/");
+console.log(userName);
 let userNameWithNoPlus = userName.replaceAll("+", " ");
 let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlist = document.querySelector(".userProfileWatchlist");
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
+
+// 使用者相關按鈕
+let editProfileBt = document.querySelector(".edditProfileBt");
+let followBt = document.querySelector(".followBt");
+
+// 看這頁面屬不屬於使用者判斷顯示什麼
+async function checkUserBelongs() {
+  let isThePageBelongsToLoggedUser = await checkUserForPages(
+    userName.replaceAll("+", " ")
+  );
+  if (isThePageBelongsToLoggedUser === false) {
+    console.log("page not belong to the logger");
+    show(followBt);
+  } else {
+    console.log("yes master");
+    show(editProfileBt);
+  }
+}
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_latest_reviews/${userName}`);
@@ -21,6 +40,10 @@ async function redirectIfNotLogin() {
 async function showRecentlyReviews() {
   let data = await getLatestFiveReviews();
   let reviewdPlace = document.querySelector(".reviewdPlace");
+  let pageBelongsToLoggedUser = await checkUserForPages(
+    userName.replaceAll("+", " ")
+  );
+  console.log("11111", pageBelongsToLoggedUser);
 
   for (let i = 0; i < data["data"].length; i++) {
     let li = document.createElement("li");
@@ -86,8 +109,8 @@ async function showRecentlyReviews() {
         starPlace[i].append(img);
       }
     }
-    // 這個理論上是給外人用的 user profile不用 但我先寫好
-    if (spoilers) {
+    // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
+    if (spoilers && pageBelongsToLoggedUser === false) {
       reviewText.classList.add("hide");
       let alert = document.createElement("p");
       alert.textContent = "There are spoilers in this review!";
@@ -103,8 +126,13 @@ async function showRecentlyReviews() {
 
       reviewBody.insertBefore(spoilerAlert, reviewText);
       reviewBody.insertBefore(alert, spoilerAlert);
+    } else {
+      let p = document.createElement("p");
+      p.textContent = "This review may contain spoilers.";
+      reviewBody.insertBefore(p, reviewText);
     }
   }
 }
+checkUserBelongs();
 redirectIfNotLogin();
 showRecentlyReviews();

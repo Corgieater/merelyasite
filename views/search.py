@@ -1,4 +1,5 @@
 from controllers.search import *
+
 from flask import *
 
 search_blueprint = Blueprint(
@@ -72,3 +73,19 @@ def search_by_genre():
 def render_genre_page():
     genre = request.args.get('genre').replace('+', ' ')
     return render_template('searchGenre.html', genre=genre)
+
+
+# 用user name找user
+@search_blueprint.route('/api/search/users')
+def get_users_by_name():
+    user = request.args.get('user')
+    page = request.args.get('page')
+    print('name', user, page)
+    return get_users_by_name_func(user, page)
+
+
+# render template search users
+@search_blueprint.route('/search/users')
+def render_users_page():
+    user = request.args.get('user').replace('+', ' ')
+    return render_template('searchUsers.html', user=user)
