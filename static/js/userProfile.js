@@ -9,6 +9,40 @@ userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 // 使用者相關按鈕
 let editProfileBt = document.querySelector(".edditProfileBt");
 let followBt = document.querySelector(".followBt");
+let unFollowBt = document.querySelector(".unFollowBt");
+
+// 給滑鼠移動到unfollowBt上用的
+let isMouseHover = false;
+
+// *************起來要做unfollow事件
+
+// 追隨事件
+followBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let message = await following_page_master();
+  if (message === true) {
+    window.location.reload();
+  }
+});
+// 把滑鼠移到following上會變成unfollowing
+unFollowBt.addEventListener(
+  "mouseover",
+  function () {
+    isMouseHover = true;
+    unFollowBt.classList.add("unFollow");
+    unFollowBt.textContent = "UNFOLLOW";
+  },
+  false
+);
+unFollowBt.addEventListener(
+  "mouseleave",
+  function () {
+    isMouseHover = false;
+    unFollowBt.classList.remove("unFollow");
+    unFollowBt.textContent = "FOLLOWING";
+  },
+  false
+);
 
 // 看這頁面屬不屬於使用者判斷顯示什麼
 async function checkUserBelongs() {
@@ -17,13 +51,45 @@ async function checkUserBelongs() {
   );
   if (isThePageBelongsToLoggedUser === false) {
     console.log("page not belong to the logger");
-    show(followBt);
+    is_following();
   } else if (isThePageBelongsToLoggedUser === true) {
     console.log("yes master");
     show(editProfileBt);
   }
 }
 
+// 追蹤別人
+async function following_page_master() {
+  let loggedUser = await getUserData();
+
+  let data = {
+    following: userNameWithNoPlus,
+    follower: loggedUser["userId"],
+  };
+  const followingMessage = await sendDataToBackend(
+    "PATCH",
+    data,
+    `/api/user_profile/follows`
+  );
+  return followingMessage;
+}
+
+// 確認有沒有追蹤
+async function is_following() {
+  console.log(`/api/user_profile/${userNameWithNoPlus}`);
+  const req = await fetch(`/api/user_profile/${userNameWithNoPlus}`);
+  const res = await req.json();
+  console.log(res);
+  if (res.ok) {
+    hide(followBt);
+    show(unFollowBt);
+  } else {
+    show(followBt);
+    hide(unFollowBt);
+  }
+}
+
+// 拿最近五個reviews
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_latest_reviews/${userName}`);
   const res = await req.json();
@@ -36,7 +102,6 @@ async function showRecentlyReviews() {
   let pageBelongsToLoggedUser = await checkUserForPages(
     userName.replaceAll("+", " ")
   );
-  console.log("11111", pageBelongsToLoggedUser);
 
   for (let i = 0; i < data["data"].length; i++) {
     let li = document.createElement("li");
@@ -126,5 +191,9 @@ async function showRecentlyReviews() {
     }
   }
 }
+
+// 小功能
+
 checkUserBelongs();
 showRecentlyReviews();
+// is_following();

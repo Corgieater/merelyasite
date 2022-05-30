@@ -55,11 +55,10 @@ def make_user_dic(data, page, total_page):
     print('make user dic', data)
     for info in data :
         info_dic = {
-            'userName':None,
-            'followingNum':None,
-            'followerNum':None
+            'userName': info[0],
+            'followingNum': None,
+            'followerNum': None
         }
-        info_dic['userName'] = info[0]
         data_dic['data']['data'].append(info_dic)
     return data_dic
 

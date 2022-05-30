@@ -50,12 +50,11 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT password, name, email, user_id FROM users Where email = %s', (email,))
+            cursor.execute('SELECT password, name, user_id FROM users Where email = %s', (email,))
             result = cursor.fetchone()
             hashed_password = result[0]
             name = result[1]
-            email = result[2]
-            user_id = result[3]
+            user_id = result[2]
             # 檢查密碼
             passwords_are_the_same = bcrypt.check_password_hash(hashed_password, password)
             if passwords_are_the_same is not True:
@@ -105,7 +104,7 @@ class UserDatabase:
             print('userData get_total_user_count_by_name', len(results))
             if len(results) == 0:
                 return False
-            # director_id, name, movie_id
+
             if results is None:
                 return None
         except Exception as e:
@@ -118,7 +117,55 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
+
+    # 確認使用者有沒有追蹤頁面作者
+    def check_is_user_following(self, userId, page_owner):
+        try:
+            connection = p.get_connection()
+            cursor = connection.cursor()
+            cursor.execute('SELECT\n'
+                           'follower.user_id as follower_id,\n'
+                           'following.user_id as following_id\n'
+                           'FROM users_follows\n'
+                           'INNER JOIN users following\n'
+                           'ON following.name = %s\n'
+                           'AND users_follows.following_id = following.user_id\n'
+                           'INNER JOIN users follower\n'
+                           'ON follower.user_id = %s\n'
+                           'AND users_follows.follower_id = follower.user_id',
+                           (page_owner, userId))
+            result = cursor.fetchone()
+            if len(result) == 0:
+                return False
+        except Exception as e:
+            print('check_is_user_following from userdata')
+            print(e)
+            return False
+        else:
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
     # 追蹤使用者
-    def follow_other_user(self, current_user_id):
+    def follow_other_user(self, follower_id, following_user_name):
         # find other user id and link to this user
-        pass
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('INSERT INTO users_follows (following_id, follower_id)\n'
+                           'SELECT following.user_id, follower.user_id\n'
+                           'FROM users following, users follower\n'
+                           'WHERE following.name = %s\n'
+                           'And follower.user_id = %s',
+                           (following_user_name, follower_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()

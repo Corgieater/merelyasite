@@ -39,9 +39,21 @@ def sign_out_func():
 def get_latest_five_reviews_from_follows():
     return get_latest_five_reviews_from_follows_func()
 
+# 看有沒有追蹤該頁面作者
+@user_blueprint.route('/api/user_profile/<page_owner>')
+def get_is_user_following(page_owner):
+    print(page_owner)
+    return get_is_user_following_func(page_owner)
+
 # 追蹤
-@user_blueprint.route('/api/user/follows/')
+@user_blueprint.route('/api/user_profile/follows', methods=["PATCH"])
 def follows_other_people():
-    return follows_other_people_func()
+    data = request.get_json()
+    print('followers',data)
+    following_name = data['following']
+    follower = data['follower']
+    return follows_other_people_func(following_name, follower)
+
+
 
 

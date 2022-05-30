@@ -15,11 +15,22 @@
   font-size: 25px;
   margin-bottom: 20px;
 }
+
+/* follow bt */
 .profile > section > a {
   background-color: lightsteelblue;
   padding: 10px;
   border-radius: 5px;
   font-size: 18px;
+  font-weight: bold;
+}
+
+/* unfollowBt */
+.unFollowBt {
+  background-color: #2a9d8f !important;
+}
+.unFollowBt.unFollow {
+  background-color: #e36414 !important;
 }
 /* user profile nav 施工中*/
 .wrap > ul > li {

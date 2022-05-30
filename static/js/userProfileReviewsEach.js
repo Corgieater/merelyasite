@@ -26,6 +26,7 @@ let movieName = uncleanUrlForMovieName.substring(
 
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
+let userNameTag = document.querySelector(".userNameTag");
 let title = document.querySelector(
   ".textPlace > div > section:nth-child(1) > section > h2 > a"
 );
@@ -357,7 +358,7 @@ async function showFilmInfo() {
   let filmSpoiler = data["spoiler"];
   let filmWatchedDate = data["watchedDate"];
   let filmReviewDate = data["reviewDate"];
-
+  userNameTag.href = `/user_profile/${userName}`;
   if (filmWatchedDate === null) {
     filmWatchedDate = filmReviewDate;
   }
