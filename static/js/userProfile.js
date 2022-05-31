@@ -15,6 +15,10 @@ let unFollowBt = document.querySelector(".unFollowBt");
 let isMouseHover = false;
 
 // *************起來要做unfollow事件
+// *************要想辦法抓到追蹤跟被追蹤數
+// *************滑鼠移動到folowbt的時候要不要做個效果?
+// *************沒follow到要顯示global news嗎?
+// *************userProfileReviewEach裡面不是該頁面擁有者的星星是壞的 要修 表示要準備兩套星星?
 
 // 追隨事件
 followBt.addEventListener("click", async function (e) {
@@ -22,6 +26,8 @@ followBt.addEventListener("click", async function (e) {
   let message = await following_page_master();
   if (message === true) {
     window.location.reload();
+  } else {
+    makeMessage(globalMessagePlace, message);
   }
 });
 // 把滑鼠移到following上會變成unfollowing

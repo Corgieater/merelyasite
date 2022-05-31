@@ -221,19 +221,21 @@ def get_average_rate_func(film_id):
 def film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers,
                      review_id=None, from_where=None):
     if from_where == 'userProfileReviewAgain':
+        print('from user profile review again')
         movie_and_user_id = review_database.get_movie_id_and_user_id_for_review_again(review_id)
         print('movie and user id ', movie_and_user_id[0], movie_and_user_id[1])
         film_id = movie_and_user_id[0]
         user_id = movie_and_user_id[1]
+        if user_id is None and from_where is None:
+            return {
+                'error': True,
+                'message': 'Please log in'
+            }
+        result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
+    else:
+        print('from film probably first time')
+        result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
-    if user_id is None and from_where is None:
-        return {
-            'error': True,
-            'message': 'Please log in'
-        }
-
-    result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
-    print('controleer films write review', result)
     if result is True:
         return {
             'ok': True

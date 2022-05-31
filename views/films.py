@@ -113,7 +113,7 @@ def render_actor_page():
 #     return render_template('genre.html')
 
 
-# 評分
+# 評分 HERE
 @films_blueprint.route('/api/rate', methods=['PATCH'])
 def rating():
     data = request.get_json()

@@ -81,24 +81,40 @@ class ReviewDatabase:
             connection.close()
 
 
-    # 拿單一評論by reviewId, user_name, movie_name
-    def get_review_by_review_id(self, review_id):
+    # 拿單一評論by reviewId, user_name, movie_name HERE
+    def get_review_by_review_id(self, page_master_name, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT reviews.*, \n'
+            cursor.execute('SELECT reviews.*,\n'
                            'movies_info.title, movies_info.year,\n'
                            'rates.rate\n'
-                           'FROM reviews\n'
-                           'INNER JOIN reviews_users\n'
-                           'INNER JOIN movies_info\n'
-                           'ON reviews.review_id = %s\n'
-                           'AND reviews.review_id = reviews_users.reu_review_id\n'
-                           'AND reviews.review_movie_id = movies_info.movie_id\n'
-                           'LEFT JOIN rates\n'
-                           'ON movies_info.movie_id = rates.rate_movie_id',
-                           (review_id,))
-            result = cursor.fetchone()
+                           'from users\n'
+                           'inner join reviews\n'
+                           'inner join movies_info\n'
+                           'on users.name = %s\n'
+                           'and reviews.review_id = %s\n'
+                           'and reviews.review_movie_id = movies_info.movie_id\n'
+                           'left join rates\n'
+                           'on rates.rate_movie_id = reviews.review_movie_id\n'
+                           'left join rates_users\n'
+                           'on rates_users.ru_user_id = users.user_id\n'
+                           'and rates_users.ru_rate_id = rates.rate_id',
+                           (page_master_name, review_id))
+            # cursor.execute('SELECT reviews.*, \n'
+            #                'movies_info.title, movies_info.year,\n'
+            #                'rates.rate\n'
+            #                'FROM reviews\n'
+            #                'INNER JOIN reviews_users\n'
+            #                'INNER JOIN movies_info\n'
+            #                'ON reviews.review_id = %s\n'
+            #                'AND reviews.review_id = reviews_users.reu_review_id\n'
+            #                'AND reviews.review_movie_id = movies_info.movie_id\n'
+            #                'LEFT JOIN rates\n'
+            #                'ON movies_info.movie_id = rates.rate_movie_id',
+            #                (review_id,))
+            result = cursor.fetchall()
+            print('get_review_by_review_id',result)
         except Exception as e:
             print('get_review_by_review_id in reviewData')
             print(e)
@@ -109,7 +125,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評論 (5, multiple)
+    # 拿評論 (5, multiple) 整個拿profile評論都有問題??
     def get_reviews_data(self, user_name, page=0):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -129,6 +145,7 @@ class ReviewDatabase:
                                'AND reviews_users.reu_review_id = reviews.review_id\n'
                                'LEFT JOIN rates\n'
                                'ON reviews.review_movie_id = rates.rate_movie_id\n'
+                               'and reviews_users.reu_review_id = reviews.review_movie_id\n'
                                'INNER JOIN movies_info\n'
                                'ON reviews.review_movie_id = movies_info.movie_id\n'
                                'ORDER BY reviews_users.reu_id DESC\n'
@@ -148,6 +165,7 @@ class ReviewDatabase:
                                'AND reviews_users.reu_review_id = reviews.review_id\n'
                                'LEFT JOIN rates\n'
                                'ON reviews.review_movie_id = rates.rate_movie_id\n'
+                               'and reviews_users.reu_review_id = reviews.review_movie_id\n'
                                'INNER JOIN movies_info\n'
                                'ON reviews.review_movie_id = movies_info.movie_id\n'
                                'ORDER BY reviews_users.reu_id DESC\n'
@@ -185,6 +203,7 @@ class ReviewDatabase:
             exist_rate_id = cursor.fetchone()
             # 這裡不能+[0] 如果是NONE會跳錯
             if exist_rate_id is None:
+                print('trying insert rating')
                 cursor.execute('INSERT INTO rates(rate_id, rate, rate_movie_id) VALUES(DEFAULT, %s, %s)',
                                (rate, film_id))
                 cursor.execute('SELECT LAST_INSERT_ID()')
@@ -256,8 +275,7 @@ class ReviewDatabase:
                            'ON rates_users.ru_rate_id=rates.rate_id\n'
                            'INNER JOIN movies_info\n'
                            'ON rates.rate_movie_id = %s\n'
-                           'AND rates.rate_movie_id = movies_info.movie_id;\n'
-                           '            ',
+                           'AND rates.rate_movie_id = movies_info.movie_id\n',
                            (user_id, film_id))
             results = cursor.fetchone()[1]
         except Exception as e:

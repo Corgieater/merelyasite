@@ -12,7 +12,8 @@ let watchedDate = document.querySelector(
 // 把這邊處理成一個功能丟到public? 等後續有差不多的東西再做
 let uncleanUrlForReviewId = cutUserInputAtLast("/films");
 let uncleanUrlForMovieName = cutUserInputAtLast("/reviews");
-let userName = cutUserInputInMiddle("e/", "/r");
+let pageMaster = cutUserInputInMiddle("e/", "/r");
+let pageMasterWithNoPlus = pageMaster.replaceAll("+", " ");
 // 拿最後一個/然後找reviewID
 let indexOfLastSlash = uncleanUrlForReviewId.lastIndexOf("/");
 let reviewId = uncleanUrlForReviewId.slice(indexOfLastSlash + 1);
@@ -39,10 +40,14 @@ let lastTimeStarPlace = document.querySelector(
 let lastTimeWatchPlace = document.querySelector(
   ".textPlace > div > section:nth-child(1) > section:nth-child(2) > p"
 );
-
 // action區
-let rateBtsWrap = document.querySelector(".rate");
-let rateBts = document.querySelectorAll("input[type='radio']");
+let rateBtsWrap = document.querySelector(".rateBts");
+// document.querySelector("body > div.wrap > div.flex > div.textPlace > div > section.actionBox > ul > li:nth-child(4) > fieldset")
+let rateBts = document.querySelectorAll("fieldset.rateBts >input");
+// document.querySelector("body > div.wrap > div.flex > div.textPlace > div > section.actionBox > ul > li:nth-child(5) > fieldset")
+// let rateBtsForOthers = document.querySelectorAll(
+//   "fieldset.rateBtsForOthers >input"
+// );
 let cancelBt = document.querySelector(".cancelBt");
 let editBt = document.querySelector(
   ".textPlace > div > section.actionBox > ul > li:nth-child(1) > a"
@@ -50,9 +55,7 @@ let editBt = document.querySelector(
 let reviewAgainBt = document.querySelector(
   ".textPlace > div > section.actionBox > ul > li:nth-child(3) > a"
 );
-let averageRatePlace = document.querySelector(
-  ".actionBox > ul > li:nth-child(5)"
-);
+let averageRatePlace = document.querySelector(".averagePlace");
 averageRatePlace.title = "";
 let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 
@@ -104,9 +107,7 @@ async function showProperReviewBox() {
     show(editBt);
     show(rateBtsWrap);
     show(addListBt);
-    isPageBelongsToLoggedUser = await checkUserForPages(
-      userName.replaceAll("+", " ")
-    );
+    isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
     console.log(isPageBelongsToLoggedUser);
 
     // page not belongs to logged user
@@ -128,9 +129,7 @@ async function showProperReviewBox() {
 // 打開評論區 - 編輯或更新上次的評分
 editBt.addEventListener("click", async function (e) {
   e.preventDefault();
-  let isPageBelongsToLoggedUser = await checkUserForPages(
-    userName.replaceAll("+", " ")
-  );
+  let isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
   if (isPageBelongsToLoggedUser) {
     // 因為跟review again共用空間 按鈕要分出來
     userLogPlace.value = lastTimeLogMessage;
@@ -213,29 +212,56 @@ closeBt.addEventListener("click", function (e) {
   hide(mask);
 });
 
-// 評分星星 按評分會直送資料庫更新
+// 評分星星 按評分會直送資料庫更新 HERE
 rateBts.forEach((bt) => {
   bt.addEventListener("click", async function (e) {
     e.preventDefault();
+
     let rate = e.target.value;
     const req = await fetch("/api/user");
     const res = await req.json();
-    let id = res["userId"];
-    if (id !== undefined) {
-      let data = {
-        rate: rate,
-        userId: id,
-        filmId: filmId,
-      };
-      let ratingMessage = await sendDataToBackend("PATCH", data, "/api/rate");
-      if (ratingMessage === true) {
-        window.location.reload();
-      } else {
-        makeMessage(averageRatePlace, ratingMessage);
-      }
+    let loggedUserId = res["userId"];
+    // let loggedUserName = res["userName"];
+    let data = {
+      rate: rate,
+      userId: loggedUserId,
+      filmId: filmId,
+    };
+
+    // 送資料
+    let ratingMessage = await sendDataToBackend("PATCH", data, "/api/rate");
+    if (ratingMessage === true) {
+      window.location.reload();
+    } else {
+      makeMessage(averageRatePlace, ratingMessage);
     }
   });
 });
+
+// rateBtsForOthers.forEach((bt) => {
+//   bt.addEventListener("click", async function (e) {
+//     e.preventDefault();
+//     console.log("rating for others");
+//     // let rate = e.target.value;
+//     // const req = await fetch("/api/user");
+//     // const res = await req.json();
+//     // let loggedUserId = res["userId"];
+//     // // let loggedUserName = res["userName"];
+//     // let data = {
+//     //   rate: rate,
+//     //   userId: loggedUserId,
+//     //   filmId: filmId,
+//     // };
+
+//     // // 送資料
+//     // let ratingMessage = await sendDataToBackend("PATCH", data, "/api/rate");
+//     // if (ratingMessage === true) {
+//     //   window.location.reload();
+//     // } else {
+//     //   makeMessage(averageRatePlace, ratingMessage);
+//     // }
+//   });
+// });
 
 // 顯示之前的評分星星
 async function showPreviousRate(rate) {
@@ -329,23 +355,22 @@ cancelBt.addEventListener("click", async function (e) {
   }
 });
 
-// 拿review資料
+// 拿review資料 HERE 拿PAGE MASTER的REVIEW
 async function getReview() {
   const req = await fetch(
-    `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`
+    `/api/user_profile/${pageMaster}/reviews/films/${movieName}/${reviewId}`
   );
   const res = await req.json();
   console.log("get review", res);
   return res;
 }
 
-// 顯示電影資料
+// 顯示電影資料 HERE
 async function showFilmInfo() {
   let data = await getReview();
   let isPageBelongsToLoggedUser = false;
-  isPageBelongsToLoggedUser = await checkUserForPages(
-    userName.replaceAll("+", " ")
-  );
+  isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
+  console.log(isPageBelongsToLoggedUser);
 
   let userReview = document.querySelector(".userReview > p");
   data = data["data"];
@@ -354,11 +379,13 @@ async function showFilmInfo() {
   reviewTitle.textContent = filmTitle;
   let filmReview = data["movieReview"];
   let filmYear = data["movieYear"];
-  let filmRate = data["movieRate"];
+  let filmUserRate = data["movieRate"];
+  // 這哪來的??? 這是使用者評分還是電影均分??
+  console.log("film rate");
   let filmSpoiler = data["spoiler"];
   let filmWatchedDate = data["watchedDate"];
   let filmReviewDate = data["reviewDate"];
-  userNameTag.href = `/user_profile/${userName}`;
+  userNameTag.href = `/user_profile/${pageMaster}`;
   if (filmWatchedDate === null) {
     filmWatchedDate = filmReviewDate;
   }
@@ -372,26 +399,26 @@ async function showFilmInfo() {
   title.href = `/film/${filmId}`;
   year.textContent = filmYear;
   year.href = `/year?year=${filmYear}`;
-  if (isPageBelongsToLoggedUser) {
-    show(rateBtsWrap);
-  } else if (isPageBelongsToLoggedUser === false) {
-    show(rateBtsWrap);
-  }
-
+  // if (isPageBelongsToLoggedUser) {
+  //   show(rateBtsWrap);
+  // } else if (isPageBelongsToLoggedUser === false) {
+  //   show(rateBtsWrap);
+  // }
+  show(rateBtsWrap);
   lastTimeWatchPlace.textContent = `Watched on 
   ${filmWatchedDate.substring(0, 16)}`;
 
-  // make starts
-  if (filmRate !== null) {
-    if (filmRate !== "0.5") {
-      let fullStarRate = parseInt(filmRate);
+  // make starts 在review本區的小星星
+  if (filmUserRate !== null) {
+    if (filmUserRate !== "0.5") {
+      let fullStarRate = parseInt(filmUserRate);
       for (let j = 0; j < fullStarRate; j++) {
         let img = document.createElement("img");
         img.src = "/static/images/star.png";
         lastTimeStarPlace.append(img);
       }
     }
-    let halfStarRate = filmRate.toString().search(".5");
+    let halfStarRate = filmUserRate.toString().search(".5");
     if (halfStarRate !== -1) {
       let img = document.createElement("img");
       img.src = "/static/images/half_star.png";
@@ -399,14 +426,17 @@ async function showFilmInfo() {
     }
   }
   getAverageRate();
+  // 秀上次的評分星星
   if (isPageBelongsToLoggedUser) {
-    showPreviousRate(filmRate);
+    // showPreviousRate(filmRate);
+    console.log("logger is page master");
+  } else {
+    console.log("logger is not page master");
   }
 }
 
 deleteReviewBt.addEventListener("click", async function (e) {
   e.preventDefault();
-  console.log("delete");
   const req = await fetch(
     `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`,
     {

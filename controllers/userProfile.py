@@ -43,8 +43,8 @@ def make_page(data, page, total_page):
     return data
 
 
-def get_user_profile_review_each_func(review_id):
-    data = review_database.get_review_by_review_id(review_id)
+def get_user_profile_review_each_func(page_master_name,review_id):
+    data = review_database.get_review_by_review_id(page_master_name, review_id)[0]
     print(data)
     if data is None:
         return {'error':True,

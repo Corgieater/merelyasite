@@ -104,10 +104,10 @@ async function getUserData() {
 async function checkUserForPages(pageMaster) {
   let loggedUser = await getUserData();
   loggedUser = loggedUser["userName"];
-  if (loggedUser === undefined) {
-    return undefined;
-  }
-  console.log("now logged in", loggedUser["userName"]);
+  // if (loggedUser === undefined) {
+  //   return undefined;
+  // }
+  console.log("now logged in", loggedUser);
   console.log("page master", pageMaster);
   if (loggedUser !== pageMaster) {
     return false;
