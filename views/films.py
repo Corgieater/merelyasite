@@ -184,7 +184,7 @@ def film_review():
         if data['reviewId']:
             review_id = data['reviewId']
             from_place = data['from']
-            print('from place', from_place)
+            print('from place views films', from_place)
             return film_review_func\
                 (movie_review, film_id, current_date, watched_date, user_id, spoilers,
                  review_id=review_id, from_where=from_place)

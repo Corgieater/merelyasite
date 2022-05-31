@@ -221,7 +221,8 @@ def get_average_rate_func(film_id):
 def film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers,
                      review_id=None, from_where=None):
     if from_where == 'userProfileReviewAgain':
-        print('from user profile review again')
+        print('from user profile review again',
+              movie_review, film_id, current_date, watched_date, user_id, spoilers, review_id, from_where)
         movie_and_user_id = review_database.get_movie_id_and_user_id_for_review_again(review_id)
         print('movie and user id ', movie_and_user_id[0], movie_and_user_id[1])
         film_id = movie_and_user_id[0]

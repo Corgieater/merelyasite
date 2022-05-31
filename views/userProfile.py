@@ -47,7 +47,7 @@ def render_user_profile_reviews(user_name):
 def get_user_profile_review_each(user_name, movie_name, review_id):
     user_name = user_name.replace('+', ' ')
     print(user_name, movie_name, review_id, 'from get use profile review each views')
-    return get_user_profile_review_each_func(user_name,review_id)
+    return get_user_profile_review_each_func(review_id)
 
 
 # update user review

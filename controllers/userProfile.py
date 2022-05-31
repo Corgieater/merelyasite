@@ -16,15 +16,15 @@ def make_review_dic(data):
     for info in data:
         print(info, 'from controller user profile')
         dic = {
-            'review': info[5],
-            'reviewDay': info[6],
-            'watchedDay': info[7],
-            'spoilers': info[8],
-            'filmId': info[4],
-            'filmTitle': info[1],
-            'filmYear': info[2],
-            'userRate': info[9],
-            'reviewId': info[0]
+            'review': info[4],
+            'reviewDay': info[5],
+            'watchedDay': info[6],
+            'spoilers': info[7],
+            'filmId': info[3],
+            'filmTitle': info[0],
+            'filmYear': info[1],
+            'userRate': info[8],
+            'reviewId': info[2]
         }
         data_dic['data'].append(dic)
     return data_dic
@@ -43,9 +43,9 @@ def make_page(data, page, total_page):
     return data
 
 
-def get_user_profile_review_each_func(page_master_name,review_id):
-    data = review_database.get_review_by_review_id(page_master_name, review_id)[0]
-    print(data)
+def get_user_profile_review_each_func(review_id):
+    data = review_database.get_review_by_review_id(review_id)[0]
+    print('get_user_profile_review_each_func',data)
     if data is None:
         return {'error':True,
                 'message':'Something is wrong, please try again'
@@ -63,7 +63,6 @@ def get_user_profile_review_each_func(page_master_name,review_id):
         }
     }
     return make_data_dic
-
 
 
 # get lasted reviews by 5

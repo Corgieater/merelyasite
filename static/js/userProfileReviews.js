@@ -113,6 +113,7 @@ async function showRecentlyReviews() {
       reviewBody.insertBefore(p, reviewText);
     }
   }
-  makePageTags("user_profile/", userName, data["totalPages"]);
+  console.log("userName from userprofilereviews", userName);
+  makePageTags("user_profile/", userNameAngPage, data["totalPages"]);
 }
 showRecentlyReviews();

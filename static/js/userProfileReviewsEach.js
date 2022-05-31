@@ -409,6 +409,7 @@ async function showFilmInfo() {
   ${filmWatchedDate.substring(0, 16)}`;
 
   // make starts 在review本區的小星星
+  // 因為是在看該PAGE所以小星星要照page master的評論跑
   if (filmUserRate !== null) {
     if (filmUserRate !== "0.5") {
       let fullStarRate = parseInt(filmUserRate);
@@ -426,11 +427,12 @@ async function showFilmInfo() {
     }
   }
   getAverageRate();
-  // 秀上次的評分星星
+  // page master秀上次的評分星星
   if (isPageBelongsToLoggedUser) {
-    // showPreviousRate(filmRate);
-    console.log("logger is page master");
+    showPreviousRate(filmUserRate);
   } else {
+    // not page master show if this outsider had ratted
+
     console.log("logger is not page master");
   }
 }
@@ -438,14 +440,14 @@ async function showFilmInfo() {
 deleteReviewBt.addEventListener("click", async function (e) {
   e.preventDefault();
   const req = await fetch(
-    `/api/user_profile/${userName}/reviews/films/${movieName}/${reviewId}`,
+    `/api/user_profile/${pageMaster}/reviews/films/${movieName}/${reviewId}`,
     {
       method: "DELETE",
     }
   );
   const res = await req.json();
   if (res.ok) {
-    window.location.replace(`/user_profile/${userName}/reviews?page=1`);
+    window.location.replace(`/user_profile/${pageMaster}/reviews?page=1`);
   } else {
     makeMessage(messagePlace, res.message);
   }
