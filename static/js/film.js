@@ -49,7 +49,6 @@ let reviewPoster = document.querySelector(
 async function showProperReviewBox() {
   const userIsLogged = await checkIfLogged();
   console.log(userIsLogged);
-  // here
   if (userIsLogged === true) {
     show(smallActionsPlace);
     show(rate);
@@ -92,7 +91,7 @@ watchlistBt.addEventListener("click", async function (e) {
   let addToWatchlistMessage = await sendDataToBackend(
     "PATCH",
     data,
-    "/api/user_profile/add_watchlist"
+    "/api/user_profile/watchlist"
   );
   if (addToWatchlistMessage === true) {
     window.location.reload();
@@ -116,7 +115,7 @@ removeWatchlistBt.addEventListener("click", async function (e) {
   let addToWatchlistMessage = await sendDataToBackend(
     "DELETE",
     data,
-    "/api/user_profile/add_watchlist"
+    "/api/user_profile/watchlist"
   );
   if (addToWatchlistMessage === true) {
     window.location.reload();
@@ -415,7 +414,7 @@ async function checkIfMovieInWatchlist() {
   let movieInWatchlist = await sendDataToBackend(
     "POST",
     data,
-    "/api/user_profile/add_watchlist"
+    "/api/user_profile/watchlist"
   );
   console.log(movieInWatchlist);
   if (movieInWatchlist === true) {

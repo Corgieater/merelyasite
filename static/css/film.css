@@ -87,16 +87,14 @@ section > a {
 .actionBox > ul > * {
   padding: 15px;
 }
-/* 有小圖案那個區塊 */
+/* 有小圖案那個區塊 small action*/
 .actionBox > ul > li:nth-child(1) {
   justify-content: space-evenly;
 }
 .actionBox > ul > li:nth-child(1) > section {
   flex-direction: column;
 }
-.actionBox > ul > li:nth-child(1) > section:nth-child(1) {
-  /* margin-right: 20px; */
-}
+
 /* 取消星星評分的按鈕 cancel bt*/
 .cancelBt {
   font-size: 30px;

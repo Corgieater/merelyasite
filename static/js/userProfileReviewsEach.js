@@ -40,24 +40,27 @@ let lastTimeStarPlace = document.querySelector(
 let lastTimeWatchPlace = document.querySelector(
   ".textPlace > div > section:nth-child(1) > section:nth-child(2) > p"
 );
+
+// action small action
+let smallActionsPlace = document.querySelector(".smallActionsPlace");
+let watchlistBtPlace = document.querySelector(".watchlistBtPlace");
+let removeWatchlistBtPlace = document.querySelector(".removeWatchlistBtPlace");
+let watchlistBt = document.querySelector(".watchlistBt");
+let removeWatchlistBt = document.querySelector(".removeWatchlistBt");
+
 // action區
-let rateBtsWrap = document.querySelector(".rateBts");
-// document.querySelector("body > div.wrap > div.flex > div.textPlace > div > section.actionBox > ul > li:nth-child(4) > fieldset")
-let rateBts = document.querySelectorAll("fieldset.rateBts >input");
-// document.querySelector("body > div.wrap > div.flex > div.textPlace > div > section.actionBox > ul > li:nth-child(5) > fieldset")
-// let rateBtsForOthers = document.querySelectorAll(
-//   "fieldset.rateBtsForOthers >input"
-// );
+let rate = document.querySelector(".rate");
+let rateBts = document.querySelectorAll(".rateBts >input");
 let cancelBt = document.querySelector(".cancelBt");
 let editBt = document.querySelector(
-  ".textPlace > div > section.actionBox > ul > li:nth-child(1) > a"
+  ".textPlace > div > section.actionBox > ul > li:nth-child(2) > a"
 );
 let reviewAgainBt = document.querySelector(
-  ".textPlace > div > section.actionBox > ul > li:nth-child(3) > a"
+  ".textPlace > div > section.actionBox > ul > li:nth-child(4) > a"
 );
 let averageRatePlace = document.querySelector(".averagePlace");
 averageRatePlace.title = "";
-let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
+let addListBt = document.querySelector(".actionBox > ul > li:nth-child(3) > a");
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
@@ -86,31 +89,17 @@ async function showProperReviewBox() {
   // 看有沒有登入
   const userIsLogged = await checkIfLogged();
   let isPageBelongsToLoggedUser = false;
+  isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
   console.log(userIsLogged);
   let actionBox = document.querySelector(".actionBox > ul");
   // 沒登入接下來都不用看了
-  if (!userIsLogged) {
-    console.log("no user logged");
-    actionBox.style.height = "200px";
-    let li = document.createElement("li");
-    let p = document.createElement("p");
-    p.textContent = "Log in to review or rate";
-    li.append(p);
-    p.style.cursor = "pointer";
-    p.addEventListener("click", function (e) {
-      e.preventDefault();
-      hideOrShow(logInPlace);
-    });
-    actionBox.insertBefore(li, averageRatePlace);
-  } else {
-    // 有登入可以show starts rates wrap
-    show(editBt);
-    show(rateBtsWrap);
+  if (userIsLogged === true) {
+    show(smallActionsPlace);
+    show(rate);
+    show(watchlistBt);
+    show(removeWatchlistBt);
     show(addListBt);
-    isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
-    console.log(isPageBelongsToLoggedUser);
-
-    // page not belongs to logged user
+    show(editBt);
     if (isPageBelongsToLoggedUser === false) {
       editBt.textContent = "Write a review";
       // 這邊要打API去查這user是有沒有寫過這電影的評論
@@ -122,8 +111,110 @@ async function showProperReviewBox() {
       cancelBt.style.bottom = "90px";
       show(reviewAgainBt);
     }
+  } else {
+    let actionBox = document.querySelector(".actionBox > ul");
+    actionBox.style.height = "200px";
+    let li = document.createElement("li");
+    let p = document.createElement("p");
+    let mouseTextPlace = document.querySelector(".mouseTextPlace");
+    p.textContent = "Log in to review or rate";
+    li.append(p);
+    p.style.cursor = "pointer";
+    p.addEventListener("click", function () {
+      hideOrShow(logInPlace);
+    });
+    let averageRate = document.querySelector(
+      ".actionBox > ul > li:nth-child(4)"
+    );
+    averageRate.title = "";
+    mouseTextPlace.style.top = "440px";
+    actionBox.insertBefore(li, averageRate);
   }
+
+  // if (!userIsLogged) {
+  //   console.log("no user logged");
+  //   actionBox.style.height = "200px";
+  //   let li = document.createElement("li");
+  //   let p = document.createElement("p");
+  //   p.textContent = "Log in to review or rate";
+  //   li.append(p);
+  //   p.style.cursor = "pointer";
+  //   p.addEventListener("click", function (e) {
+  //     e.preventDefault();
+  //     hideOrShow(logInPlace);
+  //   });
+  //   actionBox.insertBefore(li, averageRatePlace);
+  // } else {
+  //   // 有登入可以show starts rates wrap
+  //   show(editBt);
+  //   show(rateBtsWrap);
+  //   show(addListBt);
+  //   show(smallActionsPlace);
+  //   isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
+  //   console.log(isPageBelongsToLoggedUser);
+
+  //   // page not belongs to logged user
+  //   if (isPageBelongsToLoggedUser === false) {
+  //     editBt.textContent = "Write a review";
+  //     // 這邊要打API去查這user是有沒有寫過這電影的評論
+  //     show(reviewAgainBt);
+  //     cancelBt.style.bottom = "90px";
+  //   }
+  //   if (isPageBelongsToLoggedUser) {
+  //     // 屬於頁面使用者所以會有 reviewAgainBt要改一下cancelBt位置
+  //     cancelBt.style.bottom = "90px";
+  //     show(reviewAgainBt);
+  //   }
+  // }
 }
+
+// 加入待看清單
+watchlistBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "PATCH",
+    data,
+    "/api/user_profile/watchlist"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was added to your watchlist`,
+      "good"
+    );
+  }
+});
+
+// delete from watchlist
+removeWatchlistBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "DELETE",
+    data,
+    "/api/user_profile/watchlist"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was removed from your watchlist`,
+      "good"
+    );
+  }
+});
 
 // 更新評分按鈕
 // 打開評論區 - 編輯或更新上次的評分
@@ -376,6 +467,8 @@ async function showFilmInfo() {
   let userReview = document.querySelector(".userReview > p");
   data = data["data"];
   filmId = data["movieId"];
+  // 順便檢查一下有logger有沒有加這電影
+  checkIfMovieInWatchlist();
   let filmTitle = data["movieTitle"];
   reviewTitle.textContent = filmTitle;
   let filmReview = data["movieReview"];
@@ -405,7 +498,7 @@ async function showFilmInfo() {
   // } else if (isPageBelongsToLoggedUser === false) {
   //   show(rateBtsWrap);
   // }
-  show(rateBtsWrap);
+  // show(rateBtsWrap);
   lastTimeWatchPlace.textContent = `Watched on 
   ${filmWatchedDate.substring(0, 16)}`;
 
@@ -613,6 +706,26 @@ async function getAverageRate() {
     });
   } else {
     averageRatePlace.textContent = `No one rated yet`;
+  }
+}
+
+// check if logger add this movie to watchlist
+async function checkIfMovieInWatchlist() {
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let movieInWatchlist = await sendDataToBackend(
+    "POST",
+    data,
+    "/api/user_profile/watchlist"
+  );
+  if (movieInWatchlist === true) {
+    show(removeWatchlistBtPlace);
+  } else {
+    show(watchlistBtPlace);
   }
 }
 

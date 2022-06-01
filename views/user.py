@@ -54,8 +54,24 @@ def follows_other_people():
     follower = data['follower']
     return follows_other_people_func(following_name, follower)
 
+
+# render watchlist
+@user_blueprint.route('/user_profile/<page_master>/watchlist')
+def render_user_watchlist_page(page_master):
+    return render_template('userWatchlist.html', pageMaster = page_master)
+
+
+@user_blueprint.route('/api/user_profile/<page_master>/watchlist')
+def get_watchlist_by_page(page_master):
+    page_master = page_master.replace('+', ' ')
+    page = request.args.get('page')
+    print('view user get watchlist from ', page_master)
+
+    return get_watchlist_by_page_func(page_master, page)
+
+
 # 看該使用者有沒有把這電影加入watchlist
-@user_blueprint.route('/api/user_profile/add_watchlist', methods=["POST"])
+@user_blueprint.route('/api/user_profile/watchlist', methods=["POST"])
 def check_movie_in_watchlist():
     data = request.get_json()
     print('check_movie_in_watch_list', data)
@@ -64,7 +80,7 @@ def check_movie_in_watchlist():
     return check_movie_in_watchlist_func(user_id, movie_id)
 
 # 加入待看清單watch list
-@user_blueprint.route('/api/user_profile/add_watchlist', methods=["PATCH"])
+@user_blueprint.route('/api/user_profile/watchlist', methods=["PATCH"])
 def add_movie_to_watchlist():
     data = request.get_json()
     print('add to watchlist',data)
@@ -74,7 +90,7 @@ def add_movie_to_watchlist():
 
 
 # delete watch list
-@user_blueprint.route('/api/user_profile/add_watchlist', methods=["DELETE"])
+@user_blueprint.route('/api/user_profile/watchlist', methods=["DELETE"])
 def delete_movie_from_watchlist():
     data = request.get_json()
     print('delete from watchlist',data)

@@ -3,8 +3,9 @@ let userName = cutUserInputAtLast("e/");
 console.log(userName);
 let userNameWithNoPlus = userName.replaceAll("+", " ");
 let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
-let userProfileWatchlist = document.querySelector(".userProfileWatchlist");
+let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
+userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
 
 // 使用者相關按鈕
 let editProfileBt = document.querySelector(".edditProfileBt");

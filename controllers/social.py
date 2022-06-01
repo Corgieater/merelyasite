@@ -3,6 +3,7 @@ from models.reviewData import *
 from models.userData import *
 import jwt
 import os
+import math
 
 review_database = ReviewDatabase()
 user_database = UserDatabase()
@@ -25,6 +26,18 @@ def make_reviews_dic(data):
         }
         review_dic['data']['data'].append(info)
     return review_dic
+
+def make_page(data, page, total_page):
+    page = int(page)
+    data['currentPage'] = page
+    data['nextPage'] = None
+    data['totalPages'] = total_page
+
+    if page < total_page:
+        data['nextPage'] = page + 1
+    else:
+        data['nextPage'] = None
+    return data
 
 
 # 拿頭五篇所有flowing的reviews
@@ -77,6 +90,27 @@ def follows_other_people_func(following_name, follower):
         return {'error': True,
                 'message': 'Something went wrong, please try again'}
 
+# watchlist
+# check watchlist
+def get_watchlist_by_page_func(page_master, page):
+    movies_in_watchlist = user_database.get_total_movie_in_watchlist_by_name(page_master)[0]
+    total_page = math.ceil(movies_in_watchlist/24)
+    if page is None:
+        page = 1
+    page = int(page)-1
+    watchlist = user_database.get_watchlist(page_master, page)
+    data = {
+        'data': {
+            'data': [],
+            'totalMovies':movies_in_watchlist
+        }
+    }
+    print('wathvspigj-------\n',watchlist)
+    for movie in watchlist:
+        data['data']['data'].append(movie)
+    data = make_page(data, 1, total_page)
+    print(data)
+    return data
 
 # check watchlist
 def check_movie_in_watchlist_func(user_id, movie_id):

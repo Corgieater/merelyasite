@@ -170,6 +170,58 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
+    # get watchlist by name
+    def get_watchlist(self, page_master_name, start_index):
+        start_index = int(start_index)*28
+        try:
+            connection = p.get_connection()
+            cursor = connection.cursor()
+            cursor.execute('SELECT users_watch_list.wl_movie_id\n'
+                           'FROM users_watch_list\n'
+                           'INNER JOIN users\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = users_watch_list.wl_user_id\n'
+                           'LIMIT %s,28',
+                           (page_master_name,start_index))
+            result = cursor.fetchall()
+            print('get_watchlist', result)
+
+        except Exception as e:
+            print('check_watchlist from userData')
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # count watchlist by name
+    def get_total_movie_in_watchlist_by_name(self, page_master):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT count(users_watch_list.wl_movie_id) as count\n'
+                           'FROM users_watch_list\n'
+                           'INNER JOIN users\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = users_watch_list.wl_user_id\n',
+                           (page_master,))
+            result = cursor.fetchone()
+            if result == 0:
+                return None
+
+        except Exception as e:
+            print('get_total_user_count_by_name from user Data')
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
 
     # check watchlist
     def check_watchlist(self, user_id, movie_id):

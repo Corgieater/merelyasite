@@ -1,20 +1,11 @@
 "use strict";
 let userNameAngPage = cutUserInputAtLast("e/");
 let userName = cutUserInputInMiddle("e/", "/r");
-
 let page = cutUserInputAtLast("e=");
-
-// // 看這頁面屬不屬於使用者判斷顯示什麼
-// async function checkUserBelongs() {
-//   let isThePageBelongsToLoggedUser = await checkUserForPages(
-//     userName.replaceAll("+", " ")
-//   );
-//   if (isThePageBelongsToLoggedUser === false) {
-//     return
-//   } else {
-//     console.log("yes master");
-//   }
-// }
+let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
+let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
+userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
+userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
@@ -29,7 +20,6 @@ async function showRecentlyReviews() {
   let pageBelongsToLoggedUser = await checkUserForPages(
     userName.replaceAll("+", " ")
   );
-  console.log("11111", pageBelongsToLoggedUser);
 
   for (let i = 0; i < data["data"].length; i++) {
     let li = document.createElement("li");

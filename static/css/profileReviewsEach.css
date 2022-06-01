@@ -99,10 +99,14 @@ section > a {
   font-size: 25px;
   text-decoration-color: antiquewhite;
 }
-/* average rate place */
-/* .actionBox > ul > li:nth-child(4) {
-  position: absolute;
-} */
+
+/* 有小圖案那個區塊 small action*/
+.actionBox > ul > li:nth-child(1) {
+  justify-content: space-evenly;
+}
+.actionBox > ul > li:nth-child(1) > section {
+  flex-direction: column;
+}
 /* reviewBox */
 .closeBt {
   font-size: 25px;
@@ -157,24 +161,20 @@ section > a {
 /* 別人寫的星星 */
 /* thanks Ahmed Nefzaoui */
 /* Ratings widget */
-.rateBts
-/* ,.rateBtsForOthers  */ {
+.rate {
   display: inline-block;
   border: 0;
 }
 /* Hide radio */
-.rateBts > input
-/* ,.rateBtsForOthers > input  */ {
+.rate > input {
   display: none;
 }
 /* Order correctly by floating highest to the right */
-.rateBts > label
-/*,.rateBtsForOthers > label*/ {
+.rate > label {
   float: right;
 }
 /* The star of the show */
-.rateBts > label:before
-/*,.rateBtsForOthers > label:before*/ {
+.rate > label:before {
   display: inline-block;
   font-size: 2rem;
   padding: 0.3rem 0.2rem;
@@ -185,8 +185,7 @@ section > a {
 }
 
 /* Half star trick */
-.rateBts .half:before
-/*,.rateBtsForOthers .half:before*/ {
+.rate .half:before {
   content: "\f089 "; /* half star no outline */
   position: absolute;
   padding-right: 0;
@@ -214,8 +213,8 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
   background-color: antiquewhite;
   color: #264653;
   position: absolute;
-  right: 25%;
-  top: 520px;
+  right: 23%;
+  top: 620px;
 }
 .mouseTextPlace:after {
   content: "";
