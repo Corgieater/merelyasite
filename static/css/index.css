@@ -1,0 +1,32 @@
+.welcomePlace {
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* newFromFriendsPlace */
+.newFromFriendsPlace {
+  margin-top: 10px;
+}
+.newFromFriendsPlace > li {
+  width: 200px;
+  color: antiquewhite;
+  margin-right: 10px;
+}
+.imgPlace > img {
+  width: 200px;
+  height: 280px;
+  border-radius: 5px 5px 0 0;
+}
+
+.namePlace {
+  background-color: #264653;
+  border-radius: 0 0 5px 5px;
+  height: 30px;
+  font-size: 20px;
+  padding: 5px;
+}
+
+.footPlace {
+  justify-content: space-between;
+}

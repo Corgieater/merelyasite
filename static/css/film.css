@@ -78,27 +78,37 @@ section > a {
   border-radius: 5px;
   min-width: 35%;
   margin-left: 10px;
-  height: 350px;
+  /* height: 350px; */
   background-color: #264653;
-  color: white;
+  color: antiquewhite;
   text-align: center;
   position: relative;
 }
 .actionBox > ul > * {
   padding: 15px;
 }
-/* 取消星星評分的按鈕 */
-.actionBox > ul > li:nth-child(3) > fieldset > a {
+/* 有小圖案那個區塊 */
+.actionBox > ul > li:nth-child(1) {
+  justify-content: space-evenly;
+}
+.actionBox > ul > li:nth-child(1) > section {
+  flex-direction: column;
+}
+.actionBox > ul > li:nth-child(1) > section:nth-child(1) {
+  /* margin-right: 20px; */
+}
+/* 取消星星評分的按鈕 cancel bt*/
+.cancelBt {
   font-size: 30px;
   position: absolute;
   left: 10px;
-  bottom: 125px;
-  text-decoration: none;
+  bottom: 90px;
+  text-decoration: none !important;
 }
-.actionBox > ul > li:nth-child(4) {
+/* .actionBox > ul > li:nth-child(4) {
   font-size: 25px;
   text-decoration-color: antiquewhite;
-}
+} */
 /* reviewBox */
 .closeBt {
   font-size: 25px;
@@ -204,7 +214,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
   color: #264653;
   position: absolute;
   right: 23%;
-  top: 460px;
+  top: 620px;
 }
 .mouseTextPlace:after {
   content: "";

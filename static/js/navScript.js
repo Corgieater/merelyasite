@@ -1,7 +1,6 @@
 "use strict";
 let currentUserId = null;
-// 放訊息
-let globalMessagePlace = document.querySelector(".globalMessagePlace");
+
 let mask = document.querySelector(".mask");
 // nav按鈕
 let logInBt = document.querySelector(".logInPlace > button");

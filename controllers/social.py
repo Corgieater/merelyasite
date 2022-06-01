@@ -27,8 +27,7 @@ def make_reviews_dic(data):
     return review_dic
 
 
-
-# 拿頭五篇所有追蹤者的reviews
+# 拿頭五篇所有flowing的reviews
 def get_latest_five_reviews_from_follows_func():
     try:
         token = request.cookies.get('user_info')
@@ -77,3 +76,38 @@ def follows_other_people_func(following_name, follower):
     else:
         return {'error': True,
                 'message': 'Something went wrong, please try again'}
+
+
+# check watchlist
+def check_movie_in_watchlist_func(user_id, movie_id):
+    movie_is_in_watchlist = user_database.check_watchlist(user_id, movie_id)
+    if movie_is_in_watchlist is not None:
+        return{'ok': True}
+    else:
+        return{'none': True}
+
+# 加入待看清單 watchlist
+def add_movie_to_watchlist_func(user_id, movie_id):
+    if user_id is None:
+        return {'error': True,
+                'message':'Please log in'}
+    add_to_watchlist = user_database.add_to_watchlist(user_id, movie_id)
+    if add_to_watchlist:
+        return{'ok': True}
+    else:
+        return{'error': True,
+               'message': 'Something went wrong, please try again'
+               }
+
+# delete from watchlist
+def delete_movie_from_watchlist_func(user_id, movie_id):
+    if user_id is None:
+        return {'error': True,
+                'message':'Please log in'}
+    delete_from_watchlist = user_database.delete_from_watchlist(user_id, movie_id)
+    if delete_from_watchlist:
+        return {'ok': True}
+    else:
+        return {'error': True,
+                'message': 'Something went wrong, please try again'
+                }

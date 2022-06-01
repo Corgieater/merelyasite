@@ -1,5 +1,6 @@
 from models.movieData import *
 from models.reviewData import *
+from models.userData import *
 import os
 import math
 
@@ -7,6 +8,7 @@ key = os.getenv('JWT_SECRET_KEY')
 
 movie_database = MovieDatabase()
 review_database = ReviewDatabase()
+user_database = UserDatabase()
 
 
 def make_dic(film_data):
@@ -51,7 +53,7 @@ def get_data_by_type_func(query, page, data_type):
         data_count = movie_database.get_total_data_count_from_type(query, 'actor')
         print(data_count, 'actor')
 
-    if data_count is False or data_count[0] is 0:
+    if data_count is False or data_count[0] == 0:
         return {
             'error': True,
             'message': 'There is no such keyword, please check it again'
@@ -83,7 +85,7 @@ def get_film_by_id_func(film_id):
 def get_films_by_director_func(director, page):
     data_count = movie_database.get_total_data_count_from_type(director, 'director_movies')
     print('datacount', data_count)
-    if data_count is 0:
+    if data_count == 0:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
@@ -110,7 +112,7 @@ def get_films_by_actor_func(actor, page):
     # 這邊是算出演員有多少叫OO的
     # 那下面就要改成秀出演員
     print('data count get_films_by_actor_func', data_count)
-    if data_count is 0:
+    if data_count == 0:
         return {
             'error': True,
             'message': 'There is no such person, please check it again'
@@ -246,30 +248,3 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
             'error': False,
             'message': 'Review failed, please try again'
         }
-
-# # 改評論
-# def film_edit_func(user_review, film_id, current_date, watched_date, user_id):
-#     review_edited = review_database.edit_review(user_review, film_id, current_date, watched_date, user_id)
-#     if review_edited:
-#         return {
-#             'ok': True
-#         }
-#     else:
-#         return {
-#             'error': False,
-#             'message': 'Review failed, please try again'
-#         }
-
-
-# # 拿評論
-# def get_reviews_func(user_name):
-#     data = review_database.get_reviews_data(user_name)
-#     print('get_revews_func',data)
-#     if data:
-#         return {
-#             'data': data
-#         }
-#     else:
-#         return {
-#             'error': False
-#         }

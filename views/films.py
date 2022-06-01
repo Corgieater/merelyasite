@@ -209,20 +209,3 @@ def get_movie_from_omdb():
     else:
         return {'error': True,
                 'message': 'Movie already exist'}
-
-
-# 修改評論
-# ***********************
-# @films_blueprint.route('/api/edit-review', methods=['PATCH'])
-# def film_review():
-#     data = request.get_json()
-#     print(data)
-#     user_review = data['userReview']
-#     film_id = data['filmId']
-#     current_date = data['currentDate']
-#     watched_date = data['watchedDate']
-#     if watched_date is None:
-#         watched_date = None
-#     user_id = data['userId']
-#
-#     return film_edit_func(user_review, film_id, current_date, watched_date, user_id)

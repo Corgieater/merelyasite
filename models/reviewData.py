@@ -87,21 +87,44 @@ class ReviewDatabase:
         cursor = connection.cursor()
         print('reviewdata get review by review id',review_id)
         try:
-            cursor.execute('SELECT reviews.*,\n'
-                           'movies_info.title, movies_info.year,\n'
-                           'rates.rate\n'
+            cursor.execute('SELECT reviews.*,reviews_users.reu_user_id,\n'
+                           'movies_info.title, movies_info.year\n'
                            'FROM reviews\n'
                            'INNER JOIN reviews_users\n'
                            'INNER JOIN movies_info\n'
                            'ON reviews.review_id = %s\n'
                            'AND reviews.review_id = reviews_users.reu_review_id\n'
-                           'AND reviews.review_movie_id = movies_info.movie_id\n'
-                           'LEFT JOIN rates_users\n'
-                           'on rates_users.ru_user_id = reviews_users.reu_user_id\n'
-                           'INNER JOIN rates\n'
-                           'ON movies_info.movie_id = rates.rate_movie_id\n'
-                           'AND rates_users.ru_rate_id = rates.rate_id',
+                           'AND reviews.review_movie_id = movies_info.movie_id',
                            (review_id,))
+            review_result = cursor.fetchone()
+            print('get_review_by_review_id', review_result)
+            user_id = review_result[6]
+            movie_id = review_result[1]
+            cursor.execute('select rates.rate\n'
+                           'from rates\n'
+                           'inner join rates_users\n'
+                           'on rates_users.ru_user_id = %s\n'
+                           'and rates.rate_movie_id = %s\n'
+                           'and rates_users.ru_rate_id = rates.rate_id',
+                           (user_id, movie_id))
+            rate_result = cursor.fetchone()
+            print('rate_result',rate_result)
+            final_result = [review_result, rate_result]
+            # cursor.execute('SELECT reviews.*,\n'
+            #                'movies_info.title, movies_info.year,\n'
+            #                'rates.rate\n'
+            #                'FROM reviews\n'
+            #                'INNER JOIN reviews_users\n'
+            #                'INNER JOIN movies_info\n'
+            #                'ON reviews.review_id = %s\n'
+            #                'AND reviews.review_id = reviews_users.reu_review_id\n'
+            #                'AND reviews.review_movie_id = movies_info.movie_id\n'
+            #                'LEFT JOIN rates_users\n'
+            #                'on rates_users.ru_user_id = reviews_users.reu_user_id\n'
+            #                'INNER JOIN rates\n'
+            #                'ON movies_info.movie_id = rates.rate_movie_id\n'
+            #                'AND rates_users.ru_rate_id = rates.rate_id',
+            #                (review_id,))
             # cursor.execute('SELECT reviews.*,\n'
             #                'movies_info.title, movies_info.year,\n'
             #                'rates.rate\n'
@@ -117,6 +140,7 @@ class ReviewDatabase:
             #                'on rates_users.ru_user_id = users.user_id\n'
             #                'and rates_users.ru_rate_id = rates.rate_id',
             #                (page_master_name, review_id))
+
             # cursor.execute('SELECT reviews.*, \n'
             #                'movies_info.title, movies_info.year,\n'
             #                'rates.rate\n'
@@ -129,19 +153,18 @@ class ReviewDatabase:
             #                'LEFT JOIN rates\n'
             #                'ON movies_info.movie_id = rates.rate_movie_id',
             #                (review_id,))
-            result = cursor.fetchall()
-            print('get_review_by_review_id',result)
+
         except Exception as e:
             print('get_review_by_review_id in reviewData')
             print(e)
             return False
         else:
-            return result
+            return final_result
         finally:
             cursor.close()
             connection.close()
 
-    # 拿評論 (5, multiple) 整個拿profile評論都有問題?? WATCHING FIXED?
+    # 拿評論 (5, multiple) 整個拿profile評論都有問題?? WATCHING FIXED? 怎麼拿評分?
     def get_reviews_data(self, user_name, page=0):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -150,8 +173,7 @@ class ReviewDatabase:
                 page = int(page) - 1
                 start_index = int(page)*20
                 # 選不到評分 分開看看
-                cursor.execute('SELECT movies_info.title, movies_info.year\n'
-                               ', reviews.*\n'
+                cursor.execute('SELECT movies_info.title, movies_info.year, reviews.*\n'
                                'FROM users\n'
                                'INNER JOIN reviews_users\n'
                                'ON users.name = %s\n'
@@ -159,7 +181,8 @@ class ReviewDatabase:
                                'INNER JOIN reviews\n'
                                'ON reviews.review_id = reviews_users.reu_review_id\n'
                                'INNER JOIN movies_info\n'
-                               'ON reviews.review_id = movies_info.movie_id\n'
+                               'ON reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews.review_id DESC\n'
                                'LIMIT %s, 20', (user_name, start_index))
 
                 # 選得到評分 選不到沒評分的片 幹
@@ -185,8 +208,7 @@ class ReviewDatabase:
                 #                (user_name, start_index))
 
             else:
-                cursor.execute('SELECT movies_info.title, movies_info.year\n'
-                               ', reviews.*\n'
+                cursor.execute('SELECT movies_info.title, movies_info.year, reviews.*, users.user_id\n'
                                'FROM users\n'
                                'INNER JOIN reviews_users\n'
                                'ON users.name = %s\n'
@@ -194,8 +216,12 @@ class ReviewDatabase:
                                'INNER JOIN reviews\n'
                                'ON reviews.review_id = reviews_users.reu_review_id\n'
                                'INNER JOIN movies_info\n'
-                               'ON reviews.review_id = movies_info.movie_id\n'
+                               'ON reviews.review_movie_id = movies_info.movie_id\n'
+                               'ORDER BY reviews.review_id DESC\n'
                                'LIMIT 5', (user_name,))
+
+
+
                 # cursor.execute('SELECT\n'
                 #                'movies_info.title, movies_info.year,\n'
                 #                'reviews.*,\n'
@@ -217,8 +243,6 @@ class ReviewDatabase:
                 #                'LIMIT 5'
                 #                , (user_name,))
             results = cursor.fetchall()
-            print('get_reviews_data', results)
-
 
         except Exception as e:
             print('get_reviews_data from reviewData')
@@ -434,13 +458,13 @@ class ReviewDatabase:
                            'INNER JOIN reviews\n'
                            'INNER JOIN users\n'
                            'INNER JOIN movies_info\n'
-                           'ON users_follows.follower_user_id = %s\n'
-                           'AND users_follows.user_id_been_followed = reviews_users.reu_user_id\n'
+                           'ON users_follows.follower_id = %s\n'
+                           'AND users_follows.following_id = reviews_users.reu_user_id\n'
                            'AND reviews_users.reu_review_id = reviews.review_id\n'
                            'AND reviews.review_movie_id = movies_info.movie_id\n'
-                           'AND users_follows.user_id_been_followed = users.user_id\n'
+                           'AND users_follows.following_id = users.user_id\n'
                            'ORDER BY reviews.review_id DESC\n'
-                           'LIMIT 5',
+                           'LIMIT 6',
                            (user_id,))
             results = cursor.fetchall()
             print('get_latest_five_reviews_from_follows', results)

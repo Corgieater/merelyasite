@@ -1,8 +1,7 @@
 "use strict";
 // 查詢用
 let filmId = cutUserInputAtLast("m/");
-
-console.log("hi from filmjs");
+let movieName = null;
 
 // 頁面區
 let poster = document.querySelector(".posterPlace > img");
@@ -14,15 +13,22 @@ let plot = document.querySelector(".plot > p");
 let casts = document.querySelector(".casts");
 let genres = document.querySelector(".genres");
 
+// action small action
+let smallActionsPlace = document.querySelector(".smallActionsPlace");
+let watchlistBtPlace = document.querySelector(".watchlistBtPlace");
+let removeWatchlistBtPlace = document.querySelector(".removeWatchlistBtPlace");
+let watchlistBt = document.querySelector(".watchlistBt");
+let removeWatchlistBt = document.querySelector(".removeWatchlistBt");
+
 // action區
-let rateBtsWrap = document.querySelector(".rate");
+let rate = document.querySelector(".rate");
 let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
-let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(1)>a");
+let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(2)>a");
+let addListBt = document.querySelector(".actionBox > ul > li:nth-child(3) > a");
 let averageRatePlace = document.querySelector(
-  ".actionBox > ul > li:nth-child(4)"
+  ".actionBox > ul > li:nth-child(5)"
 );
-let addListBt = document.querySelector(".actionBox > ul > li:nth-child(2) > a");
 let userLogPlace = document.querySelector("#review");
 
 // review區
@@ -43,14 +49,20 @@ let reviewPoster = document.querySelector(
 async function showProperReviewBox() {
   const userIsLogged = await checkIfLogged();
   console.log(userIsLogged);
-  if (!userIsLogged) {
-    hide(rateBtsWrap);
-    hide(reviewBt);
-    hide(addListBt);
+  // here
+  if (userIsLogged === true) {
+    show(smallActionsPlace);
+    show(rate);
+    show(watchlistBt);
+    show(removeWatchlistBt);
+    show(reviewBt);
+    show(addListBt);
+  } else {
     let actionBox = document.querySelector(".actionBox > ul");
     actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
+    let mouseTextPlace = document.querySelector(".mouseTextPlace");
     p.textContent = "Log in to review or rate";
     li.append(p);
     p.style.cursor = "pointer";
@@ -61,11 +73,60 @@ async function showProperReviewBox() {
       ".actionBox > ul > li:nth-child(4)"
     );
     averageRate.title = "";
+    mouseTextPlace.style.top = "440px";
     actionBox.insertBefore(li, averageRate);
   }
 }
 
 showProperReviewBox();
+
+// 加入待看清單
+watchlistBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "PATCH",
+    data,
+    "/api/user_profile/add_watchlist"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was added to your watchlist`,
+      "good"
+    );
+  }
+});
+
+// delete from watchlist
+removeWatchlistBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "DELETE",
+    data,
+    "/api/user_profile/add_watchlist"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was removed from your watchlist`,
+      "good"
+    );
+  }
+});
 
 // 寫評分按鈕
 // 打開評論區
@@ -319,9 +380,11 @@ async function getFilm() {
 // 顯示電影資料
 async function showFilmInfo() {
   let data = await getFilm();
+  // 拿一下user資料
   data = data["data"];
   let filmId = data["movieId"];
   let filmTitle = data["title"];
+  movieName = filmTitle;
   let filmTagline = data["tagline"];
   reviewTitle.textContent = data["title"];
   let filmYear = data["year"];
@@ -341,6 +404,28 @@ async function showFilmInfo() {
   makeAlinkAndAppend(genres, "/genre?genre=", filmGenres);
 }
 
+// check if user add this movie to watchlist
+async function checkIfMovieInWatchlist() {
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let movieInWatchlist = await sendDataToBackend(
+    "POST",
+    data,
+    "/api/user_profile/add_watchlist"
+  );
+  console.log(movieInWatchlist);
+  if (movieInWatchlist === true) {
+    show(removeWatchlistBtPlace);
+  } else {
+    show(watchlistBtPlace);
+  }
+}
+
 showFilmInfo();
 showPreviousRate();
 getAverageRate();
+checkIfMovieInWatchlist();

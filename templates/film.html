@@ -23,11 +23,31 @@
       </section>
       <section class="actionBox">
         <ul>
-          <li><a href="#">Wrtie a review</a></li>
-          <li><a href="#">Add to lists</a></li>
+          <li class="flex hide smallActionsPlace">
+            <section class="flex">
+              <a class="likeBt" href="#"
+                ><img src="../static//images/heart.svg" alt=""
+              /></a>
+              Like
+            </section>
+            <section class="flex watchlistBtPlace hide">
+              <a class="watchlistBt" href="#"
+                ><img src="../static//images/plus.svg" alt=""
+              /></a>
+              Watchlist
+            </section>
+            <section class="flex removeWatchlistBtPlace hide">
+              <a class="removeWatchlistBt" href="#"
+                ><img src="../static//images/minus.svg" alt=""
+              /></a>
+              Remove
+            </section>
+          </li>
+          <li><a class="hide" href="#">Wrtie a review</a></li>
+          <li><a class="hide" href="#">Add to lists</a></li>
           <li>
             <!-- rating -->
-            <fieldset class="rate">
+            <fieldset class="rate hide">
               <p>Rate</p>
               <a class="cancelBt hide" href="#">X</a>
               <input type="radio" id="rating10" name="rating" value="5" /><label

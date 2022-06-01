@@ -23,7 +23,7 @@ def make_review_dic(data):
             'filmId': info[3],
             'filmTitle': info[0],
             'filmYear': info[1],
-            'userRate': info[8],
+            # 'userRate': info[8],
             'reviewId': info[2]
         }
         data_dic['data'].append(dic)
@@ -44,22 +44,29 @@ def make_page(data, page, total_page):
 
 
 def get_user_profile_review_each_func(review_id):
-    data = review_database.get_review_by_review_id(review_id)[0]
-    print('get_user_profile_review_each_func',data)
-    if data is None:
-        return {'error':True,
-                'message':'Something is wrong, please try again'
+    data = review_database.get_review_by_review_id(review_id)
+    print('get_user_profile_review_each_func', data)
+    if data[0] is None:
+        return {'error': True,
+                'message': 'Something is wrong, please try again'
                 }
+    review_data = data[0]
+    rate_data = data[1]
+    if rate_data is None:
+        rate_data = None
+    else:
+        rate_data = rate_data[0]
+
     make_data_dic = {
         'data':{
-            'movieId': data[1],
-            'movieReview': data[2],
-            'reviewDate': data[3],
-            'watchedDate': data[4],
-            'spoiler': data[5],
-            'movieTitle': data[6],
-            'movieYear': data[7],
-            'movieRate': data[8]
+            'movieId': review_data[1],
+            'movieReview': review_data[2],
+            'reviewDate': review_data[3],
+            'watchedDate': review_data[4],
+            'spoiler': review_data[5],
+            'movieTitle': review_data[7],
+            'movieYear': review_data[8],
+            'movieRate': rate_data
         }
     }
     return make_data_dic
@@ -108,3 +115,4 @@ def delete_user_profile_review_func(review_id):
             'error': False,
             'message': 'Review deleting failed, please try again'
         }
+

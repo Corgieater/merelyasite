@@ -169,3 +169,65 @@ class UserDatabase:
         finally:
             cursor.close()
             connection.close()
+
+
+    # check watchlist
+    def check_watchlist(self, user_id, movie_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT watch_list_id FROM users_watch_list \n'
+                           'WHERE wl_user_id = %s \n'
+                           'AND wl_movie_id = %s',
+                           (user_id, movie_id))
+            get_watchlist = cursor.fetchone()
+            print('check_watchlist',get_watchlist)
+            if get_watchlist is not None:
+                result = True
+            else:
+                result = None
+        except Exception as e:
+            print('check_watchlist from userData')
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 加入待看清單 watchlist
+    def add_to_watchlist(self, user_id, movie_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('INSERT INTO users_watch_list VALUES(default,%s,%s)',
+                           (user_id, movie_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+    # delete from watchlist
+    def delete_from_watchlist(self, user_id, movie_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DELETE FROM users_watch_list WHERE wl_user_id = %s AND wl_movie_id = %s;',
+                           (user_id, movie_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()

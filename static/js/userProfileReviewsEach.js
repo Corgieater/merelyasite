@@ -268,6 +268,7 @@ async function showPreviousRate(rate) {
   if (rate === null) {
     hide(cancelBt);
   } else {
+    console.log("i havd rated", rate);
     rate = rate;
     show(cancelBt);
   }
@@ -381,7 +382,7 @@ async function showFilmInfo() {
   let filmYear = data["movieYear"];
   let filmUserRate = data["movieRate"];
   // 這哪來的??? 這是使用者評分還是電影均分??
-  console.log("film rate");
+  console.log("film rate", filmUserRate);
   let filmSpoiler = data["spoiler"];
   let filmWatchedDate = data["watchedDate"];
   let filmReviewDate = data["reviewDate"];
@@ -432,8 +433,14 @@ async function showFilmInfo() {
     showPreviousRate(filmUserRate);
   } else {
     // not page master show if this outsider had ratted
-
-    console.log("logger is not page master");
+    let logger = await getUserData();
+    let loggerData = {
+      userId: logger["userId"],
+      filmId: filmId,
+    };
+    let loggerRate = await sendDataToBackend("POST", loggerData, "/api/rate");
+    loggerRate = loggerRate["rate"];
+    showPreviousRate(loggerRate);
   }
 }
 

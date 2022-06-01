@@ -151,28 +151,28 @@ async function showRecentlyReviews() {
       `;
     li.innerHTML = content;
     reviewdPlace.append(li);
-    let userRate = info["userRate"];
-    console.log(userRate, "userrate");
+    // let userRate = info["userRate"];
+    // console.log(userRate, "userrate");
     let starPlace = document.querySelectorAll(".starPlace");
     let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
-    if (userRate !== null) {
-      if (userRate !== "0.5") {
-        let fullStarRate = parseInt(userRate);
-        for (let j = 0; j < fullStarRate; j++) {
-          let img = document.createElement("img");
-          img.src = "../static/images/star.png";
-          starPlace[i].append(img);
-        }
-      }
-      console.log(userRate, "beffor finding fhasl");
-      let halfStarRate = userRate.toString().search(".5");
-      if (halfStarRate !== -1) {
-        let img = document.createElement("img");
-        img.src = "../static/images/half_star.png";
-        starPlace[i].append(img);
-      }
-    }
+    // if (userRate !== null) {
+    //   if (userRate !== "0.5") {
+    //     let fullStarRate = parseInt(userRate);
+    //     for (let j = 0; j < fullStarRate; j++) {
+    //       let img = document.createElement("img");
+    //       img.src = "../static/images/star.png";
+    //       starPlace[i].append(img);
+    //     }
+    //   }
+    //   console.log(userRate, "beffor finding fhasl");
+    //   let halfStarRate = userRate.toString().search(".5");
+    //   if (halfStarRate !== -1) {
+    //     let img = document.createElement("img");
+    //     img.src = "../static/images/half_star.png";
+    //     starPlace[i].append(img);
+    //   }
+    // }
     // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
     if (spoilers && pageBelongsToLoggedUser !== true) {
       reviewText.classList.add("hide");

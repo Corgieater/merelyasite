@@ -1,6 +1,7 @@
 "use strict";
 let movieTitle = document.querySelector("#movieTitle");
 let movieYear = document.querySelector("#movieYear");
+let globalMessagePlace = document.querySelector(".globalMessagePlace");
 
 // 給要headers的功能打API用
 async function sendDataToBackend(method, data, address) {

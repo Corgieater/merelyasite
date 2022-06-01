@@ -54,6 +54,35 @@ def follows_other_people():
     follower = data['follower']
     return follows_other_people_func(following_name, follower)
 
+# 看該使用者有沒有把這電影加入watchlist
+@user_blueprint.route('/api/user_profile/add_watchlist', methods=["POST"])
+def check_movie_in_watchlist():
+    data = request.get_json()
+    print('check_movie_in_watch_list', data)
+    movie_id = data['movieId']
+    user_id = data['userId']
+    return check_movie_in_watchlist_func(user_id, movie_id)
+
+# 加入待看清單watch list
+@user_blueprint.route('/api/user_profile/add_watchlist', methods=["PATCH"])
+def add_movie_to_watchlist():
+    data = request.get_json()
+    print('add to watchlist',data)
+    movie_id = data['movieId']
+    user_id = data['userId']
+    return add_movie_to_watchlist_func(user_id, movie_id)
+
+
+# delete watch list
+@user_blueprint.route('/api/user_profile/add_watchlist', methods=["DELETE"])
+def delete_movie_from_watchlist():
+    data = request.get_json()
+    print('delete from watchlist',data)
+    movie_id = data['movieId']
+    user_id = data['userId']
+    return delete_movie_from_watchlist_func(user_id, movie_id)
+
+
 
 
 

@@ -27,7 +27,7 @@ a {
 
 .wrap {
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 150px auto;
 }
 
 nav {
@@ -123,8 +123,9 @@ nav > ul {
   position: absolute;
   align-items: flex-end;
   /* width: 50%; */
-  border: solid white 1px;
+  /* border: solid white 1px; */
   right: 20%;
+  margin: 20px 0;
 }
 nav > ul > li {
   padding: 0 10px;
@@ -135,7 +136,7 @@ nav > ul > li > input {
 /* logInPlace */
 .logInPlace {
   width: 50%;
-  margin-top: 25px;
+  margin-top: 80px;
 }
 
 .logInPlace > input,
