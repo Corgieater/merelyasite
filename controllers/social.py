@@ -45,7 +45,7 @@ def get_latest_five_reviews_from_follows_func():
     try:
         token = request.cookies.get('user_info')
         if token is None:
-            return
+            return {'error': True}
         data = jwt.decode(token, key, algorithms=["HS256"])
         print(data)
 

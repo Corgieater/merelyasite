@@ -16,7 +16,7 @@ def render_user_profile(user_name):
     return render_template('userProfile.html', name=user_name)
 
 
-# 拿最新的五個評論
+# 拿最新的五個評論from user page
 @user_profile_blueprint.route('/api/get_latest_reviews/<user_name>')
 def get_user_latest_five_reviews(user_name):
     user_name = user_name.replace('+', ' ')
@@ -24,7 +24,7 @@ def get_user_latest_five_reviews(user_name):
     return get_user_latest_five_reviews_func(user_name)
 
 
-# 照頁數拿所有評論
+# 照頁數拿所有評論from user page
 @user_profile_blueprint.route('/api/get_reviews_by_page/<user_name>/reviews')
 def get_reviews_by_page(user_name):
     user_name = user_name.replace('+', ' ')

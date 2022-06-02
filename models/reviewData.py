@@ -479,3 +479,33 @@ class ReviewDatabase:
             connection.close()
 
 
+    # 拿12篇評論給index
+    @property
+    def get_latest_reviews_for_index(self):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT \n'
+                           'users.name,\n'
+                           'movies_info.title,\n'
+                           'reu_review_id,\n'
+                           'reviews.review_movie_id\n'
+                           'FROM reviews_users\n'
+                           'INNER JOIN reviews\n'
+                           'INNER JOIN users\n'
+                           'INNER JOIN movies_info\n'
+                           'ON reviews_users.reu_user_id = users.user_id\n'
+                           'AND reviews_users.reu_review_id = reviews.review_id\n'
+                           'AND movies_info.movie_id = reviews.review_movie_id\n'
+                           'ORDER BY reu_id DESC LIMIT 11')
+            results = cursor.fetchall()
+            print('get_latest_reviews_for_index', results)
+        except Exception as e:
+            print('get_latest_reviews_for_index from reviewData')
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()

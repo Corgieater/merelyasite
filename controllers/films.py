@@ -131,25 +131,6 @@ def get_films_by_actor_func(actor, page):
     return info
 
 
-# # GENRE拿電影 HERE
-# def get_films_by_genre_func(genre, page):
-#     data_count = movie_database.get_total_data_count_from_type(genre, 'genre')[0]
-#     print('data count get_films_by_genre_func', data_count)
-#     if data_count is 0:
-#         return {
-#             'error': True,
-#             'message': 'There is no such person, please check it again'
-#         }
-#     total_page = math.ceil(data_count[0] / 20)
-#     if page is None:
-#         page = 1
-#     page = int(page) - 1
-#     info = movie_database.get_film_by_genre(genre, page)
-#     info = make_page(info, page, total_page)
-#     return info
-
-
-
 # 更新或加入評分 OK
 def rating_func(rate, user_id, film_id):
     if user_id is None:
@@ -161,14 +142,6 @@ def rating_func(rate, user_id, film_id):
     result = review_database.rating(rate, user_id, film_id)
     if result is True:
         return {'ok': True}
-    # elif type(result) is int:
-    #     rates_users_relation_added =\
-    #         review_database.add_rates_users_relation(user_id, result)
-    #     if rates_users_relation_added:
-    #         return {'ok': True}
-    #     else: return{
-    #         'error':'Something went wrong, please try again'
-    #     }
 
     else:
         return{
@@ -188,6 +161,7 @@ def get_rate_func(user_id, movie_id):
         return {
             'data': {'rate':None}
         }
+
 
 # 刪除評分 OK
 def delete_rate_func(film_id, user_id):
@@ -248,3 +222,21 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
             'error': False,
             'message': 'Review failed, please try again'
         }
+
+# for index
+def get_latest_reviews_func():
+    latest_reviews = review_database.get_latest_reviews_for_index
+    data = {
+        'data':{'data':[]}
+    }
+    for reviews in latest_reviews:
+        info = {
+            'userName': reviews[0],
+            'reviewMovie': reviews[1],
+            'reviewId': reviews[2],
+            'reviewMovieId': reviews[3]
+        }
+        data['data']['data'].append(info)
+
+    print('get_latest_reviews \n',data)
+    return data

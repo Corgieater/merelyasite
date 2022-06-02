@@ -136,7 +136,9 @@ nav > ul > li > input {
 /* logInPlace */
 .logInPlace {
   width: 50%;
-  margin-top: 80px;
+  position: absolute;
+  top: 22%;
+  right: 15%;
 }
 
 .logInPlace > input,
@@ -195,6 +197,9 @@ nav > ul > li > input {
 .signUpPlace > label {
   font-size: 20px;
 }
+/* .showValidation{
+  font-size:
+} */
 
 /* addMoviePlace */
 .addMoviePlace {

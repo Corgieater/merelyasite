@@ -58,7 +58,7 @@ async function showProperReviewBox() {
     show(addListBt);
   } else {
     let actionBox = document.querySelector(".actionBox > ul");
-    actionBox.style.height = "200px";
+    // actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
     let mouseTextPlace = document.querySelector(".mouseTextPlace");
@@ -235,9 +235,7 @@ async function getUserRate() {
     filmId: filmId,
     userId: id,
   };
-  console.log("拿該使用者評分: 資料", data);
   let score = await sendDataToBackend("POST", data, "/api/rate");
-  console.log("last time rate", score);
   return score;
 }
 

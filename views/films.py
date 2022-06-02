@@ -25,39 +25,6 @@ def search_by_id(film_id):
 def render_film_page(film_id):
     return render_template('film.html')
 
-# # 找導演
-# @films_blueprint.route('/api/search/director')
-# def get_director():
-#     director = request.args.get('director').replace('+', ' ')
-#     page = request.args.get('page')
-#     if page is None:
-#         page = 1
-#     return get_data_by_type_func(director, page, 'director')
-#
-#
-# # render search director page
-# @films_blueprint.route('/search/director')
-# def render_search_Director_page():
-#     director = request.args.get('director').replace('+', ' ')
-#     return render_template('searchDirector.html', director=director)
-
-
-# # 找演員
-# @films_blueprint.route('/api/search/actor')
-# def get_actor():
-#     actor = request.args.get('actor').replace('+', ' ')
-#     page = request.args.get('page')
-#     if page is None:
-#         page = 1
-#     return get_data_by_type_func(actor, page, 'actor')
-#
-#
-# # render search actor page
-# @films_blueprint.route('/search/actor')
-# def render_search_actor_page():
-#     actor = request.args.get('actor').replace('+', ' ')
-#     return render_template('searchActor.html', director=actor)
-
 
 # director搜電影 OK
 @films_blueprint.route('/api/director')
@@ -96,21 +63,6 @@ def search_by_actor():
 def render_actor_page():
     actor = request.args.get('actor').replace('+', ' ')
     return render_template('actor.html', actor=actor)
-
-
-# genre搜電影 HERE--------------------
-# @films_blueprint.route('/api/genre')
-# def search_by_genre():
-#     genre = request.args.get('genre')
-#     page = request.args.get('page')
-#     print('genre', genre, page)
-#     return get_films_by_genre_func(genre, page)
-#
-#
-# # render template genre
-# @films_blueprint.route('/genre')
-# def render_genre_page():
-#     return render_template('genre.html')
 
 
 # 評分 HERE
@@ -209,3 +161,10 @@ def get_movie_from_omdb():
     else:
         return {'error': True,
                 'message': 'Movie already exist'}
+
+
+# 拿最新的12個評論 from index
+@films_blueprint.route('/api/get_latest_reviews/')
+def get_latest_reviews():
+    print('get_latest_reviews')
+    return get_latest_reviews_func()

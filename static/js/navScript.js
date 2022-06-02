@@ -31,12 +31,49 @@ let signUpPlace = document.querySelector(".signUpPlace");
 let logInPlace = document.querySelector(".logInPlace");
 let addMoviePlace = document.querySelector(".addMoviePlace");
 
+// signup裡面的小提示
+let validationPlace = document.querySelector(".validationPlace");
+
 // 區域toggle
 signUpPlaceBt.addEventListener("click", function (e) {
   e.preventDefault();
   hideOrShow(signUpPlace);
   hideOrShow(mask);
+  checkNameWhenFinishTyping();
 });
+
+async function checkNameWhenFinishTyping() {
+  let typingTimer;
+  let doneTypingInterval = 1000;
+  let namePlace = document.querySelector("#signName");
+  namePlace.addEventListener("keyup", () => {
+    clearTimeout(typingTimer);
+    if (namePlace.value.length >= 3) {
+      typingTimer = setTimeout(nameChecking, doneTypingInterval);
+    }
+    {
+      validationPlace.classList.remove("good");
+      validationPlace.classList.add("warning");
+      validationPlace.textContent = "Too short";
+    }
+  });
+  //user is "finished typing," do something
+  async function nameChecking() {
+    const req = await fetch(`/api/user/${namePlace.value}`);
+    const res = await req.json();
+    if (res.ok) {
+      console.log(res);
+      validationPlace.classList.remove("warning");
+      validationPlace.classList.add("good");
+      validationPlace.textContent = "Available";
+    } else {
+      console.log(res);
+      validationPlace.classList.remove("good");
+      validationPlace.classList.add("warning");
+      validationPlace.textContent = "Taken";
+    }
+  }
+}
 
 logInPlaceBt.addEventListener("click", function (e) {
   e.preventDefault();
@@ -54,6 +91,7 @@ signUpPlaceCloseBt.addEventListener("click", function (e) {
   e.preventDefault();
   hide(signUpPlace);
   hide(mask);
+  deleteMessage();
 });
 
 addMovieCloseBt.addEventListener("click", function (e) {
@@ -72,21 +110,27 @@ signUpBt.addEventListener("click", async function (e) {
   let password = document.querySelector(
     ".signUpPlace>input[type='password']"
   ).value;
-  let name = document.querySelector(".signUpPlace>input[type='text']").value;
-  console.log(email, password, name);
-
-  let data = {
-    email: email,
-    password: password,
-    name: name,
-  };
-  console.log(data);
-  let returnMessage = await sendDataToBackend("POST", data, "/api/user");
-  if (returnMessage === true) {
-    console.log("success");
-    window.location.reload();
+  let name = document.querySelector("#signName").value;
+  if (email === "" || password === "" || name === "") {
+    makeMessage(signUpPlace, "Somewhere is empty, please check again");
   } else {
-    makeMessage(signUpPlace, returnMessage);
+    if (email.indexOf("@") === -1) {
+      makeMessage(signUpPlace, "Please check your Email again");
+    } else {
+      let data = {
+        email: email,
+        password: password,
+        name: name,
+      };
+      console.log(data);
+      let returnMessage = await sendDataToBackend("POST", data, "/api/user");
+      if (returnMessage === true) {
+        console.log("success");
+        window.location.reload();
+      } else {
+        makeMessage(signUpPlace, returnMessage);
+      }
+    }
   }
 });
 

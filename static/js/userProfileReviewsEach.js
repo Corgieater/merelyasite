@@ -113,7 +113,7 @@ async function showProperReviewBox() {
     }
   } else {
     let actionBox = document.querySelector(".actionBox > ul");
-    actionBox.style.height = "200px";
+    // actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
     let mouseTextPlace = document.querySelector(".mouseTextPlace");
@@ -127,7 +127,7 @@ async function showProperReviewBox() {
       ".actionBox > ul > li:nth-child(4)"
     );
     averageRate.title = "";
-    mouseTextPlace.style.top = "440px";
+    mouseTextPlace.style.top = "490px";
     actionBox.insertBefore(li, averageRate);
   }
 

@@ -103,11 +103,6 @@ section > a {
   bottom: 90px;
   text-decoration: none !important;
 }
-/* .actionBox > ul > li:nth-child(4) {
-  font-size: 25px;
-  text-decoration-color: antiquewhite;
-} */
-/* reviewBox */
 .closeBt {
   font-size: 25px;
   color: antiquewhite;

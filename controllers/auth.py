@@ -11,6 +11,17 @@ key = os.getenv('JWT_SECRET_KEY')
 database = UserDatabase()
 
 
+# check is name taken
+def check_user_name_func(sign_up_name):
+    user_name_exist = database.check_user_name(sign_up_name)
+    print(user_name_exist)
+    if user_name_exist:
+        return{'error': True}
+    else:
+        return{'ok': True}
+
+
+
 def sign_up(email, password, name):
     password = bcrypt.generate_password_hash(password)
     data = (None, name, email, password)

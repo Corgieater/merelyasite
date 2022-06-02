@@ -80,13 +80,22 @@ section > a {
   margin-left: 10px;
   /* height: 350px; */
   background-color: #264653;
-  color: white;
+  color: antiquewhite;
   text-align: center;
   position: relative;
 }
 .actionBox > ul > * {
   padding: 15px;
 }
+
+/* 有小圖案那個區塊 small action*/
+.actionBox > ul > li:nth-child(1) {
+  justify-content: space-evenly;
+}
+.actionBox > ul > li:nth-child(1) > section {
+  flex-direction: column;
+}
+
 /* 取消星星評分的按鈕  cancelBt*/
 .actionBox > ul > li:nth-child(4) > fieldset > a {
   font-size: 30px;
@@ -100,13 +109,6 @@ section > a {
   text-decoration-color: antiquewhite;
 }
 
-/* 有小圖案那個區塊 small action*/
-.actionBox > ul > li:nth-child(1) {
-  justify-content: space-evenly;
-}
-.actionBox > ul > li:nth-child(1) > section {
-  flex-direction: column;
-}
 /* reviewBox */
 .closeBt {
   font-size: 25px;
@@ -213,7 +215,7 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
   background-color: antiquewhite;
   color: #264653;
   position: absolute;
-  right: 23%;
+  right: 24%;
   top: 620px;
 }
 .mouseTextPlace:after {

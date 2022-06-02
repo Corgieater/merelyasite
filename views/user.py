@@ -11,11 +11,19 @@ user_blueprint = Blueprint(
 )
 
 # 登入登出相關
+# sign up
 @user_blueprint.route('/api/user', methods=['POST'])
 def sign_up_func():
     data = request.get_json()
     return sign_up(data['email'], data['password'], data['name'])
 
+
+# check user name available
+@user_blueprint.route('/api/user/<sign_up_name>',)
+def check_user_name(sign_up_name):
+    sign_up_name = sign_up_name.replace('+', ' ')
+    print(sign_up_name)
+    return check_user_name_func(sign_up_name)
 
 @user_blueprint.route('/api/user', methods=['PATCH'])
 def log_in_func():
@@ -73,11 +81,18 @@ def get_watchlist_by_page(page_master):
 # 看該使用者有沒有把這電影加入watchlist
 @user_blueprint.route('/api/user_profile/watchlist', methods=["POST"])
 def check_movie_in_watchlist():
-    data = request.get_json()
-    print('check_movie_in_watch_list', data)
-    movie_id = data['movieId']
-    user_id = data['userId']
-    return check_movie_in_watchlist_func(user_id, movie_id)
+    try:
+        data = request.get_json()
+        print('check_movie_in_watch_list', data)
+        movie_id = data['movieId']
+        user_id = data['userId']
+        print('5555555555555\n',user_id)
+    except Exception as e:
+        print('check_movie_in_watchlist from user')
+        print(e)
+        return {'error': True}
+    else:
+        return check_movie_in_watchlist_func(user_id, movie_id)
 
 # 加入待看清單watch list
 @user_blueprint.route('/api/user_profile/watchlist', methods=["PATCH"])

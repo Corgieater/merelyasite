@@ -46,6 +46,29 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
+    # check if user name taken
+    def check_user_name(self, user_name):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT user_id FROM users WHERE name = %s', (user_name,))
+            user_name = cursor.fetchone()
+            print('user name existing? ', user_name)
+            if user_name:
+                result = True
+                print('we have this in bank')
+            else:
+                result = False
+                print('you can use it')
+        except Exception as e:
+            print(e)
+        else:
+            print('false')
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
     def check_user_log_in_info(self, email, password):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -172,7 +195,7 @@ class UserDatabase:
 
     # get watchlist by name
     def get_watchlist(self, page_master_name, start_index):
-        start_index = int(start_index)*28
+        start_index = int(start_index)*24
         try:
             connection = p.get_connection()
             cursor = connection.cursor()
@@ -181,7 +204,7 @@ class UserDatabase:
                            'INNER JOIN users\n'
                            'ON users.name = %s\n'
                            'AND users.user_id = users_watch_list.wl_user_id\n'
-                           'LIMIT %s,28',
+                           'LIMIT %s,24',
                            (page_master_name,start_index))
             result = cursor.fetchall()
             print('get_watchlist', result)
