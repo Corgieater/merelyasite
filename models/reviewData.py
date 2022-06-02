@@ -480,7 +480,6 @@ class ReviewDatabase:
 
 
     # 拿12篇評論給index
-    @property
     def get_latest_reviews_for_index(self):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -506,6 +505,22 @@ class ReviewDatabase:
             return False
         else:
             return results
+        finally:
+            cursor.close()
+            connection.close()
+
+    # count all reviews
+    def get_all_reviews_count(self):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(review_id)AS count FROM reviews')
+            result = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
         finally:
             cursor.close()
             connection.close()

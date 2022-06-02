@@ -4,6 +4,7 @@
 // 字樣相關
 let welcomePlace = document.querySelector(".welcomePlace");
 let dynamicTextForNews = document.querySelector(".dynamicTextForNews");
+let dynamicTextForNews2 = document.querySelector(".dynamicTextForNews2");
 
 let newFromFriendsPlace = document.querySelector(".newFromFriendsPlace");
 let justReviewdPlace = document.querySelector(".justReviewdPlace");
@@ -43,15 +44,19 @@ function showSignUpLink(welcomePlace) {
     a.style.color = "antiquewhite";
   });
   welcomePlace.append(a);
-  show(dynamicTextForNews);
 }
 
 // make news
 async function makeNews() {
   let data = await getNewReviewed();
+  console.log(data);
+  let totalReviews = data.data["totalReviews"];
   data = data.data.data;
   // for sign up
   dynamicTextForNews.textContent = "JUST REVIEWED...";
+  dynamicTextForNews2.textContent = `${totalReviews} films watched`;
+  show(dynamicTextForNews);
+  show(dynamicTextForNews2);
   for (let info of data) {
     let li = document.createElement("li");
     let reviewedUserName = info["userName"];

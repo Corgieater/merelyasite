@@ -115,6 +115,7 @@ def get_watchlist_by_page_func(page_master, page):
 # check watchlist
 def check_movie_in_watchlist_func(user_id, movie_id):
     movie_is_in_watchlist = user_database.check_watchlist(user_id, movie_id)
+    print(movie_is_in_watchlist)
     if movie_is_in_watchlist is not None:
         return{'ok': True}
     else:

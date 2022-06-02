@@ -6,10 +6,10 @@ def make_movie_info_dic(movie, directors, actors, genres):
     dic = {
         'data': {
             'movieId': movie[0],
-            'title': movie[2],
-            'year': movie[3],
-            'story': movie[4],
-            'tagline': movie[5],
+            'title': movie[1],
+            'year': movie[2],
+            'story': movie[3],
+            'tagline': movie[4],
             'directors': [],
             'actors': [],
             'genres': []

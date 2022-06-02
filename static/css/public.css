@@ -50,6 +50,9 @@ nav {
 /* general */
 
 /* input */
+img {
+  object-fit: cover;
+}
 input:focus {
   outline: solid white 3px;
 }

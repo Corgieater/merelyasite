@@ -39,6 +39,7 @@ def make_page(data, page, total_page):
         data['nextPage'] = None
     return data
 
+
 # 用TYPE拿資料(導演演員GENRE) search controller 也有一個
 def get_data_by_type_func(query, page, data_type):
     data_count = 0
@@ -73,6 +74,7 @@ def get_data_by_type_func(query, page, data_type):
 # 用ID拿電影 OK
 def get_film_by_id_func(film_id):
     data = movie_database.get_film_by_id(film_id)
+    print('film controller get_film_by_id_func',data)
     if data is None:
         return {
             'error': True,
@@ -225,16 +227,18 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
 
 # for index
 def get_latest_reviews_func():
-    latest_reviews = review_database.get_latest_reviews_for_index
+    latest_reviews = review_database.get_latest_reviews_for_index()
+    total_reviews = review_database.get_all_reviews_count()
     data = {
-        'data':{'data':[]}
+        'data':{'data':[],'totalReviews': total_reviews[0]}
     }
     for reviews in latest_reviews:
         info = {
             'userName': reviews[0],
             'reviewMovie': reviews[1],
             'reviewId': reviews[2],
-            'reviewMovieId': reviews[3]
+            'reviewMovieId': reviews[3],
+
         }
         data['data']['data'].append(info)
 

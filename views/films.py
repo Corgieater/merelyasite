@@ -10,6 +10,7 @@ films_blueprint = Blueprint(
     template_folder='templates'
 )
 
+
 # 導演演員的確定路徑(全名)一定要是類似這樣
 #  https://letterboxd.com/actor/tom-cruise/
 # 顯示電影的方式就用下滑打API
@@ -37,10 +38,11 @@ def search_by_director():
         page = 1
     return get_films_by_director_func(director, page)
 
+
 # render template director
 @films_blueprint.route('/director')
 def render_director_page():
-    #參數沒用到還是要填
+    # 參數沒用到還是要填
     director = request.args.get('director').replace('+', ' ')
     return render_template('director.html', director=director)
 
@@ -57,6 +59,7 @@ def search_by_actor():
     actor = actor.replace('+', ' ')
     print(actor, 'after replace')
     return get_films_by_actor_func(actor, page)
+
 
 # render template actor
 @films_blueprint.route('/actor')
@@ -137,7 +140,7 @@ def film_review():
             review_id = data['reviewId']
             from_place = data['from']
             print('from place views films', from_place)
-            return film_review_func\
+            return film_review_func \
                 (movie_review, film_id, current_date, watched_date, user_id, spoilers,
                  review_id=review_id, from_where=from_place)
     # 如果沒填review id = 從film來的
@@ -150,17 +153,20 @@ def film_review():
 def render_films_page():
     return render_template('publicFilms.html')
 
+
 # 加入電影   ****************要修 想辦法去爬IMDB 不然 TAGLINE就爆了
 @films_blueprint.route('/api/addFilm')
 def get_movie_from_omdb():
-    title = request.args.get('t').replace('+', ' ')
+    title = request.args.get('t').replace('+', ' ').title()
     year = request.args.get('y')
-    add_to_database = get_movie_from_omdb_func(title, year)
-    if add_to_database:
-        return {'ok': True}
-    else:
-        return {'error': True,
-                'message': 'Movie already exist'}
+    print(title, year)
+    # add_to_database = get_movie_from_omdb_func(title, year)
+    return get_movie_from_imdb_func(title, year)
+    # if add_to_database:
+    #     return {'ok': True}
+    # else:
+    #     return {'error': True,
+    #             'message': 'Movie already exist'}
 
 
 # 拿最新的12個評論 from index

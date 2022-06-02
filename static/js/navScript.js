@@ -222,12 +222,17 @@ addMovieBt.addEventListener("click", async function () {
     `/api/addFilm?t=${userInputTitle}&y=${userInputYear}`
   );
   const res = await req.json();
+  addMovieBt.disabled = true;
+
   if (res.ok) {
-    makeMessage(addMoviePlace, "It's done!", "good");
+    // makeMessage(addMoviePlace, "It's done!", "good");
+    makeMessage(globalMessagePlace, "It's done!", "good");
     userInputTitle = "";
     userInputYear = "";
+    addMovieBt.disabled = false;
   } else {
-    makeMessage(addMoviePlace, res.message);
+    makeMessage(globalMessagePlace, res.message);
+    addMovieBt.disabled = false;
   }
 });
 
