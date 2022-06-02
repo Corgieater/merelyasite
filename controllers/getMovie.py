@@ -44,6 +44,8 @@ headers = {
 imdb_move_base = Cinemagoer()
 add_movie_database = ImportDatabase()
 
+global genre_count
+genre_count = 0
 
 def get_imdb_id(title, year):
     imdb_movie_id = None
@@ -94,6 +96,7 @@ def up_load_to_s3(poster_url, movie_id):
         )
 
 def get_movie_from_imdb_func(title, year):
+    global genre_count
     is_movie_in_database = add_movie_database.find_in_database(title, year)
     poster_url = None
     if is_movie_in_database:
@@ -152,11 +155,10 @@ def get_movie_from_imdb_func(title, year):
         # this is more reliable
         genres_list = soup.findAll('li', class_="ipc-inline-list__item ipc-chip__text",
                                    attrs={'role': 'presentation'})
-        genre_count = 0
         if genre_count != 3:
             for g in genres_list:
                 genre = g.get_text()
-                genres.append(genre)
+                genres.append(genre.title())
                 genre_count += 1
         print('genres done', genres)
 
@@ -209,7 +211,7 @@ def get_movie_from_imdb_func(title, year):
                     add_movie_database.add_relationship((director_id, added_movie_id),'director')
                 else:
                     print(f'{director} not in database')
-                    new_director_id = add_movie_database.add_subject_to_database_by_type(director, 'director')
+                    new_director_id = add_movie_database.add_subject_to_database_by_type(director, 'director')[0]
                     print('new director added',new_director_id)
                     add_movie_database.add_relationship((new_director_id, added_movie_id), 'director')
 
@@ -219,7 +221,7 @@ def get_movie_from_imdb_func(title, year):
                 if actor_id is not None:
                     add_movie_database.add_relationship((actor_id, added_movie_id), 'actor')
                 else:
-                    new_actor_id = add_movie_database.add_subject_to_database_by_type(actor, 'actor')
+                    new_actor_id = add_movie_database.add_subject_to_database_by_type(actor, 'actor')[0]
                     print('new actor added', new_actor_id)
                     add_movie_database.add_relationship((new_actor_id, added_movie_id), 'actor')
 
@@ -230,7 +232,7 @@ def get_movie_from_imdb_func(title, year):
                 if genre_id is not None:
                     add_movie_database.add_relationship((genre_id, added_movie_id), 'genre')
                 else:
-                    new_genre_id = add_movie_database.add_subject_to_database_by_type(genre, 'genre')
+                    new_genre_id = add_movie_database.add_subject_to_database_by_type(genre, 'genre')[0]
                     print('new genre added', new_genre_id)
                     add_movie_database.add_relationship((new_genre_id, added_movie_id), 'genre')
 

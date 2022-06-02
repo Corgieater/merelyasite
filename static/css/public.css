@@ -115,6 +115,61 @@ label {
   background-color: rgba(0, 0, 0, 0.689);
 }
 
+/* loader */
+.loaderPlace {
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  width: 500px;
+  height: 360px;
+  /* border: 1px solid antiquewhite; */
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 999;
+}
+.loaderPlace > section {
+  position: relative;
+  top: 30%;
+}
+.loaderPlace > section > h2 {
+  font-size: 25px;
+  font-weight: bold;
+  color: antiquewhite;
+  line-height: 2;
+  text-align: center;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  /* display: flex;
+  justify-content: center; */
+  position: relative;
+  top: 25%;
+  left: 40%;
+}
+.loader__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+.loader__film {
+  position: absolute;
+  top: -30px;
+  left: 0;
+  display: flex;
+}
+.loader__film-img {
+  animation: rotate 1.5s linear infinite;
+}
+
 /* logo */
 nav > h1 > a {
   margin-left: 200px;
@@ -208,7 +263,7 @@ nav > ul > li > input {
 .addMoviePlace {
   height: 350px;
   width: 500px;
-  border: 1px white solid;
+  border: 1px antiquewhite solid;
   padding: 10px;
   position: absolute;
   left: 40%;

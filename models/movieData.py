@@ -98,7 +98,7 @@ class MovieDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         start_index = int(start_index)*20
-        print('user input from get info', user_input)
+        print('user input from get info', user_input, 'start index', start_index)
         try:
             cursor.execute('SELECT movie_id, title, year, \n'
                            'directors.name as director_name\n'
@@ -304,7 +304,7 @@ class MovieDatabase:
             result = cursor.fetchall()
             actor_movie_dic = make_poster_showing_dic(result, 'actor')
             print('movieData get_film_by_actor ', result)
-            if len(result) is 0:
+            if len(result) == 0:
                 return None
         except Exception as e:
             print(e)
@@ -339,7 +339,7 @@ class MovieDatabase:
                            ('%' + genre + '%', start_index))
             result = cursor.fetchall()
             print('get movies by genre', result)
-            if len(result) is 0:
+            if len(result) == 0:
                 return None
         except Exception as e:
             print('get_film_by_genre from movieData')
@@ -377,7 +377,7 @@ class MovieDatabase:
                 movie_counts.append(cursor.fetchone()[0])
             general_search_dic = make_dic_by_type_for_general_search(result, movie_counts, 'director')
             print('movieData make_director_dic ', result)
-            if len(result) is 0:
+            if len(result) == 0:
                 return None
         except Exception as e:
             print('get_director_by_name from movieData')
@@ -416,7 +416,7 @@ class MovieDatabase:
                 movie_counts.append(cursor.fetchone()[0])
             general_search_dic = make_dic_by_type_for_general_search(result, movie_counts, "actor")
             print('movieData make_actor_dic ', result)
-            if len(result) is 0:
+            if len(result) == 0:
                 return False
         except Exception as e:
             print('get_actor_by_name from movieData')

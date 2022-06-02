@@ -216,23 +216,26 @@ searchFormBt.addEventListener("click", async function (e) {
 addMovieBt.addEventListener("click", async function () {
   deleteMessage();
   let userInputTitle = movieTitle.value;
-  console.log(userInputTitle);
   let userInputYear = movieYear.value;
+  let loaderPlace = document.querySelector(".loaderPlace");
+  hide(addMoviePlace);
+  show(loaderPlace);
   const req = await fetch(
     `/api/addFilm?t=${userInputTitle}&y=${userInputYear}`
   );
   const res = await req.json();
-  addMovieBt.disabled = true;
 
   if (res.ok) {
     // makeMessage(addMoviePlace, "It's done!", "good");
     makeMessage(globalMessagePlace, "It's done!", "good");
     userInputTitle = "";
     userInputYear = "";
-    addMovieBt.disabled = false;
+    hide(loaderPlace);
+    show(addMoviePlace);
   } else {
     makeMessage(globalMessagePlace, res.message);
-    addMovieBt.disabled = false;
+    hide(loaderPlace);
+    show(addMoviePlace);
   }
 });
 
