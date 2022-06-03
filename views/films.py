@@ -168,3 +168,10 @@ def get_movie_from_imdb():
 def get_latest_reviews():
     print('get_latest_reviews')
     return get_latest_reviews_func()
+
+
+# 拿這週最hot的電影 *6 for index
+@films_blueprint.route('/api/get_most_popular_movies_this_week/')
+def get_most_popular_movies_this_week():
+    print('get_most_popular_movies_this_week views films')
+    return get_most_popular_movies_this_week_func()

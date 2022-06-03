@@ -146,3 +146,19 @@ function makeDateString() {
   today = yyyy + "/" + mm + "/" + dd;
   return today;
 }
+
+// 滑鼠滑進滑出
+// unFollowBt.addEventListener(
+//   "mouseover",
+//   function () {
+//     isMouseHover = true;
+//   },
+//   false
+// );
+// unFollowBt.addEventListener(
+//   "mouseleave",
+//   function () {
+//     isMouseHover = false;
+//   },
+//   false
+// );

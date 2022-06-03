@@ -127,3 +127,13 @@ def add_movie_to_likes():
     movie_id = data['movieId']
     user_id = data['userId']
     return add_movie_to_likes_func(user_id, movie_id)
+
+
+# delete movies user likes
+@user_blueprint.route('/api/user_profile/likes/movie', methods=["DELETE"])
+def delete_movie_from_likes():
+    data = request.get_json()
+    print('delete_movie_from_likes',data)
+    movie_id = data['movieId']
+    user_id = data['userId']
+    return delete_movie_from_likes_func(user_id, movie_id)

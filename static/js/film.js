@@ -110,6 +110,31 @@ likeBt.addEventListener("click", async function (e) {
   }
 });
 
+// delete from movies users likes
+// delete from likes
+removeLikeBtPlace.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "DELETE",
+    data,
+    "/api/user_profile/likes/movie"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was removed from your likes list`,
+      "good"
+    );
+  }
+});
+
 // 加入待看清單
 watchlistBt.addEventListener("click", async function (e) {
   e.preventDefault();
@@ -432,7 +457,7 @@ async function showFilmInfo() {
   makeAlinkAndAppend(genres, "/genre?genre=", filmGenres);
 }
 
-// check if user add this movie to watchlist
+// check if user add this movie to watchlist or likes
 async function checkUserMovieStates() {
   let userData = await getUserData();
   let userId = userData["userId"];
@@ -446,20 +471,19 @@ async function checkUserMovieStates() {
     "/api/user_profile/user_movie_state"
   );
   console.log(userMovieStates);
-  if (userMovieStates === null) {
+  let ifMovielist = userMovieStates["userWatchlist"];
+  let ifMovieLikes = userMovieStates["userLikes"];
+  if (ifMovielist) {
+    show(removeWatchlistBtPlace);
+  }
+  if (!ifMovielist) {
     show(watchlistBtPlace);
+  }
+  if (ifMovieLikes) {
+    show(removeLikeBtPlace);
+  }
+  if (!ifMovieLikes) {
     show(likeBtPlace);
-  } else {
-    let ifMovielist = userMovieStates["userWatchlist"];
-    let ifMovieLikes = userMovieStates["userLikes"];
-    if (ifMovielist) {
-      console.log("user movielist exist");
-      show(removeWatchlistBtPlace);
-    }
-    if (ifMovieLikes) {
-      console.log("user LIKES!!!");
-      show(removeLikeBtPlace);
-    }
   }
 }
 

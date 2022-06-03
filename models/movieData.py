@@ -393,9 +393,9 @@ class MovieDatabase:
     # general搜尋bar 名字拿演員
     def get_actor_by_name(self, actor, start_index):
         start_index = int(start_index) * 20
+        connection = p.get_connection()
+        cursor = connection.cursor()
         try:
-            connection = p.get_connection()
-            cursor = connection.cursor()
             cursor.execute('SELECT actors.actor_id, actors.name,\n'
                            'actors_movies.am_movie_id\n'
                            'FROM actors\n'
@@ -424,6 +424,29 @@ class MovieDatabase:
             return False
         else:
             return general_search_dic
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 拿這禮拜最多人按讚的電影 by 6
+    def get_most_popular_movies_for_index(self):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT mul_movie_id, COUNT(*) as popularity\n'
+                           'FROM movies_users_like_list \n'
+                           'WHERE YEARWEEK(mul_like_date) = YEARWEEK(NOW())\n'
+                           'GROUP BY mul_movie_id\n'
+                           'ORDER BY popularity DESC\n'
+                           'LIMIT 6')
+            results = cursor.fetchall()
+
+        except Exception as e:
+            print('get_most_popular_movie_this_week')
+            print(e)
+            return False
+        else:
+            return results
         finally:
             cursor.close()
             connection.close()

@@ -244,3 +244,21 @@ def get_latest_reviews_func():
 
     print('get_latest_reviews \n',data)
     return data
+
+
+# 拿本周最多like的電影
+def get_most_popular_movies_this_week_func():
+    most_popular_movies = movie_database.get_most_popular_movies_for_index()
+    data = {
+        'data':{'data':[]}
+    }
+    for reviews in most_popular_movies:
+        info = {
+            'movieId': reviews[0],
+            'totalLikes': reviews[1],
+        }
+        data['data']['data'].append(info)
+
+    print('get_most_popular_movies_this_week_func films\n',data)
+    return data
+
