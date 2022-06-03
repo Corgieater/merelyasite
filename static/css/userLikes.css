@@ -1,0 +1,18 @@
+h2 {
+  border-bottom: 1px solid antiquewhite;
+}
+.showPlace {
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+.showPlace > li {
+  margin: 0 10px 10px 0;
+}
+.showPlace > li > a > img {
+  width: 180px;
+  height: 250px;
+}
+
+/* .pagesPlace {
+  height: 25px;
+} */

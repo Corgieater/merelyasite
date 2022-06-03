@@ -154,19 +154,13 @@ def render_films_page():
     return render_template('publicFilms.html')
 
 
-# 加入電影   ****************要修 想辦法去爬IMDB 不然 TAGLINE就爆了
+# 加入電影   good
 @films_blueprint.route('/api/addFilm')
-def get_movie_from_omdb():
+def get_movie_from_imdb():
     title = request.args.get('t').replace('+', ' ').title()
     year = request.args.get('y')
     print(title, year)
-    # add_to_database = get_movie_from_omdb_func(title, year)
     return get_movie_from_imdb_func(title, year)
-    # if add_to_database:
-    #     return {'ok': True}
-    # else:
-    #     return {'error': True,
-    #             'message': 'Movie already exist'}
 
 
 # 拿最新的12個評論 from index

@@ -15,8 +15,14 @@ let genres = document.querySelector(".genres");
 
 // action small action
 let smallActionsPlace = document.querySelector(".smallActionsPlace");
+// 裡面的區域
+let likeBtPlace = document.querySelector(".likeBtPlace");
+let removeLikeBtPlace = document.querySelector(".removeLikeBtPlace");
 let watchlistBtPlace = document.querySelector(".watchlistBtPlace");
 let removeWatchlistBtPlace = document.querySelector(".removeWatchlistBtPlace");
+// 區域裡面的button
+let likeBt = document.querySelector(".likeBt");
+let removeLikeBt = document.querySelector(".removeLikeBt");
 let watchlistBt = document.querySelector(".watchlistBt");
 let removeWatchlistBt = document.querySelector(".removeWatchlistBt");
 
@@ -78,6 +84,31 @@ async function showProperReviewBox() {
 }
 
 showProperReviewBox();
+
+// small action func
+// 加入movies likes
+likeBt.addEventListener("click", async function (e) {
+  e.preventDefault();
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let data = {
+    movieId: filmId,
+    userId: userId,
+  };
+  let addToWatchlistMessage = await sendDataToBackend(
+    "PATCH",
+    data,
+    "/api/user_profile/likes/movie"
+  );
+  if (addToWatchlistMessage === true) {
+    window.location.reload();
+    makeMessage(
+      globalMessagePlace,
+      `${movieName} was added to your like list`,
+      "good"
+    );
+  }
+});
 
 // 加入待看清單
 watchlistBt.addEventListener("click", async function (e) {
@@ -402,27 +433,37 @@ async function showFilmInfo() {
 }
 
 // check if user add this movie to watchlist
-async function checkIfMovieInWatchlist() {
+async function checkUserMovieStates() {
   let userData = await getUserData();
   let userId = userData["userId"];
   let data = {
     movieId: filmId,
     userId: userId,
   };
-  let movieInWatchlist = await sendDataToBackend(
+  let userMovieStates = await sendDataToBackend(
     "POST",
     data,
-    "/api/user_profile/watchlist"
+    "/api/user_profile/user_movie_state"
   );
-  console.log(movieInWatchlist);
-  if (movieInWatchlist === true) {
-    show(removeWatchlistBtPlace);
-  } else {
+  console.log(userMovieStates);
+  if (userMovieStates === null) {
     show(watchlistBtPlace);
+    show(likeBtPlace);
+  } else {
+    let ifMovielist = userMovieStates["userWatchlist"];
+    let ifMovieLikes = userMovieStates["userLikes"];
+    if (ifMovielist) {
+      console.log("user movielist exist");
+      show(removeWatchlistBtPlace);
+    }
+    if (ifMovieLikes) {
+      console.log("user LIKES!!!");
+      show(removeLikeBtPlace);
+    }
   }
 }
 
 showFilmInfo();
 showPreviousRate();
 getAverageRate();
-checkIfMovieInWatchlist();
+checkUserMovieStates();

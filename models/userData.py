@@ -271,7 +271,7 @@ class UserDatabase:
             print('get_watchlist', result)
 
         except Exception as e:
-            print('check_watchlist from userData')
+            print('get_watchlist from userData')
             print(e)
             return False
         else:
@@ -308,18 +308,34 @@ class UserDatabase:
 
 
     # check watchlist
-    def check_watchlist(self, user_id, movie_id):
+    def check_watchlist_and_likes(self, user_id, movie_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('SELECT watch_list_id FROM users_watch_list \n'
-                           'WHERE wl_user_id = %s \n'
+            cursor.execute('SELECT users_watch_list.watch_list_id, \n'
+                           'movies_users_like_list.like_list_id\n'
+                           'FROM users_watch_list\n'
+                           'LEFT JOIN movies_users_like_list\n'
+                           'ON wl_user_id = movies_users_like_list.mul_user_id\n'
+                           'AND wl_movie_id = movies_users_like_list.mul_movie_id\n'
+                           'WHERE wl_user_id = %s\n'
                            'AND wl_movie_id = %s',
                            (user_id, movie_id))
+            # cursor.execute('SELECT watch_list_id FROM users_watch_list \n'
+            #                'WHERE wl_user_id = %s \n'
+            #                'AND wl_movie_id = %s',
+            #                (user_id, movie_id))
             get_watchlist = cursor.fetchone()
-            print('check_watchlist',get_watchlist)
-            if get_watchlist is not None:
-                result = True
+            print('check_watchlist/likes',get_watchlist)
+            # both movielist and likes
+            if get_watchlist[0] is not None and get_watchlist[1] is not None:
+                result = [True, True]
+            # only movielist
+            elif get_watchlist[0] is not None and get_watchlist[1] is None:
+                result = [True, False]
+            # only likes
+            elif get_watchlist[0] is None and get_watchlist[1] is not None:
+                result = [False, True]
             else:
                 result = None
         except Exception as e:
@@ -356,6 +372,25 @@ class UserDatabase:
         cursor = connection.cursor()
         try:
             cursor.execute('DELETE FROM users_watch_list WHERE wl_user_id = %s AND wl_movie_id = %s;',
+                           (user_id, movie_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # 加入movies likes
+    def add_to_movies_likes(self, user_id, movie_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('INSERT INTO movies_users_like_list VALUES(default,%s,%s)',
                            (user_id, movie_id))
         except Exception as e:
             print(e)

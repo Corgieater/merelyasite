@@ -112,14 +112,23 @@ def get_watchlist_by_page_func(page_master, page):
     print(data)
     return data
 
-# check watchlist
-def check_movie_in_watchlist_func(user_id, movie_id):
-    movie_is_in_watchlist = user_database.check_watchlist(user_id, movie_id)
-    print(movie_is_in_watchlist)
-    if movie_is_in_watchlist is not None:
-        return{'ok': True}
+# check user movie state movielist/likes
+def check_user_movie_state_func(user_id, movie_id):
+    watchlist_and_likes_data = user_database.check_watchlist_and_likes(user_id, movie_id)
+    print('oyoyyo user state here',watchlist_and_likes_data)
+
+
+    if watchlist_and_likes_data is not False:
+        data = {
+            'data': {
+                'userWatchlist': watchlist_and_likes_data[0],
+                'userLikes': watchlist_and_likes_data[1]
+            }
+        }
+        return data
+
     else:
-        return{'none': True}
+        return{'data': None}
 
 # 加入待看清單 watchlist
 def add_movie_to_watchlist_func(user_id, movie_id):
@@ -146,3 +155,16 @@ def delete_movie_from_watchlist_func(user_id, movie_id):
         return {'error': True,
                 'message': 'Something went wrong, please try again'
                 }
+
+
+def add_movie_to_likes_func(user_id, movie_id):
+    if user_id is None:
+        return {'error': True,
+                'message':'Please log in'}
+    movies_likes_added = user_database.add_to_movies_likes(user_id, movie_id)
+    if movies_likes_added:
+        return{'ok': True}
+    else:
+        return{'error': True,
+               'message': 'Something went wrong, please try again'
+               }

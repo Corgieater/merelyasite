@@ -66,7 +66,7 @@ def follows_other_people():
 # render watchlist
 @user_blueprint.route('/user_profile/<page_master>/watchlist')
 def render_user_watchlist_page(page_master):
-    return render_template('userWatchlist.html', pageMaster = page_master)
+    return render_template('userWatchlist.html', pageMaster=page_master)
 
 
 @user_blueprint.route('/api/user_profile/<page_master>/watchlist')
@@ -78,21 +78,20 @@ def get_watchlist_by_page(page_master):
     return get_watchlist_by_page_func(page_master, page)
 
 
-# 看該使用者有沒有把這電影加入watchlist
-@user_blueprint.route('/api/user_profile/watchlist', methods=["POST"])
-def check_movie_in_watchlist():
+# 看該使用者有沒有把這電影加入watchlist/likes
+@user_blueprint.route('/api/user_profile/user_movie_state', methods=["POST"])
+def check_user_movie_state():
     try:
         data = request.get_json()
         print('check_movie_in_watch_list', data)
         movie_id = data['movieId']
         user_id = data['userId']
-        print('5555555555555\n',user_id)
     except Exception as e:
-        print('check_movie_in_watchlist from user')
+        print('check_user_movie_state from user')
         print(e)
         return {'error': True}
     else:
-        return check_movie_in_watchlist_func(user_id, movie_id)
+        return check_user_movie_state_func(user_id, movie_id)
 
 # 加入待看清單watch list
 @user_blueprint.route('/api/user_profile/watchlist', methods=["PATCH"])
@@ -114,6 +113,17 @@ def delete_movie_from_watchlist():
     return delete_movie_from_watchlist_func(user_id, movie_id)
 
 
+# render likes
+@user_blueprint.route('/user_profile/<page_master>/likes')
+def render_user_likes_page(page_master):
+    return render_template('userLikes.html', pageMaster=page_master)
 
 
-
+# 加入likes_movies
+@user_blueprint.route('/api/user_profile/likes/movie', methods=["PATCH"])
+def add_movie_to_likes():
+    data = request.get_json()
+    print('add to movie likes',data)
+    movie_id = data['movieId']
+    user_id = data['userId']
+    return add_movie_to_likes_func(user_id, movie_id)
