@@ -41,7 +41,7 @@ def make_dic(info, page, total_page):
 
     return searched_data
 
-def make_user_dic(data, page, total_page):
+def make_user_dic(data, followed_info, following_info, page, total_page):
     data_dic = {
         'data': {
             'data': []
@@ -53,11 +53,12 @@ def make_user_dic(data, page, total_page):
     else:
         data_dic['nextPage'] = None
     print('make user dic', data)
-    for info in data :
+    # followed_info, following_info
+    for i in range(len(data)):
         info_dic = {
-            'userName': info[0],
-            'followingNum': None,
-            'followerNum': None
+            'userName': data[i][0],
+            'followingNum': following_info[i][0],
+            'followerNum': followed_info[i][0]
         }
         data_dic['data']['data'].append(info_dic)
     return data_dic
@@ -165,12 +166,14 @@ def get_users_by_name_func(name, page):
         page = 1
     page = int(page)-1
     info = user_database.get_users_by_name(name, page)
-    print(info, 'info')
+    followed_info = user_database.get_user_followed_count(name, page)
+    following_info = user_database.get_user_following_count(name, page)
 
     if info is False:
         return {
             'error': True
         }
-    dic_data = make_user_dic(info, page, total_page)
+    dic_data = make_user_dic(info, followed_info , following_info,page, total_page)
+    print(dic_data)
 
     return dic_data

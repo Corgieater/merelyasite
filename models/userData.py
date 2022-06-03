@@ -13,6 +13,7 @@ MYSQL_DATABASE = 'movie'
 
 
 class UserDatabase:
+    # sign up
     def add_to_database(self, inputs):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -132,6 +133,66 @@ class UserDatabase:
                 return None
         except Exception as e:
             print('get_film_by_director from movieData')
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # show how many people are following you
+    def get_user_followed_count(self, name, start_index):
+        start_index = int(start_index) * 20
+        print(start_index)
+        print(name)
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(follower.following_id) as followed_by_how_many_people\n'
+                           'FROM users \n'
+                           'LEFT JOIN users_follows follower\n'
+                           'ON follower.following_id = users.user_id\n'
+                           'WHERE users.name like %s\n'
+                           'GROUP BY user_id\n'
+                           'LIMIT %s, 20',
+                           ('%' + name + '%', start_index))
+            results = cursor.fetchall()
+            print(results)
+
+        except Exception as e:
+            print('get_user_followed_count userData')
+            print(e)
+            return False
+        else:
+            return results
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # show how many people you are following
+    def get_user_following_count(self, name, start_index):
+        start_index = int(start_index) * 20
+        print(start_index)
+        print(name)
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(follower.follower_id) as following_how_many_people\n'
+                           'FROM users \n'
+                           'LEFT JOIN users_follows follower\n'
+                           'ON follower.follower_id = users.user_id\n'
+                           'WHERE users.name like %s\n'
+                           'GROUP BY user_id\n'
+                           'LIMIT %s, 20\n',
+                           ('%' + name + '%', start_index))
+            results = cursor.fetchall()
+            print(results)
+
+        except Exception as e:
+            print('get_user_following_count')
             print(e)
             return False
         else:

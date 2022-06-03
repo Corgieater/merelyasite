@@ -1,15 +1,8 @@
 import requests
-from dotenv import load_dotenv
-from urllib.request import urlopen
-import json
 from os.path import basename
 import boto3
-import os
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
-import random
-import time
-from itertools import chain
 from imdb import Cinemagoer
 from models.addMovieToData import *
 
