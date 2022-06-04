@@ -335,6 +335,7 @@ class MovieDatabase:
                            'AND genres_movies.gm_movie_id = movies_info.movie_id\n'
                            'AND directors_movies.dm_movie_id = movies_info.movie_id\n'
                            'AND directors_movies.dm_director_id = directors.director_id\n'
+                           'GROUP BY movies_info.title\n'
                            'LIMIT %s, 20',
                            ('%' + genre + '%', start_index))
             result = cursor.fetchall()

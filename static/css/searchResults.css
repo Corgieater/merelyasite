@@ -20,6 +20,16 @@
 .showRow > div {
   margin-left: 20px;
 }
+/* title */
+.showPlace > li > div > div > a {
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+}
+.showPlace > li > div {
+  line-height: 2;
+}
+
 /* for non movie posters */
 .showRow > div > img {
   width: 80px;
@@ -37,7 +47,6 @@
 .showRow > div > p > a {
   margin-right: 10px;
 }
-
 /* search users */
 .showPlace > li > div > div:nth-child(2) > section > a:nth-child(1) {
   margin-right: 5px;

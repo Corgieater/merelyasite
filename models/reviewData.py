@@ -602,9 +602,9 @@ class ReviewDatabase:
         try:
             cursor.execute('SELECT COUNT(*) \n'
                            'FROM(\n'
-                           'SELECT review_id\n'
-                           'FROM reviews\n'
-                           'WHERE review_id = %s\n'
+                           'SELECT rul_review_id\n'
+                           'FROM reviews_users_like_list\n'
+                           'WHERE rul_review_id = %s\n'
                            ') content', (review_id,))
             result = cursor.fetchone()
         except Exception as e:

@@ -462,7 +462,7 @@ async function showFilmInfo() {
   isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
   console.log(isPageBelongsToLoggedUser);
 
-  let userReview = document.querySelector(".userReview > p");
+  let userReview = document.querySelector(".userReview");
   data = data["data"];
   filmId = data["movieId"];
   // 順便檢查一下logger有沒有加這電影 有userID的話
@@ -472,6 +472,7 @@ async function showFilmInfo() {
   let filmTitle = data["movieTitle"];
   reviewTitle.textContent = filmTitle;
   let filmReview = data["movieReview"];
+  userReview.textContent = filmReview;
   let filmYear = data["movieYear"];
   let filmUserRate = data["movieRate"];
 
@@ -484,7 +485,19 @@ async function showFilmInfo() {
   }
   lastTimeWatched = filmWatchedDate;
   lastTimeLogMessage = filmReview;
-  userReview.textContent = filmReview;
+  if (filmSpoiler) {
+    let antiSpoilers = document.querySelector(".antiSpoilers");
+    let antiSpoilersBt = document.querySelector(".antiSpoilers > a");
+    show(antiSpoilers);
+    antiSpoilersBt.addEventListener("click", function (e) {
+      e.preventDefault();
+      hide(antiSpoilers);
+      show(userReview);
+    });
+  } else {
+    show(userReview);
+  }
+
   lastTimeSpoilers = filmSpoiler;
   poster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
@@ -556,11 +569,12 @@ likesReviewBt.addEventListener("click", async function (e) {
     reviewId: reviewId,
     userId: userId,
   };
-  let likeThisReview = sendDataToBackend(
+  let likeThisReview = await sendDataToBackend(
     "PATCH",
     data,
     "/api/user_profile/likes/review"
   );
+  console.log(likeThisReview);
   if (likeThisReview === true) {
     window.location.reload();
   }
@@ -720,6 +734,18 @@ async function reviewAgainFunc() {
 }
 
 // 拿電影均分 有登入沒登入都沒關係的功能
+async function getReviewLikes() {
+  let req = await fetch(`/api/user_profile/likes/review/${reviewId}`);
+  let res = await req.json();
+  let reviewLikes = res.data["reviewLikes"];
+  let likesCountPlace = document.querySelector(".likesCountPlace");
+  if (reviewLikes !== 0) {
+    likesCountPlace.textContent = `${reviewLikes} likes`;
+  } else {
+    likesCountPlace.textContent = "No one likes yet";
+  }
+}
+
 async function getAverageRate() {
   let data = {
     filmId: filmId,
@@ -741,9 +767,8 @@ async function getAverageRate() {
   }
 }
 
+// 登入才有
 async function checkUserMovieStates() {
-  // let userData = await getUserData();
-  // let userId = userData["userId"];
   let dataForMovieState = {
     movieId: filmId,
     userId: currentUserId,
@@ -788,3 +813,4 @@ async function checkUserMovieStates() {
 
 showProperReviewBox();
 showFilmInfo();
+getReviewLikes();

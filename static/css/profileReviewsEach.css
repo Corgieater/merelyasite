@@ -256,3 +256,16 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
 .reviewLikePlace {
   margin-top: 50px;
 }
+
+/* antiSpoilers */
+.antiSpoilers > img {
+  margin-left: 100px;
+}
+.antiSpoilers > p,
+.antiSpoilers > a {
+  font-size: 23px;
+  font-weight: bold;
+}
+.antiSpoilers > a:hover {
+  color: #2a9d8f;
+}

@@ -454,7 +454,7 @@ async function showFilmInfo() {
   plot.textContent = filmPlot;
   makeAlinkAndAppend(directors, "/director?director=", filmDirectors);
   makeAlinkAndAppend(casts, `/actor?actor=`, filmStars);
-  makeAlinkAndAppend(genres, "/genre?genre=", filmGenres);
+  makeAlinkAndAppend(genres, "/search/genre?genre=", filmGenres);
 }
 
 // check if user add this movie to watchlist or likes

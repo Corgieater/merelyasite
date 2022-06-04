@@ -23,6 +23,7 @@ async function checkUserLogin() {
   } else {
     showSignUpLink(welcomePlace);
     makeNews();
+    show(popularThisWeekPlace);
   }
 }
 // PEOPLE WHO NOT LOGIN
@@ -172,9 +173,11 @@ async function makeNewsFromFriends(userName) {
       newFromFriendsPlace.append(li);
     }
   } else {
+    // 沒朋友就秀沒帳號的人的東西
     h2.textContent = `Hi ${userName}. Here’s what we’ve been watching…`;
     welcomePlace.append(h2);
     makeNews();
+    show(popularThisWeekPlace);
   }
 }
 

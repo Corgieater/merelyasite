@@ -229,6 +229,7 @@ def delete_review_from_likes_func(user_id, review_id):
 
 
 def get_total_review_likes_func(review_id):
-    review_likes_count = review_database.get_total_review_likes(review_id)
-    print(review_likes_count)
-    return {'ok':True}
+    review_likes_count = review_database.get_total_review_likes(review_id)[0]
+    print('review_likes_count',review_likes_count)
+    data = {'data':{'reviewLikes': review_likes_count}}
+    return data

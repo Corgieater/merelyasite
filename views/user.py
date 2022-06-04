@@ -164,7 +164,6 @@ def delete_movie_from_likes():
 # 拿多少人喜歡這reviews HERE
 @user_blueprint.route('/api/user_profile/likes/review/<review_id>')
 def get_total_review_likes(review_id):
-    print('get_total_review_likes', review_id)
     return get_total_review_likes_func(review_id)
 
 
