@@ -3,7 +3,7 @@ from os.path import basename
 import boto3
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
-from imdb import Cinemagoer
+from imdb import Cinemagoer, IMDbError
 from models.addMovieToData import *
 
 load_dotenv()
@@ -41,20 +41,20 @@ global genre_count
 genre_count = 0
 
 def get_imdb_id(title, year):
-    imdb_movie_id = None
-    movies = imdb_move_base.search_movie(title)
-    print(movies)
-    for movie in movies:
-        try:
-            if movie['title'] == title and movie['year'] == int(year) and movie['kind'] == 'movie':
-                imdb_movie_id = movie.movieID
-        except Exception as e:
-            # 不知道為啥有的電影沒年份
-            print(e)
-    if imdb_movie_id is None:
-        return {
-            'error': True
-        }
+    movies = imdb_move_base.search_movie(f'{title} ({year})')[0]
+    imdb_movie_id = movies.movieID
+    print(imdb_movie_id)
+    # for movie in movies:
+    #     try:
+    #         if movie['title'] == title and movie['year'] == int(year) and movie['kind'] == 'movie':
+    #             print('ehy')
+    #             print(movie)
+    #             imdb_movie_id = movie.movieID
+    #             continue
+    #     except IMDbError as e:
+    #         # 不知道為啥有的電影沒年份
+    #         print('something wrong on get movie from imdb')
+    #         print(e)
     return imdb_movie_id
 
 
@@ -96,13 +96,31 @@ def get_movie_from_imdb_func(title, year):
         return{'error': True,
                'message': 'Movie already exist'}
     else:
-        imdb_movie_id = get_imdb_id(title, year)
+        imdb_movie_id = None
+        try:
+            imdb_movie_id = get_imdb_id(title, year)
+            print('imdb_movie_id', imdb_movie_id)
+        except IMDbError as e:
+            print('something went wrong on imdb database')
+            print(e)
+            return {
+            'error': True,
+            'message': 'Something is wrong, please check the title and year'
+            }
         url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=1a264172-ae1142e4-' \
               f'8ef7-7fed1973bb8f&pf_rd_r=STTXPSSSH1CW5RG8QKKM&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i' \
               f'=top&ref_=chttp_tt_3'
         # url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?ref_=nv_sr_srsg_0'
         print(url)
-        page = requests.get(url, headers=headers)
+        try:
+            page = requests.get(url, headers=headers)
+        except Exception as e:
+            print('something wrong when doing request page to imdb, maybe user is trolling')
+            print(e)
+            return {
+                'error': True,
+                'message': 'Something is wrong, please check the title and year'
+            }
         soup = BeautifulSoup(page.text, 'html.parser')
         scraped_movie = []
 
