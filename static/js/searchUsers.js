@@ -23,8 +23,7 @@ let keyword = cutUserInputInMiddle("r=", "%");
 console.log(keyword);
 
 movieCollectionsBt.href = `/search?keyword=${keyword}&page=1`;
-reviewsCollectionsBt.href = `/review?${keyword}&page=1`;
-// review要考慮show什麼
+reviewsCollectionsBt.href = `/search/reviews?reviews=${keyword}&page=1`;
 directorsCollectionsBt.href = `/search/director?director=${keyword}&page=1`;
 actorsCollectionsBt.href = `/search/actor?actor=${keyword}&page=1`;
 usersCollectionsBt.href = ``;

@@ -11,6 +11,7 @@ h2 {
 .showPlace > li > a > img {
   width: 180px;
   height: 250px;
+  border: solid 1px gray;
 }
 
 /* .pagesPlace {

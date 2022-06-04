@@ -62,7 +62,7 @@ async function makeNews() {
     let reviewId = review["reviewId"];
     let reviewedUserNameForHref = reviewedUserName.replaceAll(" ", "+");
     let reviewdMovieNameForHref = reviewMovieTitle.replaceAll(" ", "+");
-    ("http://localhost:3000/user_profile/test/reviews/films/Pulp+Fiction/88");
+    ("/user_profile/test/reviews/films/Pulp+Fiction/88");
     let content = `
     <a href="/user_profile/${reviewedUserNameForHref}/reviews/films/${reviewdMovieNameForHref}/${reviewId}">
       <img
@@ -124,6 +124,7 @@ async function makePopularMoviesShow() {
     );
   }
 }
+
 makePopularMoviesShow();
 // PEOPLE WHO LOGGED
 // get news from friends

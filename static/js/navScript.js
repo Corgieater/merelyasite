@@ -195,6 +195,7 @@ searchFormBt.addEventListener("click", async function (e) {
   let actorUrl = `/search/actor?actor=${userInputForHref}&page=1`;
   let genreUrl = `/search/genre?genre=${userInputForHref}&page=1`;
   let userUrl = `/search/users?user=${userInputForHref}&page=1`;
+  let reviewUrl = `/search/reviews?reviews=${userInputForHref}&page=1`;
   if (userInput.value === "") {
     userInput.focus();
   } else {
@@ -208,6 +209,8 @@ searchFormBt.addEventListener("click", async function (e) {
       window.location.replace(genreUrl);
     } else if (userOption == "user") {
       window.location.replace(userUrl);
+    } else if (userOption == "review") {
+      window.location.replace(reviewUrl);
     }
   }
 });

@@ -38,7 +38,7 @@ def get_director():
 
 # 找導演page render(有可愛logo那個)
 @search_blueprint.route('/search/director')
-def render_search_Director_page():
+def render_search_director_page():
     director = request.args.get('director').replace('+', ' ')
     return render_template('searchDirector.html', director=director)
 
@@ -70,7 +70,7 @@ def search_by_genre():
 
 # render template genre
 @search_blueprint.route('/search/genre')
-def render_genre_page():
+def render_search_genre_page():
     genre = request.args.get('genre').replace('+', ' ')
     return render_template('searchGenre.html', genre=genre)
 
@@ -86,6 +86,23 @@ def get_users_by_name():
 
 # render template search users
 @search_blueprint.route('/search/users')
-def render_users_page():
+def render_search_users_page():
     user = request.args.get('user').replace('+', ' ')
     return render_template('searchUsers.html', user=user)
+
+
+# 電影title或心得內容找review
+@search_blueprint.route('/api/search/reviews')
+def get_reviews_from_title_or_content():
+    review_query = request.args.get('reviews').replace('+', ' ')
+    page = request.args.get('page')
+    print('reviews', review_query, page)
+    return get_reviews_from_title_or_content_func(review_query, page)
+
+
+# render template search reviews
+@search_blueprint.route('/search/reviews')
+def render_search_reviews_page():
+    review_query = request.args.get('reviews').replace('+', ' ')
+    print('render_search_reviews_page', review_query)
+    return render_template('searchReviews.html', reviews=review_query)

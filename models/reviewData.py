@@ -524,3 +524,94 @@ class ReviewDatabase:
         finally:
             cursor.close()
             connection.close()
+
+    # 算review搜尋有多少筆資料
+    def get_total_review_count_by_title_and_content(self, review_query):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(*) \n'
+                           'FROM(\n'
+                           'SELECT movies_info.title\n'
+                           'FROM movies_info\n'
+                           'WHERE movies_info.title like %s\n'
+                           'UNION\n'
+                           'SELECT reviews.movie_review\n'
+                           'FROM reviews\n'
+                           'WHERE reviews.movie_review like %s\n'
+                           ') content\n', ('%'+review_query+'%', '%'+review_query+'%'))
+            result = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # 拿movie title, review content有包含user做review搜尋的資料
+    def get_review_by_title_and_content(self, review_query, start_point):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        start_point = int(start_point)*20
+        try:
+            cursor.execute('SELECT movie_id, title, year,\n'
+                           'review_id, movie_review, spoilers\n'
+                           ',reviews_users.reu_user_id,\n'
+                           'users.name\n'
+                           'FROM movies_info\n'
+                           'INNER JOIN reviews\n'
+                           'ON movies_info.title like %s\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'INNER JOIN reviews_users\n'
+                           'ON reviews.review_id = reviews_users.reu_review_id\n'
+                           'INNER JOIN users\n'
+                           'ON reviews_users.reu_user_id = users.user_id\n'
+                           'UNION\n'
+                           'SELECT movie_id, title, year,\n'
+                           'review_id, movie_review, spoilers\n'
+                           ',reviews_users.reu_user_id,\n'
+                           'users.name\n'
+                           'FROM movies_info\n'
+                           'INNER JOIN reviews\n'
+                           'ON reviews.movie_review like %s\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'INNER JOIN reviews_users\n'
+                           'ON reviews.review_id = reviews_users.reu_review_id\n'
+                           'INNER JOIN users\n'
+                           'ON reviews_users.reu_user_id = users.user_id\n'
+                           'GROUP BY review_id\n'
+                           'LIMIT %s, 20', ('%'+review_query+'%', '%'+review_query+'%', start_point))
+            result = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+
+# 拿多少人like this review
+    def get_total_review_likes(self, review_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(*) \n'
+                           'FROM(\n'
+                           'SELECT review_id\n'
+                           'FROM reviews\n'
+                           'WHERE review_id = %s\n'
+                           ') content', (review_id,))
+            result = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()

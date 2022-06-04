@@ -300,3 +300,9 @@ nav > ul > li > input {
 .pagesPlace > a {
   padding: 5px;
 }
+
+/* filters for little icons */
+.filterGreen {
+  filter: invert(48%) sepia(58%) saturate(486%) hue-rotate(123deg)
+    brightness(95%) contrast(88%);
+}

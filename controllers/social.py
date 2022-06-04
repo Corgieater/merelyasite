@@ -114,18 +114,34 @@ def get_watchlist_by_page_func(page_master, page):
 
 # check user movie state movielist/likes
 def check_user_movie_state_func(user_id, movie_id):
+    print(user_id, movie_id,'checking')
     is_in_watchlist = user_database.check_user_state(user_id, movie_id, 'watchlist')
-    is_in_like_list = user_database.check_user_state(user_id, movie_id, 'likes')
-    print('oyoyyo user state here',is_in_watchlist, is_in_like_list)
+    is_in_movie_likes_list = user_database.check_user_state(user_id, movie_id, 'movieLikes')
+    print('oyoyyo user state here',is_in_watchlist, is_in_movie_likes_list)
     if is_in_watchlist is None:
         is_in_watchlist = False
-    if is_in_like_list is None:
-        is_in_like_list = False
-    print('oyoyyo user state here', is_in_watchlist, is_in_like_list)
+    if is_in_movie_likes_list is None:
+        is_in_movie_likes_list = False
+    print('oyoyyo user state here', is_in_watchlist, is_in_movie_likes_list)
     data = {
         'data': {
             'userWatchlist': is_in_watchlist,
-            'userLikes': is_in_like_list
+            'userLikes': is_in_movie_likes_list
+        }
+    }
+    return data
+
+
+# check user review likes
+def check_user_review_likes(user_id, review_id):
+    is_in_review_like_list = user_database.check_user_state(user_id, review_id, 'reviewLikes')
+    print('6666 user review state here', is_in_review_like_list)
+    if is_in_review_like_list is None:
+        is_in_review_like_list = False
+    print('6666 user review state here', is_in_review_like_list)
+    data = {
+        'data': {
+            'userLikes': is_in_review_like_list,
         }
     }
     return data
@@ -183,3 +199,36 @@ def delete_movie_from_likes_func(user_id, movie_id):
         return {'error': True,
                 'message': 'Something went wrong, please try again'
                 }
+
+# 喜歡這review add review to likes
+def add_review_to_likes_func(user_id, review_id):
+    if user_id is None:
+        return {'error': True,
+                'message':'Please log in'}
+    reviews_likes_added = user_database.add_to_reviews_likes(user_id, review_id)
+    if reviews_likes_added:
+        return{'ok': True}
+    else:
+        return{'error': True,
+               'message': 'Something went wrong, please try again'
+               }
+
+
+# delete from reviews users likes
+def delete_review_from_likes_func(user_id, review_id):
+    if user_id is None:
+        return {'error': True,
+                'message': 'Please log in'}
+    delete_from_reviews_users_likes = user_database.delete_from_reviews_users_likes(user_id, review_id)
+    if delete_from_reviews_users_likes:
+        return {'ok': True}
+    else:
+        return {'error': True,
+                'message': 'Something went wrong, please try again'
+                }
+
+
+def get_total_review_likes_func(review_id):
+    review_likes_count = review_database.get_total_review_likes(review_id)
+    print(review_likes_count)
+    return {'ok':True}

@@ -23,6 +23,7 @@
   width: 120px;
   height: 180px;
   background-color: rgba(0, 0, 0, 0.689);
+  border-radius: 5px;
 }
 .posterMask > img {
   position: absolute;
@@ -35,7 +36,6 @@
   right: 55px;
   font-size: 25px;
   font-weight: bold;
-  border-radius: 5px;
 }
 
 /* newFromFriendsPlace */
@@ -51,7 +51,9 @@
   border-radius: 5px 5px 0 0;
   position: relative;
 }
-.popularThisWeekPlace > li:hover {
+.popularThisWeekPlace > li:hover,
+.newFromFriendsPlace > li:hover,
+.justReviewdPlace > li:hover {
   box-shadow: 0 0 0 3px gold;
   border-radius: 5px;
 }

@@ -308,7 +308,7 @@ class UserDatabase:
 
 
     # check user state watchlist, likes, etc
-    def check_user_state(self, user_id, movie_id, type):
+    def check_user_state(self, user_id, content_id, type):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
@@ -316,12 +316,17 @@ class UserDatabase:
                 cursor.execute('SELECT watch_list_id FROM users_watch_list \n'
                                'WHERE wl_user_id = %s \n'
                                'AND wl_movie_id = %s',
-                               (user_id, movie_id))
-            if type == 'likes':
-                cursor.execute('SELECT like_list_id FROM movies_users_like_list \n'
+                               (user_id, content_id))
+            if type == 'movieLikes':
+                cursor.execute('SELECT mul_list_id FROM movies_users_like_list \n'
                                'WHERE mul_user_id = %s \n'
                                'AND mul_movie_id = %s',
-                               (user_id, movie_id))
+                               (user_id, content_id))
+            if type == 'reviewLikes':
+                cursor.execute('SELECT rul_list_id FROM reviews_users_like_list \n'
+                               'WHERE rul_user_id = %s \n'
+                               'AND rul_review_id = %s',
+                               (user_id, content_id))
             result = cursor.fetchone()
             print(result)
             if result is not None:
@@ -401,6 +406,45 @@ class UserDatabase:
         try:
             cursor.execute('DELETE FROM movies_users_like_list WHERE mul_user_id = %s AND mul_movie_id = %s;',
                            (user_id, movie_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+
+# 加入reviews likes
+    def add_to_reviews_likes(self, user_id, review_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('INSERT INTO reviews_users_like_list VALUES(default,%s,%s, now())',
+                           (user_id, review_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+    # delete_from_reviews_users_likes
+    def delete_from_reviews_users_likes(self, user_id, review_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('DELETE FROM reviews_users_like_list \n'
+                           'WHERE rul_user_id = %s \n'
+                           'AND rul_review_id = %s',
+                           (user_id, review_id))
         except Exception as e:
             print(e)
             connection.rollback()

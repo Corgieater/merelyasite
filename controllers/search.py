@@ -1,5 +1,6 @@
 from models.movieData import *
 from models.userData import *
+from models.reviewData import *
 import os
 import math
 
@@ -7,12 +8,14 @@ key = os.getenv('JWT_SECRET_KEY')
 
 movie_database = MovieDatabase()
 user_database = UserDatabase()
+review_database = ReviewDatabase()
 
 
 # films controller也有
 def make_page(data, page, total_page):
     print(data, page, total_page)
-    data['currentPage'] = page
+    data['currentPage'] = page+1
+    print("data['currentPage']", data['currentPage'], 'from controllers\search if something wrong')
     data['nextPage'] = None
     data['totalPages'] = total_page
 
@@ -63,6 +66,25 @@ def make_user_dic(data, followed_info, following_info, page, total_page):
         data_dic['data']['data'].append(info_dic)
     return data_dic
 
+
+def make_reviews_search_dic(data):
+    review_dic = {'data': {
+        'data': []
+    }
+    }
+    for info in data:
+        dic = {
+            'movieId': info[0],
+            'movieTitle': info[1],
+            'year': info[2],
+            'reviewId': info[3],
+            'review': info[4],
+            'spoilers': info[5],
+            'reviewUserId': info[6],
+            'reviewUserName': info[7]
+        }
+        review_dic['data']['data'].append(dic)
+    return review_dic
 
 # 目前只能找電影 看之後可不可以改成找全部 no:(
 def get_info_func(user_input, page):
@@ -174,6 +196,37 @@ def get_users_by_name_func(name, page):
             'error': True
         }
     dic_data = make_user_dic(info, followed_info , following_info,page, total_page)
+    print(dic_data)
+
+    return dic_data
+
+
+def get_reviews_from_title_or_content_func(review_query, page):
+    print(review_query, 'userInput')
+    data_count = review_database.get_total_review_count_by_title_and_content(review_query)[0]
+    print(data_count)
+    if data_count is 0:
+        return {
+            'error': True,
+            'message': 'No such key word, please try another'
+        }
+    print('data_count', data_count)
+    total_page = math.ceil(data_count / 20)
+    print(total_page)
+    if page is None:
+        page = 1
+    page = int(page) - 1
+    info = review_database.get_review_by_title_and_content(review_query, page)
+    print(info)
+
+    if info is False:
+        return {
+            'error': True
+        }
+
+    dic_data = make_reviews_search_dic(info)
+    make_page(dic_data, page, total_page)
+
     print(dic_data)
 
     return dic_data

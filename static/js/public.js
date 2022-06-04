@@ -72,9 +72,6 @@ function cutUserInputInMiddle(targetHead, targetTail) {
   return userInput;
 }
 
-// 拿最後的數字
-function cutDownLastNumber(url) {}
-
 // 特別用來建名字中有空格的a link
 function makeAlinkAndAppend(area, prefix, iterableData) {
   for (let info of iterableData) {

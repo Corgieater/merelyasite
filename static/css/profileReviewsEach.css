@@ -7,6 +7,7 @@ section > a {
 .posterPlace > img {
   max-width: 300px;
   margin-right: 50px;
+  border: solid 1px gray;
 }
 
 /* text */
@@ -79,7 +80,8 @@ section > a {
   min-width: 35%;
   margin-left: 10px;
   /* height: 350px; */
-  background-color: #264653;
+  /* background-color: #264653; */
+  background-color: #4a4e69;
   color: antiquewhite;
   text-align: center;
   position: relative;
@@ -248,4 +250,9 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
 }
 .textPlace > div > section:nth-child(1) > section:nth-child(2) > p {
   font-size: 18px;
+}
+
+/* likePlace */
+.reviewLikePlace {
+  margin-top: 50px;
 }

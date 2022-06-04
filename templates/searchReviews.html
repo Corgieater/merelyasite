@@ -1,0 +1,46 @@
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/searchReviews.css')}}"
+/>{% endblock %} {% block content %}
+
+<div class="frame">
+  <h2>RESULTS FOR REVIEWS MATCHING - {{ reviews }}</h2>
+  <ul class="otherCollections flex">
+    <li><a href="#">Movies</a></li>
+    <li><a href="#">Reviews</a></li>
+    <li><a href="#">Directors</a></li>
+    <li><a href="#">Actors</a></li>
+  </ul>
+  <ul class="showPlace">
+    <!-- <li class="flex">
+      <section>
+        <a href="">
+          <img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img227.jpg" alt="">
+        </a>
+      </section>
+      <section>
+        <section class="flex">
+          <a href=""><h3>MOVIE TITLE</h3></a>
+          <a href="">year</a>
+        </section>
+        <section>
+          <a href="">user name</a>
+          <p>reviews</p>
+        </section>
+        <section>
+          <a href="">Like this review</a>
+          <a href="">10 likes</a>
+        </section>
+        
+      </section>
+    </li> -->
+
+  </ul>
+</div>
+</div>
+<div class="pagesPlace alignCenter"></div>
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/searchReviews.js') }}"></script>
+{% endblock %}
