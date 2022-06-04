@@ -100,9 +100,13 @@ label {
   background-color: darkred;
 }
 .globalMessagePlace {
+  position: absolute;
   height: 50px;
-  text-align: center;
+  right: 45%;
   padding: 10px;
+  z-index: 1500;
+  font-weight: bold;
+  font-size: 25px;
 }
 
 /* 帷幕 */

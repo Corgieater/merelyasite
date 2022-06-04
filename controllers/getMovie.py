@@ -41,20 +41,19 @@ global genre_count
 genre_count = 0
 
 def get_imdb_id(title, year):
-    movies = imdb_move_base.search_movie(f'{title} ({year})')[0]
-    imdb_movie_id = movies.movieID
-    print(imdb_movie_id)
-    # for movie in movies:
-    #     try:
-    #         if movie['title'] == title and movie['year'] == int(year) and movie['kind'] == 'movie':
-    #             print('ehy')
-    #             print(movie)
-    #             imdb_movie_id = movie.movieID
-    #             continue
-    #     except IMDbError as e:
-    #         # 不知道為啥有的電影沒年份
-    #         print('something wrong on get movie from imdb')
-    #         print(e)
+    movies = imdb_move_base.search_movie(title)
+    imdb_movie_id = None
+    for movie in movies:
+        try:
+            if movie['title'].lower() == title.lower() \
+                    and movie['year'] == int(year) and movie['kind'] == 'movie':
+                print(movie)
+                imdb_movie_id = movie.movieID
+                continue
+        except IMDbError as e:
+            # 不知道為啥有的電影沒年份
+            print('something wrong on get movie from imdb')
+            print(e)
     return imdb_movie_id
 
 
@@ -110,7 +109,9 @@ def get_movie_from_imdb_func(title, year):
         url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=1a264172-ae1142e4-' \
               f'8ef7-7fed1973bb8f&pf_rd_r=STTXPSSSH1CW5RG8QKKM&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i' \
               f'=top&ref_=chttp_tt_3'
-        # url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?ref_=nv_sr_srsg_0'
+        if imdb_movie_id == None:
+            return {'error':True,
+                    'message':"Sorry, we can't find this movie, please check again"}
         print(url)
         try:
             page = requests.get(url, headers=headers)
@@ -252,6 +253,8 @@ def get_movie_from_imdb_func(title, year):
             except Exception as e:
                 print('up load to s3 got trouble')
                 print(e)
+                return {'error':True,
+                        'message':"There is no poster"}
             else:
                 print('poster up')
                 return{'ok': True}

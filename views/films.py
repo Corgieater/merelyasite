@@ -2,7 +2,6 @@ from controllers.films import *
 from flask import *
 from controllers.getMovie import *
 
-
 films_blueprint = Blueprint(
     'films_Blueprint',
     __name__,
@@ -157,8 +156,14 @@ def render_films_page():
 # 加入電影   good
 @films_blueprint.route('/api/addFilm')
 def get_movie_from_imdb():
-    title = request.args.get('t').replace('+', ' ').title()
+    title = request.args.get('t').replace('+', ' ')
     year = request.args.get('y')
+    try:
+        year = int(year)
+    except Exception as e:
+        print(e)
+        return {'error': True,
+                'message': 'Please type valid year'}
     print(title, year)
     return get_movie_from_imdb_func(title, year)
 
