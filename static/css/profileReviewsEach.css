@@ -165,20 +165,20 @@ section > a {
 /* 別人寫的星星 */
 /* thanks Ahmed Nefzaoui */
 /* Ratings widget */
-.rate {
+.rateBtsPlace {
   display: inline-block;
   border: 0;
 }
 /* Hide radio */
-.rate > input {
+.rateBtsPlace > input {
   display: none;
 }
 /* Order correctly by floating highest to the right */
-.rate > label {
+.rateBtsPlace > label {
   float: right;
 }
 /* The star of the show */
-.rate > label:before {
+.rateBtsPlace > label:before {
   display: inline-block;
   font-size: 2rem;
   padding: 0.3rem 0.2rem;
@@ -189,7 +189,7 @@ section > a {
 }
 
 /* Half star trick */
-.rate .half:before {
+.rateBtsPlace .half:before {
   content: "\f089 "; /* half star no outline */
   position: absolute;
   padding-right: 0;

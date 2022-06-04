@@ -61,6 +61,7 @@
 .reviewdPlace > li > div > img {
   max-height: 100%;
   width: 125px;
+  border: 1px gray solid;
 }
 .starPlace > img {
   height: 20px;

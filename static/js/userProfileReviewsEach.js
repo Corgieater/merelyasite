@@ -59,8 +59,8 @@ let watchlistBt = document.querySelector(".watchlistBt");
 let removeWatchlistBt = document.querySelector(".removeWatchlistBt");
 
 // action區
-let rate = document.querySelector(".rate");
-let rateBts = document.querySelectorAll(".rateBts >input");
+let rateBtsPlace = document.querySelector(".rateBtsPlace");
+let rateBts = document.querySelectorAll(".rateBtsPlace >input");
 let cancelBt = document.querySelector(".cancelBt");
 let editBt = document.querySelector(
   ".textPlace > div > section.actionBox > ul > li:nth-child(2) > a"
@@ -104,7 +104,7 @@ async function showProperReviewBox() {
   // 沒登入接下來都不用看了
   if (userIsLogged === true) {
     show(smallActionsPlace);
-    show(rate);
+    show(rateBtsPlace);
     show(watchlistBt);
     show(removeWatchlistBt);
     show(addListBt);
@@ -329,6 +329,7 @@ closeBt.addEventListener("click", function (e) {
 // 評分星星 按評分會直送資料庫更新
 rateBts.forEach((bt) => {
   bt.addEventListener("click", async function (e) {
+    console.log("hi");
     e.preventDefault();
 
     let rate = e.target.value;
