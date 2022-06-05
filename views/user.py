@@ -185,3 +185,16 @@ def delete_review_from_likes():
     review_id = data['reviewId']
     user_id = data['userId']
     return delete_review_from_likes_func(user_id, review_id)
+
+
+# 拿追蹤的人最近喜歡了什麼評論 for index HERE
+@user_blueprint.route('/api/<user_id>/get_following_latest_like_reviews/')
+def get_following_latest_like_reviews(user_id):
+    user_id = int(user_id)
+    return get_following_latest_like_reviews_func(user_id)
+
+
+# most popular reviews *4  for index HERE
+@user_blueprint.route('/api/most_popular_reviews/')
+def get_most_popular_reviews():
+    return get_most_popular_reviews_func()

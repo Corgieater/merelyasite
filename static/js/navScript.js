@@ -247,6 +247,7 @@ addMovieBt.addEventListener("click", async function () {
 function changingNav() {
   hide(signUpPlaceBt);
   hide(logInPlaceBt);
+  show(addMovieNavBt);
   show(profileBt);
   show(logOutBt);
   window.location.reload;

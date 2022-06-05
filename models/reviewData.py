@@ -615,3 +615,76 @@ class ReviewDatabase:
         finally:
             cursor.close()
             connection.close()
+
+
+    # 拿追蹤的人最近喜歡了什麼評論*4 for index HERE
+    def get_followings_like_reviews(self, user_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT\n'
+                           'reviews_users_like_list.rul_review_id,\n'
+                           'reviews.review_movie_id, reviews.movie_review, \n'
+                           'reviews.spoilers, movies_info.title,\n'
+                           'u.name as reviewer\n'
+                           'from users_follows \n'
+                           'INNER JOIN reviews_users_like_list\n'
+                           'ON follower_id = %s\n'
+                           'AND following_id = reviews_users_like_list.rul_user_id\n'
+                           'INNER JOIN reviews\n'
+                           'INNER JOIN movies_info\n'
+                           'INNER JOIN users\n'
+                           'ON following_id = users.user_id\n'
+                           'AND reviews_users_like_list.rul_review_id=reviews.review_id\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'INNER JOIN users u\n'
+                           'INNER JOIN reviews_users\n'
+                           'ON reviews.review_id = reviews_users.reu_review_id\n'
+                           'AND reviews_users.reu_user_id = u.user_id\n'
+                           'GROUP BY reviews_users_like_list.rul_review_id\n'
+                           'ORDER BY reviews_users_like_list.rul_review_id DESC\n'
+                           'LIMIT 4', (user_id,))
+            result = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # get most popular reviews*4 for index HERE
+    def get_most_popular_reviews(self):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT\n'
+                           'reviews.review_id, reviews.movie_review ,reviews.review_movie_id,\n'
+                           'reviews.spoilers,\n'
+                           'movies_info.title,\n'
+                           'users.name,\n'
+                           'COUNT(rul_review_id) AS occurrence\n'
+                           'FROM\n'
+                           'reviews_users_like_list\n'
+                           'INNER JOIN reviews\n'
+                           'INNER JOIN movies_info\n'
+                           'INNER JOIN reviews_users\n'
+                           'INNER JOIN users\n'
+                           'ON reviews.review_id = reviews_users_like_list.rul_review_id\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'AND reviews_users.reu_review_id = reviews.review_id\n'
+                           'AND reviews_users.reu_user_id = users.user_id\n'
+                           'GROUP BY rul_review_id\n'
+                           'ORDER BY occurrence DESC\n'
+                           'LIMIT 4;')
+            result = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return result
+        finally:
+            cursor.close()
+            connection.close()

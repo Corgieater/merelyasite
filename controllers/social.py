@@ -233,3 +233,43 @@ def get_total_review_likes_func(review_id):
     print('review_likes_count',review_likes_count)
     data = {'data':{'reviewLikes': review_likes_count}}
     return data
+
+
+# 拿最近following的朋友喜歡的評論*4
+def get_following_latest_like_reviews_func(user_id):
+    user_followings_like_reviews = review_database.get_followings_like_reviews(user_id)
+    print(user_followings_like_reviews)
+    data = {
+        'data':{'data':[]}
+    }
+    for review in user_followings_like_reviews:
+        info = {
+            'reviewId': review[0],
+            'movieId': review[1],
+            'review': review[2],
+            'spoilers': review[3],
+            'movieTitle': review[4],
+            'reviewer': review[5]
+        }
+        data['data']['data'].append(info)
+    print(user_followings_like_reviews)
+    return data
+
+
+def get_most_popular_reviews_func():
+    user_followings_like_reviews = review_database.get_most_popular_reviews()
+    data = {
+        'data': {'data': []}
+    }
+    for review in user_followings_like_reviews:
+        info = {
+            'reviewId': review[0],
+            'movieId': review[2],
+            'review': review[1],
+            'spoilers': review[3],
+            'movieTitle': review[4],
+            'reviewer': review[5]
+        }
+        data['data']['data'].append(info)
+    print(user_followings_like_reviews)
+    return data
