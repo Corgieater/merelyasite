@@ -67,7 +67,6 @@ async function showProperReviewBox() {
     // actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
-    let mouseTextPlace = document.querySelector(".mouseTextPlace");
     p.textContent = "Log in to review or rate";
     li.append(p);
     p.style.cursor = "pointer";
@@ -78,7 +77,6 @@ async function showProperReviewBox() {
       ".actionBox > ul > li:nth-child(4)"
     );
     averageRate.title = "";
-    mouseTextPlace.style.top = "440px";
     actionBox.insertBefore(li, averageRate);
   }
 }
@@ -408,15 +406,10 @@ async function getAverageRate() {
     filmId: filmId,
   };
   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
-  let mouseTextPlace = document.querySelector(".mouseTextPlace");
   if (averageRate !== undefined && averageRate["average"] !== null) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
-
-    mouseTextPlace.textContent = `Based on ${averageRate["totalCount"]} ratings`;
-    averageRatePlace.addEventListener("click", function () {
-      hideOrShow(mouseTextPlace);
-    });
+    averageRatePlace.title = `Based on ${averageRate["totalCount"]} ratings`;
   } else {
     averageRatePlace.textContent = `No one rated yet`;
   }
@@ -445,6 +438,10 @@ async function showFilmInfo() {
   let filmPlot = data["story"];
   let filmStars = data["actors"];
   let filmGenres = data["genres"];
+  // 如果有登入就驗一下
+  if (currentUserId) {
+    checkUserMovieStates();
+  }
   poster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg`;
   title.textContent = filmTitle;
@@ -470,7 +467,6 @@ async function checkUserMovieStates() {
     data,
     "/api/user_profile/user_movie_state"
   );
-  console.log(userMovieStates);
   let ifMovielist = userMovieStates["userWatchlist"];
   let ifMovieLikes = userMovieStates["userLikes"];
   if (ifMovielist) {
@@ -490,4 +486,3 @@ async function checkUserMovieStates() {
 showFilmInfo();
 showPreviousRate();
 getAverageRate();
-checkUserMovieStates();

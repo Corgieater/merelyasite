@@ -3,6 +3,8 @@
   position: absolute;
   flex-direction: column;
   right: 300px;
+  margin-top: 50px;
+  margin-right: 80px;
 }
 .otherCollections.flex > li:nth-child(1) {
   color: antiquewhite;
@@ -29,13 +31,32 @@ h2 {
   flex-wrap: wrap;
 }
 /* 一整行 */
+.showPlace > li {
+  height: 200px;
+}
 .showPlace > li > section,
 .showPlace > li > section:nth-child(2) > section > a:nth-child(1) {
   margin-right: 30px;
 }
+
 /* 海報右邊的字區 */
+.showPlace > li {
+  height: 300px;
+}
 .showPlace > li > section:nth-child(2) {
   line-height: 2;
+  width: 45%;
+}
+.reviewPlace {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* more text */
+.reviewBody > a:nth-child(3):hover {
+  color: #2a9d8f !important;
 }
 /* title year */
 .showPlace > li > section:nth-child(2) > section.flex {
@@ -53,7 +74,7 @@ h2 {
 }
 /* poster */
 .showPlace > li > section > a > img {
-  width: 180px;
-  height: 250px;
+  width: 100px;
+  height: 150px;
   border: solid 1px gray;
 }

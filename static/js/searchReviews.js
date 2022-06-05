@@ -3,16 +3,16 @@
 let frame = document.querySelector(".frame");
 // other colletions
 let movieCollectionsBt = document.querySelector(
-  ".otherCollections > li:nth-child(1) > a"
-);
-let reviewsCollectionsBt = document.querySelector(
   ".otherCollections > li:nth-child(2) > a"
 );
-let directorsCollectionsBt = document.querySelector(
+let reviewsCollectionsBt = document.querySelector(
   ".otherCollections > li:nth-child(3) > a"
 );
-let actorsCollectionsBt = document.querySelector(
+let directorsCollectionsBt = document.querySelector(
   ".otherCollections > li:nth-child(4) > a"
+);
+let actorsCollectionsBt = document.querySelector(
+  ".otherCollections > li:nth-child(5) > a"
 );
 
 let keyword = cutUserInputInMiddle("s=", "&");
@@ -102,10 +102,11 @@ async function makeShowRow(data, userInputAndPage) {
       li.classList.add("flex");
       li.innerHTML = content;
       showPlace.append(li);
-
+      let reviewPlaces = document.querySelectorAll(".reviewPlace");
+      let reviewBodies = document.querySelectorAll(".reviewBody");
       if (spoilers) {
-        let reviewBodies = document.querySelectorAll(".reviewBody");
-        let reviewPlaces = document.querySelectorAll(".reviewPlace");
+        // let reviewBodies = document.querySelectorAll(".reviewBody");
+        // let reviewPlaces = document.querySelectorAll(".reviewPlace");
         let alert = document.createElement("p");
         reviewPlaces[i].classList.add("hide");
         alert.textContent = "There are spoilers in this review!";
@@ -121,6 +122,23 @@ async function makeShowRow(data, userInputAndPage) {
         reviewBodies[i].insertBefore(spoilerAlert, reviewPlaces[i]);
         reviewBodies[i].insertBefore(alert, spoilerAlert);
       }
+      // 本來是想做偵測有沒有ellipses然後加入a tag可以讓使用者點開
+      // 但我現在沒心力
+      // else {
+      //   let ellipsisActive = isEllipsisActive(reviewPlaces[i]);
+      //   if (ellipsisActive) {
+      //     let a = document.createElement("a");
+      //     a.href = "#";
+      //     a.textContent = "more";
+      //     a.style.color = "white";
+      //     reviewBodies[i].append(a);
+      //     a.addEventListener("click", function (e) {
+      //       e.preventDefault();
+      //       let dot = reviewPlaces[i].innerHTML.lastIndexOf("...");
+      //       console.log(dot);
+      //     });
+      //   }
+      // }
     }
     // let reviewPlaces = document.querySelectorAll(".reviewPlace");
     // let reviewBody = document.querySelector(".reviewBody");
@@ -144,3 +162,7 @@ async function makeShowRow(data, userInputAndPage) {
 }
 
 renderDataInfo();
+
+function isEllipsisActive(e) {
+  return e.offsetHeight < e.scrollHeight;
+}

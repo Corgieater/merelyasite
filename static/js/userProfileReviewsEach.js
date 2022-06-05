@@ -122,10 +122,8 @@ async function showProperReviewBox() {
     }
   } else {
     let actionBox = document.querySelector(".actionBox > ul");
-    // actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
-    let mouseTextPlace = document.querySelector(".mouseTextPlace");
     p.textContent = "Log in to review or rate";
     li.append(p);
     p.style.cursor = "pointer";
@@ -136,7 +134,6 @@ async function showProperReviewBox() {
       ".actionBox > ul > li:nth-child(4)"
     );
     averageRate.title = "";
-    mouseTextPlace.style.top = "490px";
     actionBox.insertBefore(li, averageRate);
   }
 }
@@ -751,18 +748,11 @@ async function getAverageRate() {
   let data = {
     filmId: filmId,
   };
-  console.log(data);
   let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
-  console.log(averageRate, 156154);
-  let mouseTextPlace = document.querySelector(".mouseTextPlace");
   if (averageRate !== undefined && averageRate["average"] !== null) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
-
-    mouseTextPlace.textContent = `Based on ${averageRate["totalCount"]} ratings`;
-    averageRatePlace.addEventListener("click", function () {
-      hideOrShow(mouseTextPlace);
-    });
+    averageRatePlace.title = `Based on ${averageRate["totalCount"]} ratings`;
   } else {
     averageRatePlace.textContent = `No one rated yet`;
   }
@@ -791,7 +781,7 @@ async function checkUserMovieStates() {
   let ifMovielist = userMovieStates["userWatchlist"];
   let ifMovieLikes = userMovieStates["userLikes"];
   let ifReviewLikes = userMovieReviewState["userLikes"];
-  console.log(ifReviewLikes);
+
   if (ifMovielist) {
     show(removeWatchlistBtPlace);
   }

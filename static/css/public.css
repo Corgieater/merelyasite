@@ -199,7 +199,7 @@ nav > ul > li > input {
 .logInPlace {
   width: 50%;
   position: absolute;
-  top: 22%;
+  top: 18%;
   right: 15%;
 }
 
@@ -244,6 +244,7 @@ nav > ul > li > input {
   width: 350px;
   flex-direction: column;
   left: 40%;
+  top: 30%;
   margin-top: 50px;
   border: solid 1px antiquewhite;
   padding: 10px;

@@ -144,6 +144,13 @@ function makeDateString() {
   return today;
 }
 
+window.onload = function () {
+  let loaderPlace = document.querySelector(".loaderPlace");
+  let mask = document.querySelector(".mask");
+  loaderPlace.classList.add("hide");
+  mask.classList.add("hide");
+};
+
 // 滑鼠滑進滑出
 // unFollowBt.addEventListener(
 //   "mouseover",

@@ -3,12 +3,18 @@
   position: absolute;
   flex-direction: column;
   right: 300px;
+  margin-top: 50px;
+  margin-right: 80px;
 }
 .otherCollections.flex > li:nth-child(1) {
   color: antiquewhite;
 }
 .otherCollections > li {
   margin-bottom: 15px;
+}
+
+h2 {
+  border-bottom: 1px solid antiquewhite;
 }
 
 .showPlace {
