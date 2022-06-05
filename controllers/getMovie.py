@@ -40,8 +40,11 @@ add_movie_database = ImportDatabase()
 global genre_count
 genre_count = 0
 
+
 def get_imdb_id(title, year):
+    print(title)
     movies = imdb_move_base.search_movie(title)
+    print(movies)
     imdb_movie_id = None
     for movie in movies:
         try:

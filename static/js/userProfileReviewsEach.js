@@ -109,10 +109,10 @@ async function showProperReviewBox() {
     show(removeWatchlistBt);
     show(addListBt);
     show(editBt);
+    console.log(isPageBelongsToLoggedUser);
     if (isPageBelongsToLoggedUser === false) {
       editBt.textContent = "Write a review";
       // 這邊要打API去查這user是有沒有寫過這電影的評論
-      show(reviewAgainBt);
       cancelBt.style.bottom = "90px";
     }
     if (isPageBelongsToLoggedUser) {
@@ -483,7 +483,7 @@ async function showFilmInfo() {
   }
   lastTimeWatched = filmWatchedDate;
   lastTimeLogMessage = filmReview;
-  if (filmSpoiler) {
+  if (filmSpoiler && !isPageBelongsToLoggedUser) {
     let antiSpoilers = document.querySelector(".antiSpoilers");
     let antiSpoilersBt = document.querySelector(".antiSpoilers > a");
     show(antiSpoilers);

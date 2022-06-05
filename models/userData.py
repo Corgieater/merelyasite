@@ -1,7 +1,6 @@
 from models.databaseClass import pool as p
 import os
 from dotenv import load_dotenv
-from mysql.connector import pooling
 import flask_bcrypt as bcrypt
 
 load_dotenv()

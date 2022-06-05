@@ -1,5 +1,3 @@
-from flask import Blueprint
-import requests
 from controllers.auth import *
 from controllers.social import *
 
