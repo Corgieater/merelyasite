@@ -204,8 +204,10 @@ def get_users_by_name_func(name, page):
 def get_reviews_from_title_or_content_func(review_query, page):
     print(review_query, 'userInput')
     data_count = review_database.get_total_review_count_by_title_and_content(review_query)[0]
-    print(data_count)
-    if data_count is 0:
+    # HERE
+    # 這裡有問題
+    # 會找到沒review的電影
+    if data_count == 0:
         return {
             'error': True,
             'message': 'No such key word, please try another'
@@ -219,7 +221,7 @@ def get_reviews_from_title_or_content_func(review_query, page):
     info = review_database.get_review_by_title_and_content(review_query, page)
     print(info)
 
-    if info is False:
+    if info is False or len(info)==0:
         return {
             'error': True
         }

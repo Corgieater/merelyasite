@@ -525,7 +525,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 算review搜尋有多少筆資料
+    # 算review搜尋有多少筆資料 HERE 這裡有問題 會找到沒review的電影
     def get_total_review_count_by_title_and_content(self, review_query):
         connection = p.get_connection()
         cursor = connection.cursor()

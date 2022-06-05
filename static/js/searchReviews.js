@@ -25,8 +25,12 @@ actorsCollectionsBt.href = `/search/actor?actor=${keyword}&page=1`;
 // 做資料
 async function renderDataInfo() {
   let data = await getData();
-  let userInput = data[1];
-  makeShowRow(data, userInput);
+  if (data === undefined) {
+    makeMessage(frame, "There is no such keyword, please check it again");
+  } else {
+    let userInput = data[1];
+    makeShowRow(data, userInput);
+  }
 }
 
 // 先打API去要資料 多頁用
