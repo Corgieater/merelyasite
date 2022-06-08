@@ -4,8 +4,6 @@ from models.userData import *
 import jwt
 import os
 import math
-import requests
-from os.path import basename
 import boto3
 
 review_database = ReviewDatabase()
@@ -31,6 +29,7 @@ def up_load_to_s3(img, user_id):
         ContentType='image/jpeg',
     )
 
+
 def make_reviews_dic(data):
     review_dic = {
         'data': {
@@ -48,6 +47,7 @@ def make_reviews_dic(data):
         }
         review_dic['data']['data'].append(info)
     return review_dic
+
 
 def make_page(data, page, total_page):
     page = int(page)
@@ -69,7 +69,6 @@ def get_latest_five_reviews_from_follows_func():
         if token is None:
             return {'error': True}
         data = jwt.decode(token, key, algorithms=["HS256"])
-        print(data)
 
     except Exception as e:
         print('get_latest_five_reviews_from_follows_func from social')
@@ -90,7 +89,6 @@ def get_is_user_following_func(page_owner):
         if token is None:
             return {'error':True}
         data = jwt.decode(token, key, algorithms=["HS256"])
-        print(data)
 
     except Exception as e:
         print('get_is_user_following_func from social')
@@ -103,6 +101,7 @@ def get_is_user_following_func(page_owner):
         else:
             return{'error': True}
 
+
 # 追蹤別人
 def follows_other_people_func(following_name, follower):
     following = user_database.follow_other_user(follower, following_name)
@@ -111,6 +110,7 @@ def follows_other_people_func(following_name, follower):
     else:
         return {'error': True,
                 'message': 'Something went wrong, please try again'}
+
 
 # watchlist
 # check watchlist
@@ -127,24 +127,21 @@ def get_watchlist_by_page_func(page_master, page):
             'totalMovies':movies_in_watchlist
         }
     }
-    print('wathvspigj-------\n',watchlist)
     for movie in watchlist:
         data['data']['data'].append(movie)
     data = make_page(data, 1, total_page)
-    print(data)
     return data
+
 
 # check user movie state movielist/likes
 def check_user_movie_state_func(user_id, movie_id):
-    print(user_id, movie_id,'checking')
     is_in_watchlist = user_database.check_user_state(user_id, movie_id, 'watchlist')
     is_in_movie_likes_list = user_database.check_user_state(user_id, movie_id, 'movieLikes')
-    print('oyoyyo user state here',is_in_watchlist, is_in_movie_likes_list)
     if is_in_watchlist is None:
         is_in_watchlist = False
     if is_in_movie_likes_list is None:
         is_in_movie_likes_list = False
-    print('oyoyyo user state here', is_in_watchlist, is_in_movie_likes_list)
+
     data = {
         'data': {
             'userWatchlist': is_in_watchlist,
@@ -157,10 +154,10 @@ def check_user_movie_state_func(user_id, movie_id):
 # check user review likes
 def check_user_review_likes(user_id, review_id):
     is_in_review_like_list = user_database.check_user_state(user_id, review_id, 'reviewLikes')
-    print('6666 user review state here', is_in_review_like_list)
+
     if is_in_review_like_list is None:
         is_in_review_like_list = False
-    print('6666 user review state here', is_in_review_like_list)
+
     data = {
         'data': {
             'userLikes': is_in_review_like_list,
@@ -213,7 +210,7 @@ def add_movie_to_likes_func(user_id, movie_id):
 def delete_movie_from_likes_func(user_id, movie_id):
     if user_id is None:
         return {'error': True,
-                'message':'Please log in'}
+                'message': 'Please log in'}
     delete_from_movies_users_likes = user_database.delete_from_movies_users_likes(user_id, movie_id)
     if delete_from_movies_users_likes:
         return {'ok': True}
@@ -221,6 +218,7 @@ def delete_movie_from_likes_func(user_id, movie_id):
         return {'error': True,
                 'message': 'Something went wrong, please try again'
                 }
+
 
 # 喜歡這review add review to likes
 def add_review_to_likes_func(user_id, review_id):
@@ -252,8 +250,7 @@ def delete_review_from_likes_func(user_id, review_id):
 
 def get_total_review_likes_func(review_id):
     review_likes_count = review_database.get_total_review_likes(review_id)[0]
-    print('review_likes_count',review_likes_count)
-    data = {'data':{'reviewLikes': review_likes_count}}
+    data = {'data': {'reviewLikes': review_likes_count}}
     return data
 
 
@@ -261,7 +258,7 @@ def get_total_review_likes_func(review_id):
 def get_following_latest_like_reviews_func(user_id):
     user_followings_like_reviews = review_database.get_followings_like_reviews(user_id)
     data = {
-        'data':{'data':[]}
+        'data': {'data': []}
     }
     for review in user_followings_like_reviews:
         info = {
@@ -293,7 +290,6 @@ def get_most_popular_reviews_func():
             'reviewerImgId': review[7]
         }
         data['data']['data'].append(info)
-    print(user_followings_like_reviews)
     return data
 
 
@@ -312,14 +308,13 @@ def upload_user_profile_pic_func(user_id, img):
         }
     else:
         return {
-            'error':True,
+            'error': True,
             'message': 'Something went wrong, please try again'
         }
 
 
 def get_user_profile_pic_func(user_id):
     user_profile_pic_name = user_database.get_user_profile_pic(user_id)
-    print(user_profile_pic_name, 'user_profile_pic_name from social')
     if user_profile_pic_name is not None:
         return {
             'data': {
@@ -330,4 +325,3 @@ def get_user_profile_pic_func(user_id):
         return {
             'data': None
         }
-

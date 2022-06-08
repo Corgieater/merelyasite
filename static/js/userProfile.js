@@ -128,8 +128,10 @@ async function showRecentlyReviews() {
       />
     </div>
     <div class='reviewBody'>
+      <section class='flex'>
       <a href="${reviewPage}">${filmTitle}</a>
-      <a href="#">${info["filmYear"]}</a>
+      <p>${info["filmYear"]}</p>
+      </section>
       <section class="starPlace"></section>
       <p>${date}</p>
       <p class='reviewText'>${review}</p>

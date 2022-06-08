@@ -521,12 +521,10 @@ async function showFilmInfo() {
   } else {
     // not page master show if this outsider had ratted
     let logger = await getUserData();
-    let loggerData = {
-      userId: logger["userId"],
-      filmId: filmId,
-    };
-    let loggerRate = await sendDataToBackend("POST", loggerData, "/api/rate");
-    loggerRate = loggerRate["rate"];
+    let loggerId = logger["userId"];
+    let loggerRate = await fetch(`/api/rate/${loggerId}/${filmId}`);
+    loggerRate = await loggerRate.json();
+    loggerRate = loggerRate.data.rate;
     showPreviousRate(loggerRate);
   }
 }

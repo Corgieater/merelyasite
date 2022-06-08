@@ -16,24 +16,27 @@ def sign_up_func():
     return sign_up(data['email'], data['password'], data['name'])
 
 
-# check user name available
+# check user name if available
 @user_blueprint.route('/api/user/<sign_up_name>',)
 def check_user_name(sign_up_name):
     sign_up_name = sign_up_name.replace('+', ' ')
-    print(sign_up_name)
     return check_user_name_func(sign_up_name)
 
+
+# 登入
 @user_blueprint.route('/api/user', methods=['PATCH'])
 def log_in_func():
     data = request.get_json()
     return log_in(data['email'], data['password'])
 
 
+# 確認user登入狀態
 @user_blueprint.route('/api/user', methods=["GET"])
 def check_user_func():
     return user_checker()
 
 
+# 登出
 @user_blueprint.route('/api/user', methods=["DELETE"])
 def sign_out_func():
     return sign_out()
@@ -45,17 +48,17 @@ def sign_out_func():
 def get_latest_five_reviews_from_follows():
     return get_latest_five_reviews_from_follows_func()
 
+
 # 看有沒有追蹤該頁面作者
 @user_blueprint.route('/api/user_profile/<page_owner>')
 def get_is_user_following(page_owner):
-    print(page_owner)
     return get_is_user_following_func(page_owner)
+
 
 # 追蹤
 @user_blueprint.route('/api/user_profile/follows', methods=["PATCH"])
 def follows_other_people():
     data = request.get_json()
-    print('followers',data)
     following_name = data['following']
     follower = data['follower']
     return follows_other_people_func(following_name, follower)
@@ -73,7 +76,6 @@ def render_user_watchlist_page(page_master):
 def get_watchlist_by_page(page_master):
     page_master = page_master.replace('+', ' ')
     page = request.args.get('page')
-    print('view user get watchlist from ', page_master)
 
     return get_watchlist_by_page_func(page_master, page)
 
@@ -83,7 +85,6 @@ def get_watchlist_by_page(page_master):
 def check_user_movie_state():
     try:
         data = request.get_json()
-        print('check_movie_in_watch_list', data)
         movie_id = data['movieId']
         user_id = data['userId']
     except Exception as e:
@@ -99,7 +100,6 @@ def check_user_movie_state():
 def user_review_state():
     try:
         data = request.get_json()
-        print('check_review_in_review likes', data)
         review_id = data['reviewId']
         user_id = data['userId']
     except Exception as e:
@@ -114,27 +114,24 @@ def user_review_state():
 @user_blueprint.route('/api/user_profile/watchlist', methods=["PATCH"])
 def add_movie_to_watchlist():
     data = request.get_json()
-    print('add to watchlist',data)
     movie_id = data['movieId']
     user_id = data['userId']
     return add_movie_to_watchlist_func(user_id, movie_id)
 
 
-# delete watch list
+# delete from watchlist
 @user_blueprint.route('/api/user_profile/watchlist', methods=["DELETE"])
 def delete_movie_from_watchlist():
     data = request.get_json()
-    print('delete from watchlist',data)
     movie_id = data['movieId']
     user_id = data['userId']
     return delete_movie_from_watchlist_func(user_id, movie_id)
 
 
-# render likes
+# render user profile likes頁面
 @user_blueprint.route('/user_profile/<page_master>/likes')
 def render_user_likes_page(page_master):
     page_master = page_master.replace('+', ' ')
-    print(page_master, 666666666)
     return render_template('userLikes.html', pageMaster=page_master)
 
 
@@ -142,7 +139,6 @@ def render_user_likes_page(page_master):
 @user_blueprint.route('/api/user_profile/likes/movie', methods=["PATCH"])
 def add_movie_to_likes():
     data = request.get_json()
-    print('add to movie likes',data)
     movie_id = data['movieId']
     user_id = data['userId']
     return add_movie_to_likes_func(user_id, movie_id)
@@ -152,13 +148,12 @@ def add_movie_to_likes():
 @user_blueprint.route('/api/user_profile/likes/movie', methods=["DELETE"])
 def delete_movie_from_likes():
     data = request.get_json()
-    print('delete_movie_from_likes',data)
     movie_id = data['movieId']
     user_id = data['userId']
     return delete_movie_from_likes_func(user_id, movie_id)
 
 
-# 拿多少人喜歡這reviews HERE
+# 拿多少人喜歡這reviews
 @user_blueprint.route('/api/user_profile/likes/review/<review_id>')
 def get_total_review_likes(review_id):
     return get_total_review_likes_func(review_id)
@@ -168,7 +163,6 @@ def get_total_review_likes(review_id):
 @user_blueprint.route('/api/user_profile/likes/review', methods=["PATCH"])
 def add_review_to_likes():
     data = request.get_json()
-    print('add to review likes', data)
     review_id = data['reviewId']
     user_id = data['userId']
     return add_review_to_likes_func(user_id, review_id)
@@ -178,20 +172,19 @@ def add_review_to_likes():
 @user_blueprint.route('/api/user_profile/likes/review', methods=["DELETE"])
 def delete_review_from_likes():
     data = request.get_json()
-    print('delete_movie_from_likes',data)
     review_id = data['reviewId']
     user_id = data['userId']
     return delete_review_from_likes_func(user_id, review_id)
 
 
-# 拿追蹤的人最近喜歡了什麼評論 for index HERE
+# 拿追蹤的人最近喜歡了什麼評論給index用
 @user_blueprint.route('/api/<user_id>/get_following_latest_like_reviews/')
 def get_following_latest_like_reviews(user_id):
     user_id = int(user_id)
     return get_following_latest_like_reviews_func(user_id)
 
 
-# most popular reviews *4  for index
+# most popular reviews *4 給index用
 @user_blueprint.route('/api/most_popular_reviews/')
 def get_most_popular_reviews():
     return get_most_popular_reviews_func()
@@ -200,10 +193,7 @@ def get_most_popular_reviews():
 # user profile 上傳圖片
 @user_blueprint.route('/api/user/<user_id>/upload_pic', methods=["PATCH"])
 def upload_user_profile_pic(user_id):
-    # data = request.get_json()
-    # img = data['photoFile']
     img = request.files['photoFile']
-    print(img)
     return upload_user_profile_pic_func(user_id, img)
 
 

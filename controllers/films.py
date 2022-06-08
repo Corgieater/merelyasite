@@ -12,7 +12,6 @@ user_database = UserDatabase()
 
 
 def make_dic(film_data):
-    print(film_data)
     dic = {
         'id':film_data[0],
         'title':film_data[1],
@@ -27,7 +26,6 @@ def make_dic(film_data):
 
 
 def make_page(data, page, total_page):
-    print(data,data)
     page = int(page) + 1
     data['currentPage'] = page
     data['nextPage'] = None
@@ -40,7 +38,6 @@ def make_page(data, page, total_page):
     return data
 
 
-# 用TYPE拿資料(導演演員GENRE) search controller 也有一個
 def get_data_by_type_func(query, page, data_type):
     data_count = 0
     if page is None:
@@ -48,11 +45,9 @@ def get_data_by_type_func(query, page, data_type):
     page = int(page) - 1
     if data_type == 'director':
         data_count = movie_database.get_total_data_count_from_type(query, 'director')
-        print(data_count, 'director')
 
     if data_type == 'actor':
         data_count = movie_database.get_total_data_count_from_type(query, 'actor')
-        print(data_count, 'actor')
 
     if data_count is False or data_count[0] == 0:
         return {
@@ -71,10 +66,9 @@ def get_data_by_type_func(query, page, data_type):
     return info
 
 
-# 用ID拿電影 OK
-def get_film_by_id_func(film_id):
+# 用ID拿電影
+def get_movie_by_id_func(film_id):
     data = movie_database.get_film_by_id(film_id)
-    print('film controller get_film_by_id_func',data)
     if data is None:
         return {
             'error': True,
@@ -83,10 +77,10 @@ def get_film_by_id_func(film_id):
     return data
 
 
-# 用導演拿電影 OK
-def get_films_by_director_func(director, page):
+# 用導演拿電影
+def get_movies_by_director_func(director, page):
     data_count = movie_database.get_total_data_count_from_type(director, 'director_movies')
-    print('datacount', data_count)
+
     if data_count == 0:
         return {
             'error': True,
@@ -107,13 +101,10 @@ def get_films_by_director_func(director, page):
     return info
 
 
-# 演員拿電影 OK?
-def get_films_by_actor_func(actor, page):
+# 演員拿電影
+def get_movies_by_actor_func(actor, page):
     data_count = movie_database.get_total_data_count_from_type(actor, 'actor')
-    print('datacount',data_count)
-    # 這邊是算出演員有多少叫OO的
-    # 那下面就要改成秀出演員
-    print('data count get_films_by_actor_func', data_count)
+
     if data_count == 0:
         return {
             'error': True,
@@ -133,7 +124,7 @@ def get_films_by_actor_func(actor, page):
     return info
 
 
-# 更新或加入評分 OK
+# 更新或加入評分
 def rating_func(rate, user_id, film_id):
     if user_id is None:
         return {
@@ -151,9 +142,10 @@ def rating_func(rate, user_id, film_id):
         }
 
 
-# 拿上次評分 OK
+# 拿上次評分
 def get_rate_func(user_id, movie_id):
     rate = review_database.get_rate_data(user_id, movie_id)
+    print(rate)
     if rate:
         data = {
             'data': {'rate': rate}
@@ -161,13 +153,12 @@ def get_rate_func(user_id, movie_id):
         return data
     else:
         return {
-            'data': {'rate':None}
+            'data': {'rate': None}
         }
 
 
-# 刪除評分 OK
+# 刪除評分
 def delete_rate_func(film_id, user_id):
-    print('delete_rate_func control',film_id, user_id)
     data_deleted = review_database.delete_rate_data(film_id, user_id)
     if data_deleted:
         return {
@@ -180,10 +171,10 @@ def delete_rate_func(film_id, user_id):
         }
 
 
-# 拿均分 OK
+# 拿均分
 def get_average_rate_func(film_id):
     data = review_database.get_average_rate_data(film_id)
-    print('print data',data)
+
     if data:
         return {
             'data': {'totalCount': data[0],'average':data[1]}
@@ -199,10 +190,7 @@ def get_average_rate_func(film_id):
 def film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers,
                      review_id=None, from_where=None):
     if from_where == 'userProfileReviewAgain':
-        print('from user profile review again',
-              movie_review, film_id, current_date, watched_date, user_id, spoilers, review_id, from_where)
         movie_and_user_id = review_database.get_movie_id_and_user_id_for_review_again(review_id)
-        print('movie and user id ', movie_and_user_id[0], movie_and_user_id[1])
         film_id = movie_and_user_id[0]
         user_id = movie_and_user_id[1]
         if user_id is None and from_where is None:
@@ -212,7 +200,6 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
             }
         result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
     else:
-        print('from film probably first time')
         result = review_database.write_review(movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
     if result is True:
@@ -230,7 +217,7 @@ def get_latest_reviews_func():
     latest_reviews = review_database.get_latest_reviews_for_index()
     total_reviews = review_database.get_all_reviews_count()
     data = {
-        'data':{'data':[],'totalReviews': total_reviews[0]}
+        'data': {'data': [],'totalReviews': total_reviews[0]}
     }
     for reviews in latest_reviews:
         info = {
@@ -242,7 +229,6 @@ def get_latest_reviews_func():
         }
         data['data']['data'].append(info)
 
-    print('get_latest_reviews \n',data)
     return data
 
 
@@ -250,7 +236,7 @@ def get_latest_reviews_func():
 def get_most_popular_movies_this_week_func():
     most_popular_movies = movie_database.get_most_popular_movies_for_index()
     data = {
-        'data':{'data':[]}
+        'data': {'data': []}
     }
     for reviews in most_popular_movies:
         info = {
@@ -259,6 +245,5 @@ def get_most_popular_movies_this_week_func():
         }
         data['data']['data'].append(info)
 
-    print('get_most_popular_movies_this_week_func films\n',data)
     return data
 

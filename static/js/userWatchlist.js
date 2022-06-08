@@ -1,8 +1,18 @@
 "use strict";
 let pageMasterAndPage = cutUserInputAtLast("e/");
+let pageMaster = cutUserInputInMiddle("e/", "/w");
 let showPlace = document.querySelector(".showPlace");
 let totalMoviePlace = document.querySelector(".wrap > h2 > span");
 let isMouseHover = false;
+
+let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
+let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
+let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
+
+// user profile nav bar
+userProfileReviewsBt.href = `/user_profile/${pageMaster}/reviews?page=1`;
+userProfileWatchlistBt.href = `/user_profile/${pageMaster}/watchlist?page=1`;
+userProfileHomeBt.href = `/user_profile/${pageMaster}`;
 
 async function getWatchlist() {
   const req = await fetch(`/api/user_profile/${pageMasterAndPage}`);

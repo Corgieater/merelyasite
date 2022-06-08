@@ -9,7 +9,7 @@ user_profile_blueprint = Blueprint(
 )
 
 
-# render template
+# render user profile template
 @user_profile_blueprint.route('/user_profile/<user_name>')
 def render_user_profile(user_name):
     user_name = user_name.replace('+', ' ')
@@ -20,7 +20,6 @@ def render_user_profile(user_name):
 @user_profile_blueprint.route('/api/get_latest_reviews/<user_name>')
 def get_user_latest_five_reviews(user_name):
     user_name = user_name.replace('+', ' ')
-    print(user_name)
     return get_user_latest_five_reviews_func(user_name)
 
 
@@ -28,7 +27,6 @@ def get_user_latest_five_reviews(user_name):
 @user_profile_blueprint.route('/api/get_reviews_by_page/<user_name>/reviews')
 def get_reviews_by_page(user_name):
     user_name = user_name.replace('+', ' ')
-    print(user_name)
     page = request.args.get('page')
     if page is None:
         page = 1
@@ -45,8 +43,6 @@ def render_user_profile_reviews(user_name):
 @user_profile_blueprint.route('/api/user_profile/<user_name>/reviews/films/<movie_name>/<review_id>',
                               methods=['GET'])
 def get_user_profile_review_each(user_name, movie_name, review_id):
-    user_name = user_name.replace('+', ' ')
-    print(user_name, movie_name, review_id, 'from get use profile review each views')
     return get_user_profile_review_each_func(review_id)
 
 

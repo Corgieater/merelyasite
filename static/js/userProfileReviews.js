@@ -4,8 +4,12 @@ let userName = cutUserInputInMiddle("e/", "/r");
 let page = cutUserInputAtLast("e=");
 let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
+let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
+
+// user profile nav bar
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
+userProfileHomeBt.href = `/user_profile/${userName}`;
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
@@ -51,8 +55,10 @@ async function showRecentlyReviews() {
       />
     </div>
     <div class='reviewBody'>
+    <section class='flex'>
       <a href="${reviewPage}">${filmTitle}</a>
-      <a href="#">${info["filmYear"]}</a>
+      <p>${info["filmYear"]}</p>
+    </section>
       <section class="starPlace"></section>
       <p>${date}</p>
       <p class='reviewText'>${review}</p>
@@ -61,29 +67,9 @@ async function showRecentlyReviews() {
       `;
     li.innerHTML = content;
     reviewdPlace.append(li);
-    // FIXING STAR SHOWING
-    // let userRate = info["userRate"];
-    let starPlace = document.querySelectorAll(".starPlace");
     let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
 
-    // FIXING STAR SHOWING
-    // if (userRate !== null) {
-    //   if (userRate !== "0.5") {
-    //     let fullStarRate = parseInt(userRate);
-    //     for (let j = 0; j < fullStarRate; j++) {
-    //       let img = document.createElement("img");
-    //       img.src = "/static/images/star.png";
-    //       starPlace[i].append(img);
-    //     }
-    //   }
-    //   let halfStarRate = userRate.toString().search(".5");
-    //   if (halfStarRate !== -1) {
-    //     let img = document.createElement("img");
-    //     img.src = "/static/images/half_star.png";
-    //     starPlace[i].append(img);
-    //   }
-    // }
     // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
     if (spoilers && pageBelongsToLoggedUser === false) {
       reviewText.classList.add("hide");

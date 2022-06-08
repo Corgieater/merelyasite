@@ -9,69 +9,57 @@ films_blueprint = Blueprint(
     template_folder='templates'
 )
 
-
-# 導演演員的確定路徑(全名)一定要是類似這樣
-#  https://letterboxd.com/actor/tom-cruise/
-# 顯示電影的方式就用下滑打API
-
-# ID搜電影 OK
+# ID拿電影
 @films_blueprint.route('/api/film/<film_id>')
-def search_by_id(film_id):
-    return get_film_by_id_func(film_id)
+def get_movie_by_id(film_id):
+    return get_movie_by_id_func(film_id)
 
 
-# render template ID
+# render template film.html 電影頁面
 @films_blueprint.route('/film/<film_id>')
 def render_film_page(film_id):
     return render_template('film.html')
 
 
-# director搜電影 OK
+# director拿電影
 @films_blueprint.route('/api/director')
-def search_by_director():
+def get_movies_by_director():
     director = request.args.get('director').replace('+', ' ')
-    print('director', director)
     page = request.args.get('page')
-    print(page)
     if page is None:
         page = 1
-    return get_films_by_director_func(director, page)
+    return get_movies_by_director_func(director, page)
 
 
-# render template director
+# render template 導演所有電影頁面
 @films_blueprint.route('/director')
 def render_director_page():
-    # 參數沒用到還是要填
     director = request.args.get('director').replace('+', ' ')
     return render_template('director.html', director=director)
 
 
-# 演員搜電影 OK
+# 演員拿電影
 @films_blueprint.route('/api/actor')
-def search_by_actor():
+def get_movies_by_actor():
     actor = request.args.get('actor')
-    print(actor)
     page = request.args.get('page')
-    print(page)
     if page is None:
         page = 1
     actor = actor.replace('+', ' ')
-    print(actor, 'after replace')
-    return get_films_by_actor_func(actor, page)
+    return get_movies_by_actor_func(actor, page)
 
 
-# render template actor
+# render template actor 演員所有電影頁面
 @films_blueprint.route('/actor')
 def render_actor_page():
     actor = request.args.get('actor').replace('+', ' ')
     return render_template('actor.html', actor=actor)
 
 
-# 評分 HERE
+# 評分
 @films_blueprint.route('/api/rate', methods=['PATCH'])
 def rating():
     data = request.get_json()
-    print(data)
     try:
         rate = data['rate']
         user_id = data['userId']
@@ -87,26 +75,16 @@ def rating():
 
 
 # 拿使用者上次評分
-@films_blueprint.route('/api/rate', methods=['POST'])
-def get_rate():
-    data = request.get_json()
-    try:
-        user_id = data['userId']
-        film_id = data['filmId']
-    except Exception as e:
-        print(e)
-        return {
-            'data': {'rate': None}
-        }
-    else:
-        return get_rate_func(user_id, film_id)
+# /api/rate
+@films_blueprint.route('/api/rate/<user_id>/<film_id>')
+def get_rate(user_id, film_id):
+    return get_rate_func(user_id, film_id)
 
 
 # 刪評分
 @films_blueprint.route('/api/rate', methods=['DELETE'])
 def delete_rate():
     data = request.get_json()
-    print("films_blueprint.route('/api/rate', methods=['DELETE']", data)
     film_id = data['filmId']
     user_id = data['userId']
 
@@ -138,7 +116,6 @@ def film_review():
         if data['reviewId']:
             review_id = data['reviewId']
             from_place = data['from']
-            print('from place views films', from_place)
             return film_review_func \
                 (movie_review, film_id, current_date, watched_date, user_id, spoilers,
                  review_id=review_id, from_where=from_place)
@@ -147,13 +124,13 @@ def film_review():
         return film_review_func(movie_review, film_id, current_date, watched_date, user_id, spoilers)
 
 
-# nav 上的films
+# nav 上的films render films page
 @films_blueprint.route('/films')
 def render_films_page():
     return render_template('publicFilms.html')
 
 
-# 加入電影   good
+# 加入電影
 @films_blueprint.route('/api/addFilm')
 def get_movie_from_imdb():
     title = request.args.get('t').replace('+', ' ')
@@ -164,14 +141,12 @@ def get_movie_from_imdb():
         print(e)
         return {'error': True,
                 'message': 'Please type valid year'}
-    print(title, year)
     return get_movie_from_imdb_func(title, year)
 
 
 # 拿最新的12個評論 from index
 @films_blueprint.route('/api/get_latest_reviews/')
 def get_latest_reviews():
-    print('get_latest_reviews')
     return get_latest_reviews_func()
 
 

@@ -61,7 +61,6 @@ async function showProperReviewBox() {
     show(reviewBt);
   } else {
     let actionBox = document.querySelector(".actionBox > ul");
-    // actionBox.style.height = "200px";
     let li = document.createElement("li");
     let p = document.createElement("p");
     p.textContent = "Log in to review or rate";
@@ -280,12 +279,11 @@ rateBts.forEach((bt) => {
 async function getUserRate() {
   const req = await fetch("/api/user");
   const res = await req.json();
-  let id = res["userId"];
-  let data = {
-    filmId: filmId,
-    userId: id,
-  };
-  let score = await sendDataToBackend("POST", data, "/api/rate");
+  let userId = res["userId"];
+  let userRate = await fetch(`/api/rate/${userId}/${filmId}`);
+  userRate = await loggerRate.json();
+  userRate = loggerRate.data.rate;
+
   return score;
 }
 

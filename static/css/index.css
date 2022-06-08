@@ -143,6 +143,7 @@
 .reviewsWIthFriendsPlace > li > section.flex > section > a:nth-child(2):hover {
   color: #219ebc;
 }
+/* 最受歡迎的reviews */
 .likeReviewPlace {
   margin-top: 20px;
   display: -webkit-box;
@@ -150,4 +151,5 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }

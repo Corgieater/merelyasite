@@ -7,8 +7,7 @@ class ReviewDatabase:
     def write_review(self, movie_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('wrtie review from reviewData, movie_review, movie_id, current_date, watched_date, user_id, spoilers')
-        print(movie_review, movie_id, current_date, watched_date, user_id, spoilers)
+
         try:
             cursor.execute('INSERT INTO reviews (review_id, review_movie_id, movie_review,'
                            'today, watched_date, spoilers)'
@@ -23,12 +22,10 @@ class ReviewDatabase:
             return False
         else:
             connection.commit()
-            print('write_review add review sucess try adding relation')
             add_relation = self.add_relation_between_tables('reviews_users', user_id, last_insert_review_id)
             if add_relation:
                 return True
             else:
-                print('write_review review data add relation failed')
                 return False
 
         finally:
@@ -39,7 +36,6 @@ class ReviewDatabase:
     def update_review(self, review_id, movie_review, watched_date, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('update review reviewData',movie_review, watched_date, spoilers, review_id)
         try:
             cursor.execute('UPDATE reviews \n'
                            'SET \n'
@@ -61,13 +57,12 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
     # 刪除評論
     def delete_review(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('''DELETE FROM reviews WHERE review_id = %s''',
+            cursor.execute('DELETE FROM reviews WHERE review_id = %s',
                            (review_id,))
         except Exception as e:
             print(e)
@@ -80,12 +75,10 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
-    # 拿單一評論by reviewId, user_name, movie_name HERE WATCHING
+    # 拿單一評論by reviewId
     def get_review_by_review_id(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
-        print('reviewdata get review by review id',review_id)
         try:
             cursor.execute('SELECT reviews.*,reviews_users.reu_user_id,\n'
                            'movies_info.title, movies_info.year\n'
@@ -97,7 +90,6 @@ class ReviewDatabase:
                            'AND reviews.review_movie_id = movies_info.movie_id',
                            (review_id,))
             review_result = cursor.fetchone()
-            print('get_review_by_review_id', review_result)
             user_id = review_result[6]
             movie_id = review_result[1]
             cursor.execute('select rates.rate\n'
@@ -108,51 +100,7 @@ class ReviewDatabase:
                            'and rates_users.ru_rate_id = rates.rate_id',
                            (user_id, movie_id))
             rate_result = cursor.fetchone()
-            print('rate_result',rate_result)
             final_result = [review_result, rate_result]
-            # cursor.execute('SELECT reviews.*,\n'
-            #                'movies_info.title, movies_info.year,\n'
-            #                'rates.rate\n'
-            #                'FROM reviews\n'
-            #                'INNER JOIN reviews_users\n'
-            #                'INNER JOIN movies_info\n'
-            #                'ON reviews.review_id = %s\n'
-            #                'AND reviews.review_id = reviews_users.reu_review_id\n'
-            #                'AND reviews.review_movie_id = movies_info.movie_id\n'
-            #                'LEFT JOIN rates_users\n'
-            #                'on rates_users.ru_user_id = reviews_users.reu_user_id\n'
-            #                'INNER JOIN rates\n'
-            #                'ON movies_info.movie_id = rates.rate_movie_id\n'
-            #                'AND rates_users.ru_rate_id = rates.rate_id',
-            #                (review_id,))
-            # cursor.execute('SELECT reviews.*,\n'
-            #                'movies_info.title, movies_info.year,\n'
-            #                'rates.rate\n'
-            #                'from users\n'
-            #                'inner join reviews\n'
-            #                'inner join movies_info\n'
-            #                'on users.name = %s\n'
-            #                'and reviews.review_id = %s\n'
-            #                'and reviews.review_movie_id = movies_info.movie_id\n'
-            #                'left join rates\n'
-            #                'on rates.rate_movie_id = reviews.review_movie_id\n'
-            #                'left join rates_users\n'
-            #                'on rates_users.ru_user_id = users.user_id\n'
-            #                'and rates_users.ru_rate_id = rates.rate_id',
-            #                (page_master_name, review_id))
-
-            # cursor.execute('SELECT reviews.*, \n'
-            #                'movies_info.title, movies_info.year,\n'
-            #                'rates.rate\n'
-            #                'FROM reviews\n'
-            #                'INNER JOIN reviews_users\n'
-            #                'INNER JOIN movies_info\n'
-            #                'ON reviews.review_id = %s\n'
-            #                'AND reviews.review_id = reviews_users.reu_review_id\n'
-            #                'AND reviews.review_movie_id = movies_info.movie_id\n'
-            #                'LEFT JOIN rates\n'
-            #                'ON movies_info.movie_id = rates.rate_movie_id',
-            #                (review_id,))
 
         except Exception as e:
             print('get_review_by_review_id in reviewData')
@@ -164,7 +112,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評論 (5, multiple) 整個拿profile評論都有問題?? WATCHING FIXED? 怎麼拿評分?
+    # 拿評論 5 or multiple
     def get_reviews_data(self, user_name, page=0):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -172,7 +120,6 @@ class ReviewDatabase:
             if int(page) > 0:
                 page = int(page) - 1
                 start_index = int(page)*20
-                # 選不到評分 分開看看
                 cursor.execute('SELECT movies_info.title, movies_info.year, reviews.*\n'
                                'FROM users\n'
                                'INNER JOIN reviews_users\n'
@@ -184,28 +131,6 @@ class ReviewDatabase:
                                'ON reviews.review_movie_id = movies_info.movie_id\n'
                                'ORDER BY reviews.review_id DESC\n'
                                'LIMIT %s, 20', (user_name, start_index))
-
-                # 選得到評分 選不到沒評分的片 幹
-                # cursor.execute('SELECT\n'
-                #                'movies_info.title, movies_info.year,\n'
-                #                'reviews.*,\n'
-                #                'rates.rate\n'
-                #                'FROM reviews_users\n'
-                #                'INNER JOIN users\n'
-                #                'INNER JOIN reviews\n'
-                #                'INNER JOIN movies_info\n'
-                #                'ON users.name = %s\n'
-                #                'AND users.user_id = reviews_users.reu_user_id\n'
-                #                'AND reviews_users.reu_review_id = reviews.review_id\n'
-                #                'AND movies_info.movie_id = reviews.review_movie_id\n'
-                #                'LEFT join rates_users\n'
-                #                'ON rates_users.ru_user_id = reviews_users.reu_user_id\n'
-                #                'INNER JOIN rates\n'
-                #                'ON rates.rate_movie_id = movies_info.movie_id\n'
-                #                'AND rates_users.ru_rate_id = rates.rate_id\n'
-                #                'ORDER BY reviews.review_id DESC\n'
-                #                'LIMIT %s, 20',
-                #                (user_name, start_index))
 
             else:
                 cursor.execute('SELECT movies_info.title, movies_info.year, reviews.*, users.user_id\n'
@@ -220,28 +145,6 @@ class ReviewDatabase:
                                'ORDER BY reviews.review_id DESC\n'
                                'LIMIT 5', (user_name,))
 
-
-
-                # cursor.execute('SELECT\n'
-                #                'movies_info.title, movies_info.year,\n'
-                #                'reviews.*,\n'
-                #                'rates.rate\n'
-                #                'FROM reviews_users\n'
-                #                'INNER JOIN users\n'
-                #                'INNER JOIN reviews\n'
-                #                'INNER JOIN movies_info\n'
-                #                'ON users.name = %s\n'
-                #                'AND users.user_id = reviews_users.reu_user_id\n'
-                #                'AND reviews_users.reu_review_id = reviews.review_id\n'
-                #                'AND movies_info.movie_id = reviews.review_movie_id\n'
-                #                'LEFT join rates_users\n'
-                #                'ON rates_users.ru_user_id = reviews_users.reu_user_id\n'
-                #                'INNER JOIN rates\n'
-                #                'ON rates.rate_movie_id = movies_info.movie_id\n'
-                #                'AND rates_users.ru_rate_id = rates.rate_id\n'
-                #                'ORDER BY reviews.review_id DESC\n'
-                #                'LIMIT 5'
-                #                , (user_name,))
             results = cursor.fetchall()
 
         except Exception as e:
@@ -254,7 +157,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 更新評分 先找有沒有舊的 有就更新 沒有就加入 OK
+    # 更新評分 先找有沒有舊的 有就更新 沒有就加入
     def rating(self, rate, user_id, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -270,16 +173,13 @@ class ReviewDatabase:
                            'ON rates.rate_movie_id = %s\n'
                            'AND rates.rate_movie_id = movies_info.movie_id', (user_id, film_id))
             exist_rate_id = cursor.fetchone()
-            # 這裡不能+[0] 如果是NONE會跳錯
             if exist_rate_id is None:
-                print('trying insert rating')
                 cursor.execute('INSERT INTO rates(rate_id, rate, rate_movie_id) VALUES(DEFAULT, %s, %s)',
                                (rate, film_id))
                 cursor.execute('SELECT LAST_INSERT_ID()')
                 result = cursor.fetchone()[0]
 
             else:
-                print('trying update')
                 cursor.execute('UPDATE rates SET rate = %s WHERE rate_id = %s',
                                (rate, exist_rate_id[0]))
                 result = True
@@ -293,12 +193,10 @@ class ReviewDatabase:
             if result is True:
                 return True
             if type(result) is int:
-                # return self.add_rates_users_relation(user_id, result)
                 return self.add_relation_between_tables('rates_users', user_id, result)
         finally:
             cursor.close()
             connection.close()
-
 
     # 加入關聯
     def add_relation_between_tables(self, table, first_id, second_id):
@@ -308,29 +206,25 @@ class ReviewDatabase:
         try:
             # 關聯兩張表
             if table == 'rates_users':
-                print('relation between rates_users')
                 cursor.execute('INSERT INTO rates_users VALUES(DEFAULT, %s, %s)',
                                (first_id, second_id))
             if table == 'reviews_users':
-                print('relation between reviews_users')
                 cursor.execute('INSERT INTO reviews_users VALUES(DEFAULT, %s, %s)',
                                (first_id, second_id))
 
         except Exception as e:
             print('add_relation_between_tables reviewData')
-            print('add_relation_between_tables reviewData fail')
             print(e)
             connection.rollback()
             return False
         else:
             connection.commit()
-            print('add_relation_between_tables reviewData success')
             return True
         finally:
             cursor.close()
             connection.close()
 
-    # 拿評分資料 OK
+    # 拿評分資料
     def get_rate_data(self, user_id, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -356,7 +250,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 刪除評分資料 OK
+    # 刪除評分資料
     def delete_rate_data(self, film_id, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -383,7 +277,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿均分資料+總共多少人平分 OK
+    # 拿均分資料+總共多少人平分
     def get_average_rate_data(self, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -421,8 +315,8 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # #  從REVIEW ID拿到電影跟使用者ID
-    # #  給從USER PROFILE REVIEW AGAIN用
+    #  從REVIEW ID拿到電影跟使用者ID
+    #  給從USER PROFILE REVIEW AGAIN用
     def get_movie_id_and_user_id_for_review_again(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -434,7 +328,6 @@ class ReviewDatabase:
                            'AND reviews.review_id = reviews_users.reu_review_id',
                            (review_id,))
             results = cursor.fetchone()
-            print(results, 'get_movie_id_and_user_id_for_review_again')
         except Exception as e:
             print(e)
             return False
@@ -443,7 +336,6 @@ class ReviewDatabase:
         finally:
             cursor.close()
             connection.close()
-
 
     # 用使用者追蹤的對象拿review
     def get_latest_five_reviews_from_follows(self, user_id):
@@ -467,7 +359,6 @@ class ReviewDatabase:
                            'LIMIT 6',
                            (user_id,))
             results = cursor.fetchall()
-            print('get_latest_five_reviews_from_follows', results)
         except Exception as e:
             print('get_latest_five_reviews_from_follows from reviewData')
             print(e)
@@ -478,8 +369,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
-    # 拿12篇評論給index
+    # 拿12篇評論給index用
     def get_latest_reviews_for_index(self):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -498,7 +388,6 @@ class ReviewDatabase:
                            'AND movies_info.movie_id = reviews.review_movie_id\n'
                            'ORDER BY reu_id DESC LIMIT 11')
             results = cursor.fetchall()
-            print('get_latest_reviews_for_index', results)
         except Exception as e:
             print('get_latest_reviews_for_index from reviewData')
             print(e)
@@ -550,7 +439,6 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
     # 拿movie title, review content有包含user做review搜尋的資料
     def get_review_by_title_and_content(self, review_query, start_point):
         connection = p.get_connection()
@@ -594,7 +482,6 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
 # 拿多少人like this review
     def get_total_review_likes(self, review_id):
         connection = p.get_connection()
@@ -616,8 +503,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
-    # 拿追蹤的人最近喜歡了什麼評論*4 for index HERE
+    # 拿追蹤的人最近喜歡了什麼評論*4 給index用
     def get_followings_like_reviews(self, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -654,8 +540,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-
-    # get most popular reviews*4 for index HERE
+    # get most popular reviews*4 for 給index用
     def get_most_popular_reviews(self):
         connection = p.get_connection()
         cursor = connection.cursor()

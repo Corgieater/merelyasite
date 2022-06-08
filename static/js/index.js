@@ -263,6 +263,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
     let reviewP = document.createElement("p");
     reviewP.textContent = review;
     let likeReviewPlaces = document.querySelectorAll(".likeReviewPlace");
+    // 如果有spoilers而且並非此review擁有者
     if (spoilers && userName !== reviewer) {
       likeReviewPlaces[i].append(reviewP);
       reviewP.classList.add("hide");

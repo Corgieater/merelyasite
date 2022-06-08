@@ -9,17 +9,17 @@ search_blueprint = Blueprint(
     template_folder='templates'
 )
 
-# http://localhost:3000/search?keyword=&page=1
-# 網頁右上角的搜尋from OK
+# 這邊都是給網頁右上角的搜尋from用
+
+# 普通搜尋就是搜電影
 @search_blueprint.route('/api/search')
-def search():
+def get_movie():
     user_keyword = request.args.get('keyword')
     user_page = request.args.get('page')
-    print(user_keyword)
-    print(user_page)
-    return get_info_func(user_keyword, user_page)
+    return get_movie_info_func(user_keyword, user_page)
 
 
+# render search頁面
 @search_blueprint.route('/search')
 def render_search_page():
     movie = request.args.get('keyword').replace('+', ' ')
@@ -36,7 +36,7 @@ def get_director():
     return get_data_by_type_func(director, page, 'director')
 
 
-# 找導演page render(有可愛logo那個)
+# 找導演page render 秀出所有在這個資料庫有該關鍵字的導演和有幾部作品
 @search_blueprint.route('/search/director')
 def render_search_director_page():
     director = request.args.get('director').replace('+', ' ')
@@ -53,7 +53,7 @@ def get_actor():
     return get_data_by_type_func(actor, page, 'actor')
 
 
-# 找演員 page render(有可愛logo那個)
+# 找演員 page render 秀出所有在這個資料庫有該關鍵字的演員和有幾部作品
 @search_blueprint.route('/search/actor')
 def render_search_actor_page():
     actor = request.args.get('actor').replace('+', ' ')
@@ -64,7 +64,6 @@ def render_search_actor_page():
 def search_by_genre():
     genre = request.args.get('genre')
     page = request.args.get('page')
-    print('genre', genre, page)
     return get_films_by_genre_func(genre, page)
 
 
@@ -95,7 +94,6 @@ def render_search_users_page():
 def get_reviews_from_title_or_content():
     review_query = request.args.get('reviews').replace('+', ' ')
     page = request.args.get('page')
-    print('reviews', review_query, page)
     return get_reviews_from_title_or_content_func(review_query, page)
 
 
@@ -103,5 +101,4 @@ def get_reviews_from_title_or_content():
 @search_blueprint.route('/search/reviews')
 def render_search_reviews_page():
     review_query = request.args.get('reviews').replace('+', ' ')
-    print('render_search_reviews_page', review_query)
     return render_template('searchReviews.html', reviews=review_query)

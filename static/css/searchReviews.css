@@ -23,7 +23,7 @@
   margin-left: 20px;
 }
 
-h2 {
+.frame > h2 {
   border-bottom: 1px solid antiquewhite;
 }
 .showPlace {

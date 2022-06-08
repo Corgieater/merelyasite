@@ -5,6 +5,11 @@
   href="{{url_for('static', filename='css/userWatchlist.css')}}"
 />
 {% endblock %} {% block content %}
+<ul class="userNav flex alignCenter">
+  <li><a class="userProfileReviewsBt" href="#">Reviews</a></li>
+  <li><a class="userProfileWatchlistBt" href="#">Watchlist</a></li>
+  <li><a class="userProfileHomeBt" href="#">Profile</a></li>
+</ul>
 <h2>{{pageMaster}} WANTS TO SEE <span></span> FILMS</h2>
 <ul class="showPlace flex alignCenter"></ul>
 <div class="pagesPlace alignCenter"></div>

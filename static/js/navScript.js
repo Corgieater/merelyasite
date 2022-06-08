@@ -228,6 +228,7 @@ addMovieBt.addEventListener("click", async function () {
     userInputYear = "";
     hide(loaderPlace);
     show(addMoviePlace);
+    window.location.reload();
   } else {
     makeMessage(globalMessagePlace, res.message);
     hide(loaderPlace);
