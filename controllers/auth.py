@@ -21,7 +21,6 @@ def check_user_name_func(sign_up_name):
         return{'ok': True}
 
 
-
 def sign_up(email, password, name):
     password = bcrypt.generate_password_hash(password)
     data = (None, name, email, password)

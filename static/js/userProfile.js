@@ -1,6 +1,5 @@
 "use strict";
 let userName = cutUserInputAtLast("e/");
-console.log(userName);
 let userNameWithNoPlus = userName.replaceAll("+", " ");
 let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
@@ -14,12 +13,6 @@ let unFollowBt = document.querySelector(".unFollowBt");
 
 // 給滑鼠移動到unfollowBt上用的
 let isMouseHover = false;
-
-// *************起來要做unfollow事件
-// *************要想辦法抓到追蹤跟被追蹤數
-// *************滑鼠移動到folowbt的時候要不要做個效果?
-// *************沒follow到要顯示global news嗎?
-// *************userProfileReviewEach裡面不是該頁面擁有者的星星是壞的 要修 表示要準備兩套星星?
 
 // 追隨事件
 followBt.addEventListener("click", async function (e) {
@@ -83,10 +76,8 @@ async function following_page_master() {
 
 // 確認有沒有追蹤
 async function is_following() {
-  console.log(`/api/user_profile/${userNameWithNoPlus}`);
   const req = await fetch(`/api/user_profile/${userNameWithNoPlus}`);
   const res = await req.json();
-  console.log(res);
   if (res.ok) {
     hide(followBt);
     show(unFollowBt);
@@ -152,28 +143,10 @@ async function showRecentlyReviews() {
       `;
     li.innerHTML = content;
     reviewdPlace.append(li);
-    // let userRate = info["userRate"];
-    // console.log(userRate, "userrate");
-    let starPlace = document.querySelectorAll(".starPlace");
+    // let starPlace = document.querySelectorAll(".starPlace");
     let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
-    // if (userRate !== null) {
-    //   if (userRate !== "0.5") {
-    //     let fullStarRate = parseInt(userRate);
-    //     for (let j = 0; j < fullStarRate; j++) {
-    //       let img = document.createElement("img");
-    //       img.src = "../static/images/star.png";
-    //       starPlace[i].append(img);
-    //     }
-    //   }
-    //   console.log(userRate, "beffor finding fhasl");
-    //   let halfStarRate = userRate.toString().search(".5");
-    //   if (halfStarRate !== -1) {
-    //     let img = document.createElement("img");
-    //     img.src = "../static/images/half_star.png";
-    //     starPlace[i].append(img);
-    //   }
-    // }
+
     // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
     if (spoilers && pageBelongsToLoggedUser !== true) {
       reviewText.classList.add("hide");
@@ -199,8 +172,21 @@ async function showRecentlyReviews() {
   }
 }
 
-// 小功能
+async function getUserPicAndShow() {
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let req = await fetch(`/api/user/${userId}/upload_pic`);
+  let res = await req.json();
+  let profileImg = document.querySelector(".profile >img");
+  if (res.data !== null) {
+    let userPic = res.data["picName"];
+    profileImg.src = `https://dwn6ych98b9pm.cloudfront.net/userPic/${userPic}.jpg`;
+    show(profileImg);
+  } else {
+    show(profileImg);
+  }
+}
 
 checkUserBelongs();
 showRecentlyReviews();
-// is_following();
+getUserPicAndShow();

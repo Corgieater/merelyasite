@@ -195,3 +195,20 @@ def get_following_latest_like_reviews(user_id):
 @user_blueprint.route('/api/most_popular_reviews/')
 def get_most_popular_reviews():
     return get_most_popular_reviews_func()
+
+
+# user profile 上傳圖片
+@user_blueprint.route('/api/user/<user_id>/upload_pic', methods=["PATCH"])
+def upload_user_profile_pic(user_id):
+    # data = request.get_json()
+    # img = data['photoFile']
+    img = request.files['photoFile']
+    print(img)
+    return upload_user_profile_pic_func(user_id, img)
+
+
+# user profile 拿user上傳的照片 沒有就用預設
+@user_blueprint.route('/api/user/<user_id>/upload_pic')
+def get_user_profile_pic(user_id):
+    return get_user_profile_pic_func(user_id)
+

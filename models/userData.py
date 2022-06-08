@@ -454,3 +454,40 @@ class UserDatabase:
         finally:
             cursor.close()
             connection.close()
+
+    # 加入user profile照片名字
+    def add_user_profile_pic(self, user_id, img_name):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('UPDATE users SET image_id = %s WHERE user_id=%s',
+                           (img_name, user_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+
+    # 拿user profile 照片
+    def get_user_profile_pic(self, user_id):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT image_id FROM users WHERE user_id = %s',
+                           (user_id,))
+            image_id = cursor.fetchone()
+            print(image_id, 'from userData')
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return image_id
+        finally:
+            cursor.close()
+            connection.close()

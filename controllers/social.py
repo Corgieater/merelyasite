@@ -4,11 +4,32 @@ from models.userData import *
 import jwt
 import os
 import math
+import requests
+from os.path import basename
+import boto3
 
 review_database = ReviewDatabase()
 user_database = UserDatabase()
 key = os.getenv('JWT_SECRET_KEY')
 
+key_id = os.getenv('AWS_ACCESS_KEY_ID')
+secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+bucket_name = os.getenv('BUCKET_NAME')
+
+client = boto3.client('s3',
+                      aws_access_key_id=key_id,
+                      aws_secret_access_key=secret_key
+                      )
+
+
+def up_load_to_s3(img, user_id):
+    # 丟S3
+    client.put_object(
+        Bucket=bucket_name,
+        Body=img,
+        Key=f'userPic/userProfileImg-{user_id}.jpg',
+        ContentType='image/jpeg',
+    )
 
 def make_reviews_dic(data):
     review_dic = {
@@ -273,3 +294,39 @@ def get_most_popular_reviews_func():
         data['data']['data'].append(info)
     print(user_followings_like_reviews)
     return data
+
+
+# 上傳user profile 照片
+def upload_user_profile_pic_func(user_id, img):
+    img_name = f'userProfileImg-{user_id}'
+    try:
+        up_load_to_s3(img, user_id)
+    except Exception as e:
+        print('we got problem on user pic upload to s3')
+        print(e)
+    pic_uploaded = user_database.add_user_profile_pic(user_id, img_name)
+    if pic_uploaded:
+        return {
+            'ok': True
+        }
+    else:
+        return {
+            'error':True,
+            'message': 'Something went wrong, please try again'
+        }
+
+
+def get_user_profile_pic_func(user_id):
+    user_profile_pic_name = user_database.get_user_profile_pic(user_id)
+    print(user_profile_pic_name, 'user_profile_pic_name from social')
+    if user_profile_pic_name is not None:
+        return {
+            'data': {
+                'picName': user_profile_pic_name[0]
+            }
+        }
+    else:
+        return {
+            'data': None
+        }
+

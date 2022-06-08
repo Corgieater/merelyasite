@@ -11,7 +11,6 @@ load_dotenv()
 key_id = os.getenv('AWS_ACCESS_KEY_ID')
 secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 bucket_name = os.getenv('BUCKET_NAME')
-omdb_key = os.getenv('TMDB_KEY')
 
 
 client = boto3.client('s3',

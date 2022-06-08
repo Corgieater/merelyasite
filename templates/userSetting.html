@@ -5,17 +5,34 @@
   href="{{url_for('static', filename='css/userSetting.css')}}"
 />
 {% endblock %} {% block content %}
-<div>
-  <p>Change profile image:</p>
-  <input type="file" />
+<h2>Change profile image:</h2>
+<div class="flex">
+  <form id="photoForm">
+    <input
+      type="file"
+      name="photoFile"
+      id="phtoFile"
+      accept="image/jpeg, image/png"
+    />
+    <br />
+    <button class="uploadBt">Upload photo</button>
+  </form>
+  <img class="picPlace hide" src="" alt="" />
 </div>
+
+<br />
 <div>
   <section>
     <label for="changePassword"> Change password: </label>
+    <br />
+    <br />
     <input type="password" name="changePassword" id="changePassword" />
   </section>
+  <br />
   <section>
     <label for="confirmPassword"> Confirm password: </label>
+    <br />
+    <br />
     <input type="password" name="confirmPassword" id="confirmPassword" />
   </section>
 </div>

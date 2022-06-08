@@ -3,7 +3,10 @@
 }
 /* user */
 .profile > img {
-  width: 150px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: gray;
 }
 .profile > section {
   margin-left: 100px;
