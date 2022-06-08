@@ -36,7 +36,7 @@ let title = document.querySelector(
   ".textPlace > div > section:nth-child(1) > section > h2 > a"
 );
 let year = document.querySelector(
-  ".textPlace > div > section:nth-child(1) > section > p > a"
+  ".textPlace > div > section:nth-child(1) > section > p"
 );
 let lastTimeStarPlace = document.querySelector(
   ".textPlace > div > section:nth-child(1) > section:nth-child(2) > section"
@@ -66,11 +66,11 @@ let editBt = document.querySelector(
   ".textPlace > div > section.actionBox > ul > li:nth-child(2) > a"
 );
 let reviewAgainBt = document.querySelector(
-  ".textPlace > div > section.actionBox > ul > li:nth-child(4) > a"
+  ".textPlace > div > section.actionBox > ul > li:nth-child(3) > a"
 );
 let averageRatePlace = document.querySelector(".averagePlace");
 averageRatePlace.title = "";
-let addListBt = document.querySelector(".actionBox > ul > li:nth-child(3) > a");
+// let addListBt = document.querySelector(".actionBox > ul > li:nth-child(3) > a");
 
 // review區
 let reviewBox = document.querySelector(".reviewBox");
@@ -107,7 +107,6 @@ async function showProperReviewBox() {
     show(rateBtsPlace);
     show(watchlistBt);
     show(removeWatchlistBt);
-    show(addListBt);
     show(editBt);
     console.log(isPageBelongsToLoggedUser);
     if (isPageBelongsToLoggedUser === false) {

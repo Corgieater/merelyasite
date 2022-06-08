@@ -12,7 +12,7 @@ section > a {
 
 /* text */
 .textPlace > .headArea > section:nth-child(1) {
-  /* max-width: 30%; */
+  max-width: 500px;
 }
 .textPlace {
   line-height: 1.5;
@@ -34,7 +34,6 @@ section > a {
 /* head area */
 .headArea {
   width: 100%;
-  /* justify-content: space-between; */
 }
 .headArea > section > h2 {
   font-size: 35px;
@@ -48,9 +47,7 @@ section > a {
   font-size: 25px;
   font-weight: bold;
 }
-/* .headArea > section :nth-child(2) {
-  margin-bottom: 20px;
-} */
+
 /* tagling */
 .headArea > section :nth-child(3) {
   font-size: 18px;
@@ -102,7 +99,7 @@ section > a {
   font-size: 30px;
   position: absolute;
   left: 10px;
-  bottom: 90px;
+  bottom: 110px;
   text-decoration: none !important;
 }
 .closeBt {

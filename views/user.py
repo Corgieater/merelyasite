@@ -65,7 +65,6 @@ def follows_other_people():
 @user_blueprint.route('/user_profile/<page_master>/watchlist')
 def render_user_watchlist_page(page_master):
     page_master = page_master.replace('+', ' ')
-    print(page_master, 666666666)
 
     return render_template('userWatchlist.html', pageMaster=page_master)
 
@@ -111,7 +110,7 @@ def user_review_state():
         return check_user_review_likes(user_id, review_id)
 
 
-# 加入待看清單watch list
+# 加入待看清單watchlist
 @user_blueprint.route('/api/user_profile/watchlist', methods=["PATCH"])
 def add_movie_to_watchlist():
     data = request.get_json()

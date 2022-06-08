@@ -25,11 +25,11 @@ section > a {
 .casts {
   margin-bottom: 20px;
 }
-/* .headArea a,
+.headArea a,
 .footArea a {
   text-decoration: underline;
   text-decoration-color: antiquewhite;
-} */
+}
 
 /* head area */
 .headArea {
@@ -80,7 +80,6 @@ section > a {
   min-width: 35%;
   margin-left: 10px;
   max-height: 500px;
-  /* background-color: #264653; */
   background-color: #4a4e69;
   color: antiquewhite;
   text-align: center;
@@ -99,12 +98,12 @@ section > a {
 }
 
 /* 取消星星評分的按鈕  cancelBt*/
-.actionBox > ul > li:nth-child(5) > fieldset > a {
+.cancelBt {
   font-size: 30px;
   position: absolute;
   left: 5px;
-  bottom: 60px;
-  text-decoration: none;
+  bottom: 100px !important;
+  text-decoration: none !important;
 }
 .actionBox > ul > li:nth-child(5) {
   font-size: 25px;
@@ -120,7 +119,6 @@ section > a {
   top: 0;
 }
 .reviewBox {
-  /* border: 1px white solid; */
   border-radius: 5px;
   position: absolute;
   background-color: lightslategrey;
@@ -133,7 +131,6 @@ section > a {
   padding: 30px;
 }
 .reviewBox > section > img {
-  /* max-width: 50%; */
   max-height: 80%;
 }
 .reviewBox > section:nth-child(2) {
@@ -259,7 +256,9 @@ label:hover ~ input:checked ~ label /* highlight previous selected stars */ {
 .reviewLikePlace {
   margin-top: 50px;
 }
-
+.likesCountPlace {
+  font-size: 20px !important;
+}
 /* antiSpoilers */
 .antiSpoilers > img {
   margin-left: 100px;

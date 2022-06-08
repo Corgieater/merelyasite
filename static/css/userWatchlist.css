@@ -5,15 +5,45 @@ h2 {
   margin-top: 20px;
   flex-wrap: wrap;
 }
-.showPlace > li {
+/* 海報容器*/
+.posterFrame {
   margin: 0 10px 10px 0;
-}
-.showPlace > li > a > img {
-  width: 180px;
-  height: 250px;
+  position: relative;
   border: solid 1px gray;
 }
 
-/* .pagesPlace {
-  height: 25px;
-} */
+/* 海報 */
+.moviePos {
+  width: 180px;
+  height: 250px;
+}
+
+/* 海報上的暗影 */
+.posterMask {
+  position: absolute;
+  z-index: 2;
+  top: 10%;
+  left: 15%;
+  width: 120px;
+  height: 180px;
+  background-color: rgba(0, 0, 0, 0.689);
+  border-radius: 5px;
+}
+
+.posterFrame > .posterMask > section {
+  flex-direction: column;
+}
+/* 海報上的小東西 */
+.posterFrame > .posterMask > section > a {
+  position: relative;
+}
+.posterFrame > .posterMask > section > a > img {
+  position: absolute;
+  left: 23%;
+}
+.posterMask > section > a:nth-child(1) > img {
+  top: 20px;
+}
+.posterMask > section > a:nth-child(2) > img {
+  top: 100px;
+}

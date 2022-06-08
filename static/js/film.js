@@ -31,9 +31,8 @@ let rate = document.querySelector(".rate");
 let rateBts = document.querySelectorAll("input[type='radio']");
 let cancelBt = document.querySelector(".cancelBt");
 let reviewBt = document.querySelector(".actionBox>ul>li:nth-child(2)>a");
-let addListBt = document.querySelector(".actionBox > ul > li:nth-child(3) > a");
 let averageRatePlace = document.querySelector(
-  ".actionBox > ul > li:nth-child(5)"
+  ".actionBox > ul > li:nth-child(4)"
 );
 let userLogPlace = document.querySelector("#review");
 
@@ -61,7 +60,6 @@ async function showProperReviewBox() {
     show(watchlistBt);
     show(removeWatchlistBt);
     show(reviewBt);
-    show(addListBt);
   } else {
     let actionBox = document.querySelector(".actionBox > ul");
     // actionBox.style.height = "200px";
@@ -166,12 +164,12 @@ removeWatchlistBt.addEventListener("click", async function (e) {
     movieId: filmId,
     userId: userId,
   };
-  let addToWatchlistMessage = await sendDataToBackend(
+  let removeFromWatchlistMessage = await sendDataToBackend(
     "DELETE",
     data,
     "/api/user_profile/watchlist"
   );
-  if (addToWatchlistMessage === true) {
+  if (removeFromWatchlistMessage === true) {
     window.location.reload();
     makeMessage(
       globalMessagePlace,
