@@ -191,7 +191,7 @@ def get_following_latest_like_reviews(user_id):
     return get_following_latest_like_reviews_func(user_id)
 
 
-# most popular reviews *4  for index HERE
+# most popular reviews *4  for index
 @user_blueprint.route('/api/most_popular_reviews/')
 def get_most_popular_reviews():
     return get_most_popular_reviews_func()

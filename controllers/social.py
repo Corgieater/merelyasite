@@ -43,7 +43,8 @@ def make_reviews_dic(data):
             'reviewId': item[1],
             'movieId': item[2],
             'reviewDate': item[3],
-            'movieTitle': item[4]
+            'movieTitle': item[4],
+            'reviewerImgId': item[5]
         }
         review_dic['data']['data'].append(info)
     return review_dic
@@ -259,7 +260,6 @@ def get_total_review_likes_func(review_id):
 # 拿最近following的朋友喜歡的評論*4
 def get_following_latest_like_reviews_func(user_id):
     user_followings_like_reviews = review_database.get_followings_like_reviews(user_id)
-    print(user_followings_like_reviews)
     data = {
         'data':{'data':[]}
     }
@@ -270,10 +270,10 @@ def get_following_latest_like_reviews_func(user_id):
             'review': review[2],
             'spoilers': review[3],
             'movieTitle': review[4],
-            'reviewer': review[5]
+            'reviewer': review[5],
+            'reviewerImgId': review[6]
         }
         data['data']['data'].append(info)
-    print(user_followings_like_reviews)
     return data
 
 
@@ -289,7 +289,8 @@ def get_most_popular_reviews_func():
             'review': review[1],
             'spoilers': review[3],
             'movieTitle': review[4],
-            'reviewer': review[5]
+            'reviewer': review[5],
+            'reviewerImgId': review[7]
         }
         data['data']['data'].append(info)
     print(user_followings_like_reviews)

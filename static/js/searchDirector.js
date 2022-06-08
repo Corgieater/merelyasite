@@ -31,11 +31,8 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("r=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/director?director=${userInputAndPage}`);
-  console.log(`/api/search/director?director=${userInputAndPage}`);
   const res = await req.json();
-  console.log(res);
   if (res.data) {
     return [res, userInputAndPage];
   } else {
@@ -58,7 +55,6 @@ async function makeShowRow(data, userInputAndPage) {
 
     //   use for of for async func
     for (const info of data.data) {
-      console.log(info);
       let directorName = info["directorName"];
       let noSpaceName = directorName.replaceAll(" ", "+");
       let totalMoiesCount = info["directorMovieCount"];
@@ -91,7 +87,5 @@ async function makeShowRow(data, userInputAndPage) {
     }
   }
 }
-
-// 小功能
 
 renderDataInfo();

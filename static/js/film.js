@@ -53,7 +53,6 @@ let reviewPoster = document.querySelector(
 // 沒登入就把reviewBox的東西都藏起來吧
 async function showProperReviewBox() {
   const userIsLogged = await checkIfLogged();
-  console.log(userIsLogged);
   if (userIsLogged === true) {
     show(smallActionsPlace);
     show(rate);
@@ -236,7 +235,6 @@ saveBt.addEventListener("click", async function () {
       userId: id,
       spoilers: spoilers,
     };
-    console.log("datatata", data);
     sendDataToBackend("PATCH", data, "/api/review");
     hide(reviewBox);
     hide(mask);
@@ -297,72 +295,60 @@ async function showPreviousRate() {
   let rate = null;
   if (data.rate === null) {
     hide(cancelBt);
-    console.log(rate);
     return (rate = 0);
   } else {
     rate = data.rate;
-    console.log(rate);
     show(cancelBt);
   }
 
   switch (rate) {
     case "0.5": {
       let star = document.querySelector("#rating1");
-      console.log(0.5);
       star.checked = true;
       break;
     }
     case "1.0": {
       let star = document.querySelector("#rating2");
-      console.log(1);
       star.checked = true;
       break;
     }
     case "1.5": {
       let star = document.querySelector("#rating3");
-      console.log(1.5);
       star.checked = true;
       break;
     }
     case "2.0": {
       let star = document.querySelector("#rating4");
-      console.log(2);
       star.checked = true;
       break;
     }
     case "2.5": {
       let star = document.querySelector("#rating5");
-      console.log(2.5);
       star.checked = true;
       break;
     }
     case "3.0": {
       let star = document.querySelector("#rating6");
-      console.log(3);
       star.checked = true;
       break;
     }
     case "3.5": {
       let star = document.querySelector("#rating7");
-      console.log(3.5);
       star.checked = true;
       break;
     }
     case "4.0": {
       let star = document.querySelector("#rating8");
-      console.log(4);
       star.checked = true;
       break;
     }
     case "4.5": {
       let star = document.querySelector("#rating9");
-      console.log(4.5);
       star.checked = true;
       break;
     }
     case "5.0": {
       let star = document.querySelector("#rating10");
-      console.log(5);
       star.checked = true;
       break;
     }
@@ -393,7 +379,6 @@ cancelBt.addEventListener("click", async function (e) {
     hide(cancelBt);
     window.location.reload();
   } else {
-    console.log(deleteRatingMessage, "deleteRatingMessage");
     makeMessage(averageRatePlace, deleteRatingMessage);
   }
 });
@@ -417,7 +402,6 @@ async function getAverageRate() {
 async function getFilm() {
   const req = await fetch(`/api/film/${filmId}`);
   const res = await req.json();
-  console.log("getFIlm", res);
   return res;
 }
 

@@ -15,14 +15,12 @@ async function sendDataToBackend(method, data, address) {
     },
     body: JSON.stringify(data),
   });
-  console.log("send this to back", data, typeof data);
+
   const res = await req.json();
-  console.log(res);
+
   if (res.ok) {
-    console.log("res.ok", res.ok);
     return true;
   } else if (res.message) {
-    console.log("res.message", res.message);
     return res.message;
   } else {
     return res.data;
@@ -105,11 +103,7 @@ async function getUserData() {
 async function checkUserForPages(pageMaster) {
   let loggedUser = await getUserData();
   loggedUser = loggedUser["userName"];
-  // if (loggedUser === undefined) {
-  //   return undefined;
-  // }
-  console.log("now logged in", loggedUser);
-  console.log("page master", pageMaster);
+
   if (loggedUser !== pageMaster) {
     return false;
   } else {
@@ -119,7 +113,6 @@ async function checkUserForPages(pageMaster) {
 
 // 做頁碼 先用成做13頁 不然有夠他媽多= =
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
-  console.log("makePageTagds", userInputAndPage);
   let pagesPlace = document.querySelector(".pagesPlace");
   // 這裡的問題 改一下
   if (totalPages >= 14) {

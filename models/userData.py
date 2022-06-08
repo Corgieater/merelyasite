@@ -17,7 +17,7 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s)', inputs)
+            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s, DEFAULT)', inputs)
         except Exception as e:
             print(e)
             connection.rollback()

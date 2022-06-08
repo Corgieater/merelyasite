@@ -36,9 +36,7 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("s=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/reviews?reviews=${userInputAndPage}`);
-  console.log(`/api/search/reviews?reviews=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -49,7 +47,6 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   makePageTags(
     "search/reviews?reviews=",
     userInputAndPage,
@@ -60,11 +57,9 @@ async function makeShowRow(data, userInputAndPage) {
   } else {
     let showPlace = document.querySelector(".showPlace");
     data = data[0]["data"].data;
-    console.log(data);
     //   use for of for async func
     // (const info of data)
     for (let i = 0; i < data.length; i++) {
-      // console.log(info);
       let li = document.createElement("li");
       let movieId = data[i]["movieId"];
       let movieTitle = data[i]["movieTitle"];
@@ -126,42 +121,7 @@ async function makeShowRow(data, userInputAndPage) {
         reviewBodies[i].insertBefore(spoilerAlert, reviewPlaces[i]);
         reviewBodies[i].insertBefore(alert, spoilerAlert);
       }
-      // 本來是想做偵測有沒有ellipses然後加入a tag可以讓使用者點開
-      // 但我現在沒心力
-      // else {
-      //   let ellipsisActive = isEllipsisActive(reviewPlaces[i]);
-      //   if (ellipsisActive) {
-      //     let a = document.createElement("a");
-      //     a.href = "#";
-      //     a.textContent = "more";
-      //     a.style.color = "white";
-      //     reviewBodies[i].append(a);
-      //     a.addEventListener("click", function (e) {
-      //       e.preventDefault();
-      //       let dot = reviewPlaces[i].innerHTML.lastIndexOf("...");
-      //       console.log(dot);
-      //     });
-      //   }
-      // }
     }
-    // let reviewPlaces = document.querySelectorAll(".reviewPlace");
-    // let reviewBody = document.querySelector(".reviewBody");
-    // if (spoilers) {
-    //   console.log(reviewPlace);
-    //   reviewPlace.classList.add("hide");
-    //   let alert = document.createElement("p");
-    //   alert.textContent = "There are spoilers in this review!";
-    //   let spoilerAlert = document.createElement("a");
-    //   spoilerAlert.textContent = "I don't mind, let me read.";
-    //   spoilerAlert.href = "#";
-    //   spoilerAlert.addEventListener("click", function (e) {
-    //     e.preventDefault();
-    //     reviewText.classList.remove("hide");
-    //     alert.classList.add("hide");
-    //     spoilerAlert.classList.add("hide");
-    //   });
-    //   reviewBody.insertBefore(spoilerAlert, reviewPlace);
-    //   reviewBody.insertBefore(alert, spoilerAlert);
   }
 }
 

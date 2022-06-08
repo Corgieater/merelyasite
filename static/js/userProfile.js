@@ -50,10 +50,8 @@ async function checkUserBelongs() {
     userName.replaceAll("+", " ")
   );
   if (isThePageBelongsToLoggedUser === false) {
-    console.log("page not belong to the logger");
     is_following();
   } else if (isThePageBelongsToLoggedUser === true) {
-    console.log("yes master");
     show(editProfileBt);
   }
 }
@@ -116,15 +114,12 @@ async function showRecentlyReviews() {
     const spoilers = info["spoilers"];
     // 把後面的時間切掉
     if (watchedDay !== null) {
-      console.log("use watched day");
       date = `Watched on ${watchedDay.substring(0, 16)}`;
     } else {
-      console.log("reivewDay");
       // 如果使用者沒填watched day 就拿填表日期來用
       date = `Reviewd on ${reviewDay.substring(0, 16)}`;
     }
     const reviewPage = `/user_profile/${userName}/reviews/films/${filmTitleForHref}/${reviewId}`;
-    // ("/user_profile/<user_name>/reviews/films/<movie_name>/<review_id></review_id>");
     let content = `
       <div>
       <img
@@ -143,7 +138,6 @@ async function showRecentlyReviews() {
       `;
     li.innerHTML = content;
     reviewdPlace.append(li);
-    // let starPlace = document.querySelectorAll(".starPlace");
     let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
 

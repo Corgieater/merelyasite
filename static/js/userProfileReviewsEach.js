@@ -100,7 +100,7 @@ async function showProperReviewBox() {
   const userIsLogged = await checkIfLogged();
   let isPageBelongsToLoggedUser = false;
   isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
-  console.log(userIsLogged);
+
   // 沒登入接下來都不用看了
   if (userIsLogged === true) {
     show(smallActionsPlace);
@@ -108,7 +108,6 @@ async function showProperReviewBox() {
     show(watchlistBt);
     show(removeWatchlistBt);
     show(editBt);
-    console.log(isPageBelongsToLoggedUser);
     if (isPageBelongsToLoggedUser === false) {
       editBt.textContent = "Write a review";
       // 這邊要打API去查這user是有沒有寫過這電影的評論
@@ -249,7 +248,6 @@ editBt.addEventListener("click", async function (e) {
     hide(reviewAgainSaveBt);
     // 看上次spoiler是不是true
     spoilersCheckBox.checked = lastTimeSpoilers;
-    console.log(lastTimeSpoilers);
     // 上次看過東西就要維持一樣
     if (lastTimeWatched) {
       dateCheckBox.checked = true;
@@ -272,11 +270,9 @@ editBt.addEventListener("click", async function (e) {
     hide(deleteReviewBt);
   }
   editSaveBt.addEventListener("click", async function () {
-    console.log("update");
     updateReviewFunc();
   });
   saveBtForOthers.addEventListener("click", async function () {
-    console.log("save review for others");
     saveReviewForOthers();
   });
 });
@@ -296,7 +292,6 @@ reviewAgainBt.addEventListener("click", function (e) {
   watchedDate.value = "";
   hide(deleteReviewBt);
   reviewAgainSaveBt.addEventListener("click", async function () {
-    console.log("review again");
     reviewAgainFunc();
   });
 });
@@ -325,7 +320,6 @@ closeBt.addEventListener("click", function (e) {
 // 評分星星 按評分會直送資料庫更新
 rateBts.forEach((bt) => {
   bt.addEventListener("click", async function (e) {
-    console.log("hi");
     e.preventDefault();
 
     let rate = e.target.value;
@@ -354,7 +348,6 @@ async function showPreviousRate(rate) {
   if (rate === null) {
     hide(cancelBt);
   } else {
-    console.log("i havd rated", rate);
     rate = rate;
     show(cancelBt);
   }
@@ -437,7 +430,6 @@ cancelBt.addEventListener("click", async function (e) {
     hide(cancelBt);
     window.location.reload();
   } else {
-    console.log(deleteRatingMessage, "deleteRatingMessage");
     makeMessage(averageRatePlace, deleteRatingMessage);
   }
 });
@@ -448,7 +440,6 @@ async function getReview() {
     `/api/user_profile/${pageMaster}/reviews/films/${movieName}/${reviewId}`
   );
   const res = await req.json();
-  console.log("get review", res);
   return res;
 }
 
@@ -457,7 +448,6 @@ async function showFilmInfo() {
   let data = await getReview();
   let isPageBelongsToLoggedUser = false;
   isPageBelongsToLoggedUser = await checkUserForPages(pageMasterWithNoPlus);
-  console.log(isPageBelongsToLoggedUser);
 
   let userReview = document.querySelector(".userReview");
   data = data["data"];
@@ -571,7 +561,6 @@ likesReviewBt.addEventListener("click", async function (e) {
     data,
     "/api/user_profile/likes/review"
   );
-  console.log(likeThisReview);
   if (likeThisReview === true) {
     window.location.reload();
   }
@@ -591,7 +580,6 @@ deleteLikesReviewBt.addEventListener("click", async function (e) {
     data,
     "/api/user_profile/likes/review"
   );
-  console.log(deleteFromReviewLike);
   if (deleteFromReviewLike === true) {
     window.location.reload();
   }
@@ -633,7 +621,7 @@ async function updateReviewFunc() {
       watchedDate: watchedDate.value,
       spoilers: spoilers,
     };
-    console.log("for update review", data);
+
     let reviewUpdateMessage = await sendDataToBackend(
       "PATCH",
       data,
@@ -649,7 +637,6 @@ async function updateReviewFunc() {
 
 // save review for other func
 async function saveReviewForOthers() {
-  console.log("not page master 555");
   let spoilers = false;
   let loggedUser = await getUserData();
   deleteMessage();
@@ -675,7 +662,7 @@ async function saveReviewForOthers() {
       spoilers: spoilers,
       reviewId: reviewId,
     };
-    console.log("for update review", data);
+
     let reviewUpdateMessage = await sendDataToBackend(
       "PATCH",
       data,
@@ -715,7 +702,6 @@ async function reviewAgainFunc() {
       reviewId: reviewId,
       from: "userProfileReviewAgain",
     };
-    console.log("for review again", data);
 
     let reviewUpdateMessage = await sendDataToBackend(
       "PATCH",

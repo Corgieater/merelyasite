@@ -178,5 +178,4 @@ def get_latest_reviews():
 # 拿這週最hot的電影 *6 for index
 @films_blueprint.route('/api/get_most_popular_movies_this_week/')
 def get_most_popular_movies_this_week():
-    print('get_most_popular_movies_this_week views films')
     return get_most_popular_movies_this_week_func()

@@ -28,12 +28,12 @@ async function checkUserLogin() {
     let userName = userData["userName"];
     let userId = userData["userId"];
     makeNewsFromFriends(userName);
-    showReviewsFriendsLike(userId);
+    showReviewsFriendsLikeOrOtherPeopleLike(userId);
   } else {
     showSignUpLink(welcomePlace);
     makeNews();
     show(popularThisWeekPlace);
-    showReviewsFriendsLike();
+    showReviewsFriendsLikeOrOtherPeopleLike();
   }
 }
 // PEOPLE WHO NOT LOGIN
@@ -89,10 +89,8 @@ async function makeNews() {
 }
 
 async function makePopularMoviesShow() {
-  let popularMovies = await getMostPopularThisWeek();
+  let popularMovies = await getMostPopularMoviesThisWeek();
   popularMovies = popularMovies.data.data;
-  console.log(popularMovies);
-  // popularMovies = popularMovies.data;
   for (let movie of popularMovies) {
     let movidId = movie["movieId"];
     let totalLikes = movie["totalLikes"];
@@ -150,7 +148,6 @@ async function getNewsFromFriends() {
 async function makeNewsFromFriends(userName) {
   let data = await getNewsFromFriends();
   let h2 = document.createElement("h2");
-  console.log(data);
   if (data.data) {
     h2.textContent = `Hi ${userName}. Your friends have been watching...`;
     welcomePlace.append(h2);
@@ -164,6 +161,14 @@ async function makeNewsFromFriends(userName) {
       let followingNameForHref = info["followUserName"].replaceAll(" ", "+");
       let reviewdMovieNameForHref = info["movieTitle"].replaceAll(" ", "+");
       let reviewId = info["reviewId"];
+      let reviewerImgId = info["reviewerImgId"];
+
+      if (reviewerImgId === null) {
+        reviewerImgId = "../static/images/user.png";
+      } else {
+        reviewerImgId = `https://dwn6ych98b9pm.cloudfront.net/userPic/${reviewerImgId}.jpg`;
+      }
+
       let content = `
     <a href="/user_profile/${followingNameForHref}/reviews/films/${reviewdMovieNameForHref}/${reviewId}">
     <section class="headPlace">
@@ -173,7 +178,11 @@ async function makeNewsFromFriends(userName) {
           alt="image"
         />
       </section>
-      <section class="namePlace">${followingName}</section>
+      
+      <section class="namePlace flex">
+      <img class='userPic' src="${reviewerImgId}">
+      ${followingName}
+      </section>
     </section>
     <section class="footPlace flex">
       <section class="datePlace">${followingReviewDate}</section>
@@ -192,8 +201,8 @@ async function makeNewsFromFriends(userName) {
   }
 }
 
-// show friends like reviews *4
-async function showReviewsFriendsLike(currentUserId = null) {
+// show friends like reviews *4 or other people like if no firends
+async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
   let reviewFriendsLike = null;
   let reviewFriendsLikeLen = 0;
   let userData = await getUserData();
@@ -204,7 +213,6 @@ async function showReviewsFriendsLike(currentUserId = null) {
     );
     let res = await req.json();
     reviewFriendsLike = res.data.data;
-    console.log(res);
     reviewFriendsLikeLen = reviewFriendsLike.length;
     dynamicTextForLikeReviews.textContent = "REVIEWS YOUR FRIENDS LIKE";
   }
@@ -222,6 +230,15 @@ async function showReviewsFriendsLike(currentUserId = null) {
     let review = reviewFriendsLike[i]["review"];
     let reviewId = reviewFriendsLike[i]["reviewId"];
     let spoilers = reviewFriendsLike[i]["spoilers"];
+    // reviewers photo
+    let reviewerImgId = reviewFriendsLike[i]["reviewerImgId"];
+    reviewerImgId = reviewFriendsLike[i]["reviewerImgId"];
+
+    if (reviewerImgId === null) {
+      reviewerImgId = "../static/images/user.png";
+    } else {
+      reviewerImgId = `https://dwn6ych98b9pm.cloudfront.net/userPic/${reviewerImgId}.jpg`;
+    }
 
     let reviewerNameForUrl = reviewer.replaceAll(" ", "+");
     let movieTitleForUrl = review.replaceAll(" ", "+");
@@ -231,7 +248,10 @@ async function showReviewsFriendsLike(currentUserId = null) {
     <section class="flex">
     <img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg" />
     <section class="likeReviewNamePlace flex">
+      <section class='flex'>
+      <img class='userPic' src="${reviewerImgId}">
       <a href="/user_profile/${reviewer}">${reviewer}</a>
+      </section>
       <a href="${reviewUrl}">${movieTitle}</a>
     </section>
   </section>
@@ -268,7 +288,7 @@ async function showReviewsFriendsLike(currentUserId = null) {
 }
 
 // some func for people do not follow or no login
-async function getMostPopularThisWeek() {
+async function getMostPopularMoviesThisWeek() {
   const req = await fetch("/api/get_most_popular_movies_this_week/");
   const res = await req.json();
   return res;
@@ -277,12 +297,11 @@ async function getMostPopularThisWeek() {
 async function getNewReviewed() {
   let req = await fetch(`/api/get_latest_reviews/`);
   const res = await req.json();
-  console.log(res);
   return res;
 }
 
-function addEventToPosters() {
-  console.log(popularPosters);
-}
+// function addEventToPosters() {
+//   console.log(popularPosters);
+// }
 
 checkUserLogin();

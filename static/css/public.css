@@ -184,8 +184,6 @@ nav > h1 > a {
 nav > ul {
   position: absolute;
   align-items: flex-end;
-  /* width: 50%; */
-  /* border: solid white 1px; */
   right: 20%;
   margin: 20px 0;
 }
@@ -199,7 +197,7 @@ nav > ul > li > input {
 .logInPlace {
   width: 50%;
   position: absolute;
-  top: 18%;
+  top: 20%;
   right: 15%;
 }
 
@@ -260,9 +258,6 @@ nav > ul > li > input {
 .signUpPlace > label {
   font-size: 20px;
 }
-/* .showValidation{
-  font-size:
-} */
 
 /* addMoviePlace */
 .addMoviePlace {
@@ -310,4 +305,16 @@ nav > ul > li > input {
 .filterGreen {
   filter: invert(48%) sepia(58%) saturate(486%) hue-rotate(123deg)
     brightness(95%) contrast(88%);
+}
+
+/* user小圖 */
+.userPic {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.namePlace {
+  padding: 10px;
+  align-items: center;
 }

@@ -47,7 +47,7 @@ async function showWatchlist() {
           movieId: filmId,
           userId: userId,
         };
-        console.log(data);
+
         let removeFromWatchlistMessage = await sendDataToBackend(
           "DELETE",
           data,

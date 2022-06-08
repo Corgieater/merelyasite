@@ -118,6 +118,13 @@
   flex-direction: column;
   padding: 20px;
 }
+.likeReviewNamePlace > section {
+  align-items: center;
+  padding: 15px 0;
+}
+.likeReviewNamePlace > section > img {
+  margin-right: 10px;
+}
 /* friend like user name */
 .reviewsWIthFriendsPlace > li > section > section > a:nth-child(1) {
   margin-bottom: 20px;
