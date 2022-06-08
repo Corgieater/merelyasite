@@ -172,7 +172,7 @@ async function getUserPicAndShow() {
   let req = await fetch(`/api/user/${userId}/upload_pic`);
   let res = await req.json();
   let profileImg = document.querySelector(".profile >img");
-  if (res.data !== null) {
+  if (res.data.picName !== null) {
     let userPic = res.data["picName"];
     profileImg.src = `https://dwn6ych98b9pm.cloudfront.net/userPic/${userPic}.jpg`;
     show(profileImg);

@@ -55,11 +55,12 @@ def make_user_dic(data, followed_info, following_info, page, total_page):
         data_dic['nextPage'] = page + 1
     else:
         data_dic['nextPage'] = None
-    print('make user dic', data)
+
     # followed_info, following_info
     for i in range(len(data)):
         info_dic = {
             'userName': data[i][0],
+            'userImageId':data[i][1], 
             'followingNum': following_info[i][0],
             'followerNum': followed_info[i][0]
         }
@@ -174,16 +175,13 @@ def get_films_by_genre_func(genre, page):
 
 # user name get users HERE
 def get_users_by_name_func(name, page):
-    print(name, 'userInput')
     data_count = user_database.get_total_user_count_by_name(name)[0]
     if data_count is 0:
         return {
             'error': True,
             'message': 'No such key word, please try another'
         }
-    print('data_count', data_count)
     total_page = math.ceil(data_count / 20)
-    print(total_page)
     if page is None:
         page = 1
     page = int(page)-1
@@ -195,7 +193,7 @@ def get_users_by_name_func(name, page):
         return {
             'error': True
         }
-    dic_data = make_user_dic(info, followed_info , following_info,page, total_page)
+    dic_data = make_user_dic(info, followed_info, following_info,page, total_page)
     print(dic_data)
 
     return dic_data

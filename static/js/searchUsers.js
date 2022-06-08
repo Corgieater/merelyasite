@@ -31,7 +31,6 @@ usersCollectionsBt.href = ``;
 // 做資料
 async function renderDataInfo() {
   let data = await getData();
-  console.log(data);
   let userInput = data[1];
   makeShowRow(data, userInput);
 }
@@ -41,9 +40,7 @@ async function getData() {
   let userInputAndPage = cutUserInputAtLast("r=");
   console.log(userInputAndPage);
   let req = await fetch(`/api/search/users?user=${userInputAndPage}`);
-  console.log(`/api/search/users?user=${userInputAndPage}`);
   const res = await req.json();
-  console.log(res);
   if (res.data) {
     return [res, userInputAndPage];
   } else {
@@ -53,12 +50,12 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
     let showPlace = document.querySelector(".showPlace");
     data = data[0].data;
+    console.log(data);
 
     //   use for of for async func
     for (const info of data.data) {
@@ -76,7 +73,14 @@ async function makeShowRow(data, userInputAndPage) {
       let a2 = document.createElement("a");
       let a3 = document.createElement("a");
       let section = document.createElement("section");
-      img.src = `../static/images/user.png`;
+      let userImage = info["userImageId"];
+      if (userImage === null) {
+        userImage = "../static/images/user.png";
+      } else {
+        userImage = `https://dwn6ych98b9pm.cloudfront.net/userPic/${userImage}.jpg`;
+      }
+      img.src = userImage;
+      img.classList.add("userImg");
       a1.href = `/user_profile/${noSpaceName}`;
       a1.textContent = searchedUserName + " ";
       if (searchedUserFollowingNum === null) {

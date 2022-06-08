@@ -80,7 +80,6 @@ def render_search_genre_page():
 def get_users_by_name():
     user = request.args.get('user')
     page = request.args.get('page')
-    print('name', user, page)
     return get_users_by_name_func(user, page)
 
 

@@ -57,3 +57,8 @@ h2 {
 .showPlace > li > div > div:nth-child(2) > section > a:nth-child(1) {
   margin-right: 5px;
 }
+
+/* for user image, search users */
+.userImg {
+  border-radius: 50% !important;
+}

@@ -112,19 +112,16 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # 拿user資料by name page HERE 還在做
+    # 拿user資料by name page
     def get_users_by_name(self, name, start_index):
         start_index = int(start_index) * 20
-        print(start_index)
-        print(name)
+        connection = p.get_connection()
+        cursor = connection.cursor()
         try:
-            connection = p.get_connection()
-            cursor = connection.cursor()
-            cursor.execute('SELECT name FROM users WHERE name LIKE %s LIMIT %s, 20',
+            cursor.execute('SELECT name, image_id FROM users WHERE name LIKE %s LIMIT %s, 20',
                            ('%' + name + '%', start_index))
             results = cursor.fetchall()
-            print(results)
-            print('userData get_total_user_count_by_name', len(results))
+
             if len(results) == 0:
                 return False
 
