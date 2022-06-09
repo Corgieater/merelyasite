@@ -123,7 +123,6 @@ def get_movies_user_likes_func(page_master):
     if movies_user_likes is None:
         return {'error': True,
                 'message': 'Oops, looks like there is no movie you like, go and find some?'}
-    print(movies_user_likes)
     data = {
         'data': {
             'data':[]
@@ -140,10 +139,9 @@ def get_reviews_user_likes_func(page_master):
     if reviews_user_likes is None:
         return {'error': True,
                 'message': 'Oops, looks like there is no review you like, go and find some?'}
-    print(reviews_user_likes)
     data = {
-        'data':{
-            'data':[]
+        'data': {
+            'data': []
         }
     }
     for review in reviews_user_likes:

@@ -1,10 +1,12 @@
 from flask import *
 from models.reviewData import *
 from models.userData import *
+from controllers.generalFunc import *
 import jwt
 import os
 import math
 import boto3
+
 
 review_database = ReviewDatabase()
 user_database = UserDatabase()
@@ -49,17 +51,17 @@ def make_reviews_dic(data):
     return review_dic
 
 
-def make_page(data, page, total_page):
-    page = int(page)
-    data['currentPage'] = page
-    data['nextPage'] = None
-    data['totalPages'] = total_page
-
-    if page < total_page:
-        data['nextPage'] = page + 1
-    else:
-        data['nextPage'] = None
-    return data
+# def make_page(data, page, total_page):
+#     page = int(page)
+#     data['currentPage'] = page
+#     data['nextPage'] = None
+#     data['totalPages'] = total_page
+#
+#     if page < total_page:
+#         data['nextPage'] = page + 1
+#     else:
+#         data['nextPage'] = None
+#     return data
 
 
 # 拿頭五篇所有flowing的reviews
@@ -124,12 +126,12 @@ def get_watchlist_by_page_func(page_master, page):
     data = {
         'data': {
             'data': [],
-            'totalMovies':movies_in_watchlist
+            'totalMovies': movies_in_watchlist
         }
     }
     for movie in watchlist:
         data['data']['data'].append(movie)
-    data = make_page(data, 1, total_page)
+    data = make_page(data, page, total_page)
     return data
 
 
@@ -178,6 +180,7 @@ def add_movie_to_watchlist_func(user_id, movie_id):
         return{'error': True,
                'message': 'Something went wrong, please try again'
                }
+
 
 # delete from watchlist
 def delete_movie_from_watchlist_func(user_id, movie_id):

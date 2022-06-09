@@ -5,6 +5,8 @@ from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from imdb import Cinemagoer
 from models.addMovieToData import *
+import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -89,7 +91,7 @@ def up_load_to_s3(poster_url, movie_id):
 
 def get_movie_from_imdb_func(title, year):
     global genre_count
-    is_movie_in_database = add_movie_database.find_in_database(title, year)
+    is_movie_in_database = add_movie_database.find_movie_in_database(title, year)
     poster_url = None
     if is_movie_in_database:
         return{'error': True,
@@ -111,7 +113,6 @@ def get_movie_from_imdb_func(title, year):
         if imdb_movie_id is None:
             return {'error': True,
                     'message': "Sorry, we can't find this movie, please check again"}
-        print(url)
         try:
             page = requests.get(url, headers=headers)
         except Exception as e:
@@ -129,16 +130,17 @@ def get_movie_from_imdb_func(title, year):
         try:
             unclean_title = soup.title.string
         except Exception as e:
+            print('Something is wrong when get unclean_title')
             print(e)
 
         try:
             unclean_year = soup.findAll \
                 ('a', class_="ipc-link ipc-link--baseAlt ipc-link--inherit-color sc-8c396aa2-1 WIUyh")
         except Exception as e:
+            print('Something is wrong when get unclean_year')
             print(e)
 
         # 判斷是否有多個genre/director genre out
-        # find_genre = soup.find(text='Genre')
         find_director = soup.find(text='Director')
 
         # clean title
@@ -151,6 +153,7 @@ def get_movie_from_imdb_func(title, year):
             story_line = soup.find('span', class_='sc-16ede01-2 gXUyNh').getText()
             scraped_movie.append(story_line)
         except Exception as e:
+            print('Something is wrong when get story_line')
             print(e)
         try:
             find_tag_line = soup.find(text="Taglines")
@@ -159,6 +162,7 @@ def get_movie_from_imdb_func(title, year):
             scraped_movie.append(tag_line)
         except Exception as e:
             scraped_movie.append('')
+            print('Something is wrong when get tag_line, maybe there is none')
             print(e)
         genres = []
         directors = []
@@ -177,6 +181,7 @@ def get_movie_from_imdb_func(title, year):
             actors = soup.find(text='Stars')
             actors = clean_by_input(soup, 'Stars')
         except Exception as e:
+            print('Something is wrong when get actors')
             print(e)
 
         # dealing with directors
@@ -196,9 +201,10 @@ def get_movie_from_imdb_func(title, year):
             poster_url = soup.find('img', attrs={'class': 'sc-7c0a9e7c-0 hXPlvk'})['src']
 
         except Exception as e:
+            print('Something is wrong when get poster, maybe there is none')
             print(e, 'skip')
 
-        added_movie_id = add_movie_database.add_to_database(scraped_movie, directors, actors, genres)
+        added_movie_id = add_movie_database.add_movie_to_database(scraped_movie)
         if added_movie_id:
             for director in directors:
                 director_id = add_movie_database.find_input_from_table('director_id', 'directors', 'name', director)

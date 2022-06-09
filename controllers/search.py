@@ -1,6 +1,7 @@
 from models.movieData import *
 from models.userData import *
 from models.reviewData import *
+from controllers.generalFunc import *
 import os
 import math
 
@@ -11,17 +12,17 @@ user_database = UserDatabase()
 review_database = ReviewDatabase()
 
 
-# films controller也有
-def make_page(data, page, total_page):
-    data['currentPage'] = page+1
-    data['nextPage'] = None
-    data['totalPages'] = total_page
-
-    if page < total_page:
-        data['nextPage'] = page + 1
-    else:
-        data['nextPage'] = None
-    return data
+# # films controller也有
+# def make_page(data, page, total_page):
+#     data['currentPage'] = page+1
+#     data['nextPage'] = None
+#     data['totalPages'] = total_page
+#
+#     if page < total_page:
+#         data['nextPage'] = page + 1
+#     else:
+#         data['nextPage'] = None
+#     return data
 
 
 def make_dic(info, page, total_page):
@@ -41,6 +42,7 @@ def make_dic(info, page, total_page):
         searched_data['data'].append(dic)
 
     return searched_data
+
 
 def make_user_dic(data, followed_info, following_info, page, total_page):
     data_dic = {
@@ -85,6 +87,7 @@ def make_reviews_search_dic(data):
         review_dic['data']['data'].append(dic)
     return review_dic
 
+
 # 拿電影資料 搜尋用
 def get_movie_info_func(user_input, page):
     data_count = movie_database.get_total_data_count_from_type(user_input, 'movie')[0]
@@ -97,7 +100,7 @@ def get_movie_info_func(user_input, page):
     if page is None:
         page = 1
     page = int(page)-1
-    info = movie_database.get_info(user_input, page)
+    info = movie_database.get_movie_info_by_keyword(user_input, page)
 
     if info is False:
         return {
@@ -106,6 +109,7 @@ def get_movie_info_func(user_input, page):
     dic_data = make_dic(info, page, total_page)
 
     return dic_data
+
 
 def get_data_by_type_func(query, page, data_type):
     data_count = 0
@@ -128,10 +132,10 @@ def get_data_by_type_func(query, page, data_type):
 
     info = None
     if data_type == 'director':
-        info = movie_database.get_director_by_name(query, page)
+        info = movie_database.get_director_by_name(query, page, data_count[0])
 
     if data_type == 'actor':
-        info = movie_database.get_actor_by_name(query, page)
+        info = movie_database.get_actor_by_name(query, page, data_count[0])
     info = make_page(info, page, total_page)
     return info
 

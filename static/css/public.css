@@ -193,6 +193,11 @@ nav > ul > li {
 nav > ul > li > input {
   width: 150px;
 }
+
+/* user name */
+nav > ul > li:nth-child(1) > a {
+  font-weight: bold;
+}
 /* logInPlace */
 .logInPlace {
   width: 50%;

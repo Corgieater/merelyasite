@@ -1,6 +1,7 @@
 from models.movieData import *
 from models.reviewData import *
 from models.userData import *
+from controllers.generalFunc import *
 import os
 import math
 
@@ -11,31 +12,17 @@ review_database = ReviewDatabase()
 user_database = UserDatabase()
 
 
-def make_dic(film_data):
-    dic = {
-        'id':film_data[0],
-        'title':film_data[1],
-        'year': film_data[2],
-        'directors': film_data[3].split(','),
-        'stars': film_data[4].split(','),
-        'genres': film_data[5].split(','),
-        'plot': film_data[6]
-    }
-
-    return dic
-
-
-def make_page(data, page, total_page):
-    page = int(page) + 1
-    data['currentPage'] = page
-    data['nextPage'] = None
-    data['totalPages'] = total_page
-
-    if page < total_page:
-        data['nextPage'] = page + 1
-    else:
-        data['nextPage'] = None
-    return data
+# def make_page(data, page, total_page):
+#     page = int(page) + 1
+#     data['currentPage'] = page
+#     data['nextPage'] = None
+#     data['totalPages'] = total_page
+#
+#     if page < total_page:
+#         data['nextPage'] = page + 1
+#     else:
+#         data['nextPage'] = None
+#     return data
 
 
 def get_data_by_type_func(query, page, data_type):
@@ -131,21 +118,19 @@ def rating_func(rate, user_id, film_id):
             'error': True,
             'message': 'Please log in'
         }
-    print('rating_func from controllers', rate, user_id, film_id)
     result = review_database.rating(rate, user_id, film_id)
     if result is True:
         return {'ok': True}
 
     else:
         return{
-            'error':'Something went wrong, please try again'
+            'error': 'Something went wrong, please try again'
         }
 
 
 # 拿上次評分
 def get_rate_func(user_id, movie_id):
     rate = review_database.get_rate_data(user_id, movie_id)
-    print(rate)
     if rate:
         data = {
             'data': {'rate': rate}
@@ -211,6 +196,7 @@ def film_review_func(movie_review, film_id, current_date, watched_date, user_id,
             'error': False,
             'message': 'Review failed, please try again'
         }
+
 
 # for index
 def get_latest_reviews_func():

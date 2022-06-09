@@ -177,7 +177,7 @@ async function logOut(e) {
 }
 
 let dataForShowrow = {};
-// 搜尋  HERE
+// 搜尋
 searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
   let userOption = searchSelect.value;
