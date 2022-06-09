@@ -12,8 +12,8 @@ console.log(moviesUserLikesAllBt, reviewsUserLikesAllBt);
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
 userProfileHomeBt.href = `/user_profile/${userName}`;
-moviesUserLikesAllBt.href = `/user_profile/${userName}/likes/allMovies`;
-reviewsUserLikesAllBt.href = `/user_profile/${userName}/likes/allReviews`;
+moviesUserLikesAllBt.href = `/user_profile/${userName}/likes/allMovies?page=1`;
+reviewsUserLikesAllBt.href = `/user_profile/${userName}/likes/allReviews?page=1`;
 // movies user likes
 let moviePosPlace = document.querySelector(".moviePosPlace");
 let reviewPlace = document.querySelector(".reviewPlace");
@@ -50,7 +50,6 @@ async function showMoviesUserLiks() {
 
 async function showReviewsUserLikes() {
   let data = await getReviewsUserLikes();
-  console.log(data);
   if (data !== data.error) {
     let currentUserData = await getUserData();
     let currentUserName = currentUserData["userName"];
@@ -70,7 +69,6 @@ async function showReviewsUserLikes() {
       } else {
         reviewerImg = `https://dwn6ych98b9pm.cloudfront.net/userPic/${reviewerImg}.jpg`;
       }
-      console.log(reviewerImg);
       let spoilers = data[i]["spoilers"];
       let year = data[i]["year"];
       let reviewUrl = `/user_profile/${reviewerNameForUrl}/reviews/films/${movieTitleForUrl}/${reviewId}`;

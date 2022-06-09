@@ -136,7 +136,7 @@ def get_movies_user_likes_func(page_master):
 
 
 def get_reviews_user_likes_func(page_master):
-    reviews_user_likes = user_database.get_reviews_user_likes(page_master)
+    reviews_user_likes = user_database.get_reviews_user_likes(page_master, 8)
     if reviews_user_likes is None:
         return {'error': True,
                 'message': 'Oops, looks like there is no review you like, go and find some?'}
@@ -165,9 +165,7 @@ def get_reviews_user_likes_func(page_master):
 def get_all_movies_user_likes_func(page_master, page):
     page = int(page)
     all_movies_user_likes_count = user_database.count_all_movies_user_likes(page_master)
-    print(page)
     all_movies_user_likes = user_database.get_movies_user_likes(page_master, 50)
-    print(len(all_movies_user_likes))
 
     if all_movies_user_likes_count is not None:
         total_pages = math.ceil(int(all_movies_user_likes_count[0]) / 50)
@@ -175,7 +173,7 @@ def get_all_movies_user_likes_func(page_master, page):
             'data': {
                 'data': [],
                 'nextPage': None,
-                'totalPage': total_pages
+                'totalPages': total_pages
             }
         }
         if page < total_pages:
@@ -183,6 +181,39 @@ def get_all_movies_user_likes_func(page_master, page):
         for movie in all_movies_user_likes:
             data['data']['data'].append(movie)
         return data
+    else:
+        return {'error': True}
 
-def get_all_reviews_user_likes_func(page_master):
-    pass
+
+def get_all_reviews_user_likes_func(page_master, page):
+    page = int(page)
+    all_reviews_user_likes_count = user_database.count_all_movies_user_likes(page_master)
+    all_reviews_user_likes = user_database.get_reviews_user_likes(page_master, 20)
+
+    if all_reviews_user_likes_count is not None:
+        total_pages = math.ceil(int(all_reviews_user_likes_count[0]) / 50)
+        data = {
+            'data': {
+                'data': [],
+                'nextPage': None,
+                'totalPages': total_pages
+            }
+        }
+        if page < total_pages:
+            data['data']['nextPage'] = page + 1
+        for review in all_reviews_user_likes:
+            info = {
+                'reviewId': review[0],
+                'reviewer': review[1],
+                'reviewerImg': review[2],
+                'movieId': review[3],
+                'review': review[4],
+                'spoilers': review[5],
+                'movieTitle': review[6],
+                'year': review[7],
+                'reviewDate': review[8]
+            }
+            data['data']['data'].append(info)
+        return data
+    else:
+        return {'error': True}

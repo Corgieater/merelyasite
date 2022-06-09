@@ -115,10 +115,12 @@ def render_movies_user_likes_page(page_master):
 
 
 # get all reviews user likes for user profile
-@user_blueprint.route('/api/user_profile/<page_master>/likes/allMovies')
+@user_blueprint.route('/api/user_profile/<page_master>/likes/allReviews')
 def get_all_reviews_user_likes(page_master):
     page_master = page_master.replace('+', ' ')
-    return get_all_reviews_user_likes_func(page_master)
+    page = request.args.get('page')
+    print(page_master, page)
+    return get_all_reviews_user_likes_func(page_master, page)
 
 
 # render user profile all reviews user likes頁面

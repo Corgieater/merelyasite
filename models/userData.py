@@ -513,15 +513,15 @@ class UserDatabase:
             connection.close()
 
 
-# 拿reviews user likes 先拿八個
-    def get_reviews_user_likes(self, page_master):
+# 拿reviews user likes
+    def get_reviews_user_likes(self, page_master, limit_num):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
             cursor.execute('SELECT reviews_users_like_list.rul_review_id,\n'
                            'reviewer.name as reviewer, reviewer.image_id,\n'
                            'reviews.review_movie_id, reviews.movie_review, reviews.spoilers,\n'
-                           'movies_info.title, movies_info.year\n'
+                           'movies_info.title, movies_info.year, reviews.today\n'
                            'FROM reviews_users_like_list \n'
                            'INNER JOIN users\n'
                            'ON users.name = %s\n'
@@ -534,8 +534,8 @@ class UserDatabase:
                            'INNER JOIN movies_info\n'
                            'ON reviews_users_like_list.rul_review_id = reviews.review_id\n'
                            'AND reviews.review_movie_id = movies_info.movie_id\n'
-                           'ORDER BY reviews_users_like_list.rul_like_date DESC LIMIT 8',
-                           (page_master,))
+                           'ORDER BY reviews_users_like_list.rul_like_date DESC LIMIT %s',
+                           (page_master, limit_num))
             image_id = cursor.fetchall()
         except Exception as e:
             print(e)

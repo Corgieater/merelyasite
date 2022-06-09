@@ -1,5 +1,5 @@
 "use strict";
-let pageMasterAndPage = cutUserInputAtLast("e/");
+let pageMasterAndPage = cutUserInputAtLast("profile/");
 let pageMaster = cutUserInputInMiddle("file/", "/likes");
 let showPlace = document.querySelector(".showPlace");
 let totalMoviePlace = document.querySelector(".wrap > h2 > span");
@@ -15,9 +15,7 @@ userProfileHomeBt.href = `/user_profile/${pageMaster}`;
 userProfileLikesBt.href = `/user_profile/${pageMaster}/likes`;
 
 async function getAllMoviesUserLikes() {
-  const req = await fetch(
-    `/api/user_profile/${pageMaster}/likes/allMovies?page=1`
-  );
+  const req = await fetch(`/api/user_profile/${pageMasterAndPage}`);
   const res = await req.json();
   console.log(res);
   return res;
@@ -25,7 +23,7 @@ async function getAllMoviesUserLikes() {
 
 async function showAllMoviesUserLikes() {
   let data = await getAllMoviesUserLikes();
-  makePageTags("user_profile/", pageMasterAndPage, data["totalPages"]);
+  makePageTags("user_profile/", pageMasterAndPage, data.data["totalPages"]);
   data = data["data"]["data"];
   for (let i = 0; i < data.length; i++) {
     let li = document.createElement("li");
@@ -52,7 +50,7 @@ async function showAllMoviesUserLikes() {
     // 沒登入就不會秀出removeLikesBts
     if (userId !== undefined) {
       let removeLikesBts = document.querySelectorAll(".removeWatchlistBt");
-      show(removeWatchlistBts[i]);
+      show(removeLikesBts[i]);
       removeLikesBts[i].addEventListener("click", async function (e) {
         e.preventDefault();
         let data = {
@@ -63,7 +61,7 @@ async function showAllMoviesUserLikes() {
         let removeFromWatchlistMessage = await sendDataToBackend(
           "DELETE",
           data,
-          "/api/user_profile/watchlist"
+          "/api/user_profile/likes/movie"
         );
         if (removeFromWatchlistMessage === true) {
           window.location.reload();

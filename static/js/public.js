@@ -84,7 +84,7 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
   }
 }
 
-// user 沒登入就滾出去>:(
+// user 沒登入就返回
 async function redirectIfNotLogin() {
   const userLoged = await checkIfLogged();
   if (!userLoged) {
@@ -111,13 +111,10 @@ async function checkUserForPages(pageMaster) {
   }
 }
 
-// 做頁碼 先用成做13頁 不然有夠他媽多= =
+// 做頁碼
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
   let pagesPlace = document.querySelector(".pagesPlace");
   // 這裡的問題 改一下
-  if (totalPages >= 14) {
-    totalPages = 14;
-  }
   for (let i = 0; i < totalPages; i++) {
     // 找出要切哪
     let sliceIndex = userInputAndPage.indexOf("e=");
