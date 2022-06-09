@@ -2,7 +2,7 @@
 <link
   rel="stylesheet"
   type="text/css"
-  href="{{url_for('static', filename='css/userWatchlist.css')}}"
+  href="{{url_for('static', filename='css/movieUserLikes.css')}}"
 />
 {% endblock %} {% block content %}
 <ul class="userNav flex alignCenter">
@@ -10,9 +10,8 @@
   <li><a class="userProfileLikesBt" href="#">Likes</a></li>
   <li><a class="userProfileHomeBt" href="#">Profile</a></li>
 </ul>
-<h2>{{pageMaster}} WANTS TO SEE <span></span> FILMS</h2>
 <ul class="showPlace flex alignCenter"></ul>
 <div class="pagesPlace alignCenter"></div>
 {% endblock %} {% block script %}
-<script src="{{ url_for('static', filename='js/userWatchlist.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moviesUserLikes.js') }}"></script>
 {% endblock %}

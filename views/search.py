@@ -11,6 +11,7 @@ search_blueprint = Blueprint(
 
 # 這邊都是給網頁右上角的搜尋from用
 
+
 # 普通搜尋就是搜電影
 @search_blueprint.route('/api/search')
 def get_movie():
@@ -58,6 +59,7 @@ def get_actor():
 def render_search_actor_page():
     actor = request.args.get('actor').replace('+', ' ')
     return render_template('searchActor.html', actor=actor)
+
 
 # genre 找電影+director
 @search_blueprint.route('/api/search/genre')

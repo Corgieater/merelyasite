@@ -3,8 +3,11 @@ let userName = cutUserInputAtLast("e/");
 let userNameWithNoPlus = userName.replaceAll("+", " ");
 let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
+let userProfileLikesBt = document.querySelector(".userProfileLikesBt");
+
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
+userProfileLikesBt.href = `/user_profile/${userName}/likes`;
 
 // 使用者相關按鈕
 let editProfileBt = document.querySelector(".edditProfileBt");
@@ -168,10 +171,8 @@ async function showRecentlyReviews() {
   }
 }
 
-async function getUserPicAndShow() {
-  let userData = await getUserData();
-  let userId = userData["userId"];
-  let req = await fetch(`/api/user/${userId}/upload_pic`);
+async function getPageMasterPicAndShow() {
+  let req = await fetch(`/api/user/${userName}/upload_pic`);
   let res = await req.json();
   let profileImg = document.querySelector(".profile >img");
   if (res.data.picName !== null) {
@@ -185,4 +186,4 @@ async function getUserPicAndShow() {
 
 checkUserBelongs();
 showRecentlyReviews();
-getUserPicAndShow();
+getPageMasterPicAndShow();

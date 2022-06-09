@@ -281,21 +281,21 @@ async function getUserRate() {
   const res = await req.json();
   let userId = res["userId"];
   let userRate = await fetch(`/api/rate/${userId}/${filmId}`);
-  userRate = await loggerRate.json();
-  userRate = loggerRate.data.rate;
+  userRate = await userRate.json();
+  userRate = userRate.data.rate;
 
-  return score;
+  return userRate;
 }
 
 // 顯示之前的評分星星
 async function showPreviousRate() {
   let data = await getUserRate();
   let rate = null;
-  if (data.rate === null) {
+  if (data === null) {
     hide(cancelBt);
     return (rate = 0);
   } else {
-    rate = data.rate;
+    rate = data;
     show(cancelBt);
   }
 
@@ -438,15 +438,10 @@ async function showFilmInfo() {
 async function checkUserMovieStates() {
   let userData = await getUserData();
   let userId = userData["userId"];
-  let data = {
-    movieId: filmId,
-    userId: userId,
-  };
-  let userMovieStates = await sendDataToBackend(
-    "POST",
-    data,
-    "/api/user_profile/user_movie_state"
-  );
+  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
+  ${userId}/${filmId}`);
+  userMovieStates = await userMovieStates.json();
+  userMovieStates = userMovieStates.data;
   let ifMovielist = userMovieStates["userWatchlist"];
   let ifMovieLikes = userMovieStates["userLikes"];
   if (ifMovielist) {

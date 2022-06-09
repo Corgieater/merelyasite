@@ -1,5 +1,6 @@
 from models.movieData import *
 from models.reviewData import *
+from models.userData import *
 import os
 import math
 
@@ -7,6 +8,8 @@ key = os.getenv('JWT_SECRET_KEY')
 
 movie_database = MovieDatabase()
 review_database = ReviewDatabase()
+user_database = UserDatabase()
+
 
 def make_review_dic(data):
     data_dic = {
@@ -14,7 +17,6 @@ def make_review_dic(data):
     }
 
     for info in data:
-        print(info, 'from controller user profile')
         dic = {
             'review': info[4],
             'reviewDay': info[5],
@@ -23,7 +25,6 @@ def make_review_dic(data):
             'filmId': info[3],
             'filmTitle': info[0],
             'filmYear': info[1],
-            # 'userRate': info[8],
             'reviewId': info[2]
         }
         data_dic['data'].append(dic)
@@ -43,9 +44,8 @@ def make_page(data, page, total_page):
     return data
 
 
-def get_user_profile_review_each_func(review_id):
+def get_user_review_func(review_id):
     data = review_database.get_review_by_review_id(review_id)
-    print('get_user_profile_review_each_func', data)
     if data[0] is None:
         return {'error': True,
                 'message': 'Something is wrong, please try again'
@@ -58,7 +58,7 @@ def get_user_profile_review_each_func(review_id):
         rate_data = rate_data[0]
 
     make_data_dic = {
-        'data':{
+        'data': {
             'movieId': review_data[1],
             'movieReview': review_data[2],
             'reviewDate': review_data[3],
@@ -78,6 +78,7 @@ def get_user_latest_five_reviews_func(user_name):
     data_dic = make_review_dic(data)
     return data_dic
 
+
 # get all reviews
 def get_reviews_by_page_func(user_name, page):
     data = review_database.get_user_reviews_count(user_name)
@@ -90,21 +91,21 @@ def get_reviews_by_page_func(user_name, page):
 
 
 # update user review
-def update_user_profile_review_func(review_id, movie_review, watched_date, spoilers):
+def update_user_review_func(review_id, movie_review, watched_date, spoilers):
     review_updated = review_database.update_review(review_id, movie_review, watched_date, spoilers)
     if review_updated:
         return {
-            'ok':True,
+            'ok': True,
         }
     else:
         return{
-            'error':True,
+            'error': True,
             'message': 'Something goes wrong, please try again'
         }
 
 
 # delete user review
-def delete_user_profile_review_func(review_id):
+def delete_user_review_func(review_id):
     review_deleted = review_database.delete_review(review_id)
     if review_deleted:
         return {
@@ -116,3 +117,72 @@ def delete_user_profile_review_func(review_id):
             'message': 'Review deleting failed, please try again'
         }
 
+
+def get_movies_user_likes_func(page_master):
+    movies_user_likes = user_database.get_movies_user_likes(page_master, 21)
+    if movies_user_likes is None:
+        return {'error': True,
+                'message': 'Oops, looks like there is no movie you like, go and find some?'}
+    print(movies_user_likes)
+    data = {
+        'data': {
+            'data':[]
+        }
+    }
+    for movie in movies_user_likes:
+        data['data']['data'].append(movie)
+
+    return data
+
+
+def get_reviews_user_likes_func(page_master):
+    reviews_user_likes = user_database.get_reviews_user_likes(page_master)
+    if reviews_user_likes is None:
+        return {'error': True,
+                'message': 'Oops, looks like there is no review you like, go and find some?'}
+    print(reviews_user_likes)
+    data = {
+        'data':{
+            'data':[]
+        }
+    }
+    for review in reviews_user_likes:
+        info = {
+            'reviewId': review[0],
+            'reviewer': review[1],
+            'reviewerImg': review[2],
+            'movieId': review[3],
+            'review': review[4],
+            'spoilers': review[5],
+            'movieTitle': review[6],
+            'year': review[7]
+        }
+        data['data']['data'].append(info)
+
+    return data
+
+
+def get_all_movies_user_likes_func(page_master, page):
+    page = int(page)
+    all_movies_user_likes_count = user_database.count_all_movies_user_likes(page_master)
+    print(page)
+    all_movies_user_likes = user_database.get_movies_user_likes(page_master, 50)
+    print(len(all_movies_user_likes))
+
+    if all_movies_user_likes_count is not None:
+        total_pages = math.ceil(int(all_movies_user_likes_count[0]) / 50)
+        data = {
+            'data': {
+                'data': [],
+                'nextPage': None,
+                'totalPage': total_pages
+            }
+        }
+        if page < total_pages:
+            data['data']['nextPage'] = page+1
+        for movie in all_movies_user_likes:
+            data['data']['data'].append(movie)
+        return data
+
+def get_all_reviews_user_likes_func(page_master):
+    pass

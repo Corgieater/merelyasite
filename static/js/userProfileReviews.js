@@ -2,14 +2,14 @@
 let userNameAngPage = cutUserInputAtLast("e/");
 let userName = cutUserInputInMiddle("e/", "/r");
 let page = cutUserInputAtLast("e=");
-let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
 let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
+let userProfileLikesBt = document.querySelector(".userProfileLikesBt");
 
 // user profile nav bar
-userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
 userProfileHomeBt.href = `/user_profile/${userName}`;
+userProfileLikesBt.href = `/user_profile/${userName}/likes`;
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
@@ -63,7 +63,6 @@ async function showRecentlyReviews() {
       <p>${date}</p>
       <p class='reviewText'>${review}</p>
     </div>
-  </li>
       `;
     li.innerHTML = content;
     reviewdPlace.append(li);
@@ -92,7 +91,6 @@ async function showRecentlyReviews() {
       reviewBody.insertBefore(p, reviewText);
     }
   }
-  console.log("userName from userprofilereviews", userName);
   makePageTags("user_profile/", userNameAngPage, data["totalPages"]);
 }
 showRecentlyReviews();

@@ -313,8 +313,8 @@ def upload_user_profile_pic_func(user_id, img):
         }
 
 
-def get_user_profile_pic_func(user_id):
-    user_profile_pic_name = user_database.get_user_profile_pic(user_id)
+def get_user_profile_pic_func(user_name):
+    user_profile_pic_name = user_database.get_user_profile_pic(user_name)
     if user_profile_pic_name is not None:
         return {
             'data': {

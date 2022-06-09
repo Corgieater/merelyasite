@@ -2,18 +2,33 @@
 <link
   rel="stylesheet"
   type="text/css"
-  href="{{url_for('static', filename='css/userWatchlist.css')}}"
+  href="{{url_for('static', filename='css/userLikes.css')}}"
 />
 {% endblock %} {% block content %}
-<h2>{{pageMaster}} WANTS TO SEE <span></span> FILMS</h2>
-<ul class="showPlace flex alignCenter">
-  <!-- <li>
-    <a href="#"
-      ><img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img2.jpg" alt=""
-    /></a>
-  </li> -->
+<ul class="userNav flex">
+  <li><a class="userProfileReviewsBt" href="#">Reviews</a></li>
+  <li><a class="userProfileWatchlistBt" href="#">Watchlist</a></li>
+  <li><a class="userProfileHomeBt" href="#">Profile</a></li>
 </ul>
-<div class="pagesPlace alignCenter"></div>
+<div class="showPlace flex">
+  <section>
+    <section class="flex">
+      <h2>FILMS</h2>
+      <a class="moviesUserLikesAllBt" href="#">ALL</a>
+    </section>
+
+    <ul class="moviePosPlace flex"></ul>
+  </section>
+
+  <section>
+    <section class="flex">
+      <h2>REVIEWS</h2>
+      <a class="reviewsUserLikesAllBt" href="#">ALL</a>
+    </section>
+    <ul class="reviewPlace"></ul>
+  </section>
+</div>
+
 {% endblock %} {% block script %}
-<script src="{{ url_for('static', filename='js/userWatchlist.js') }}"></script>
+<script src="{{ url_for('static', filename='js/userLikes.js') }}"></script>
 {% endblock %}

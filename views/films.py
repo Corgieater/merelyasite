@@ -9,6 +9,7 @@ films_blueprint = Blueprint(
     template_folder='templates'
 )
 
+
 # ID拿電影
 @films_blueprint.route('/api/film/<film_id>')
 def get_movie_by_id(film_id):
@@ -75,7 +76,6 @@ def rating():
 
 
 # 拿使用者上次評分
-# /api/rate
 @films_blueprint.route('/api/rate/<user_id>/<film_id>')
 def get_rate(user_id, film_id):
     return get_rate_func(user_id, film_id)
@@ -150,7 +150,7 @@ def get_latest_reviews():
     return get_latest_reviews_func()
 
 
-# 拿這週最hot的電影 *6 for index
+# 拿這週最熱門的電影 *6 for index
 @films_blueprint.route('/api/get_most_popular_movies_this_week/')
 def get_most_popular_movies_this_week():
     return get_most_popular_movies_this_week_func()

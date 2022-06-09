@@ -743,24 +743,14 @@ async function getAverageRate() {
 
 // 登入才有
 async function checkUserMovieStates() {
-  let dataForMovieState = {
-    movieId: filmId,
-    userId: currentUserId,
-  };
-  let dataForReviewState = {
-    reviewId: reviewId,
-    userId: currentUserId,
-  };
-  let userMovieStates = await sendDataToBackend(
-    "POST",
-    dataForMovieState,
-    "/api/user_profile/user_movie_state"
-  );
-  let userMovieReviewState = await sendDataToBackend(
-    "POST",
-    dataForReviewState,
-    "/api/user_profile/user_review_state"
-  );
+  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
+  ${currentUserId}/${filmId}`);
+  userMovieStates = await userMovieStates.json();
+  userMovieStates = userMovieStates.data;
+  let userMovieReviewState = await fetch(`/api/user_profile/user_review_state/
+  ${currentUserId}/${reviewId}`);
+  userMovieReviewState = await userMovieReviewState.json();
+  userMovieReviewState = userMovieReviewState.data;
   let ifMovielist = userMovieStates["userWatchlist"];
   let ifMovieLikes = userMovieStates["userLikes"];
   let ifReviewLikes = userMovieReviewState["userLikes"];

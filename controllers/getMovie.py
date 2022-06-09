@@ -24,7 +24,7 @@ headers = {
               "webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.8",
-    "Host": "www.imdb.com",  #目標網站
+    "Host": "www.imdb.com",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
@@ -41,12 +41,9 @@ genre_count = 0
 
 
 def get_imdb_id(title, year):
-    print(title, year)
     movies = imdb_move_base.search_movie(title)
-    print(movies)
     imdb_movie_id = None
     for movie in movies:
-        print(666,movie['title'], movie['year'])
         try:
             if movie['title'].lower() == title.lower() \
                     and movie['year'] == int(year) and movie['kind'] == 'movie':
@@ -77,6 +74,7 @@ def random_delay(time_list):
     delay = random.choice(delay_choices)
     time.sleep(delay)
 
+
 # poster to s3
 def up_load_to_s3(poster_url, movie_id):
     # 丟S3
@@ -87,6 +85,7 @@ def up_load_to_s3(poster_url, movie_id):
             Key=f'moviePos/img{movie_id}.jpg',
             ContentType='image/jpeg',
         )
+
 
 def get_movie_from_imdb_func(title, year):
     global genre_count
@@ -99,20 +98,19 @@ def get_movie_from_imdb_func(title, year):
         imdb_movie_id = None
         try:
             imdb_movie_id = get_imdb_id(title, year)
-            print('imdb_movie_id', imdb_movie_id)
         except Exception as e:
             print('something went wrong on imdb database')
             print(e)
-            return {
-            'error': True,
-            'message': 'Something is wrong, please check the title and year'
-            }
+            return {'error': True,
+                    'message': 'Something is wrong, please check the title and year'
+                    }
         url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=1a264172-ae1142e4-' \
               f'8ef7-7fed1973bb8f&pf_rd_r=STTXPSSSH1CW5RG8QKKM&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i' \
               f'=top&ref_=chttp_tt_3'
-        if imdb_movie_id == None:
-            return {'error':True,
-                    'message':"Sorry, we can't find this movie, please check again"}
+
+        if imdb_movie_id is None:
+            return {'error': True,
+                    'message': "Sorry, we can't find this movie, please check again"}
         print(url)
         try:
             page = requests.get(url, headers=headers)
@@ -143,8 +141,10 @@ def get_movie_from_imdb_func(title, year):
         # find_genre = soup.find(text='Genre')
         find_director = soup.find(text='Director')
 
+        # clean title
         m_title = cut_string(unclean_title, ' (')
         scraped_movie.append(m_title)
+        # clean year
         year = unclean_year[0].string
         scraped_movie.append(year)
         try:
@@ -167,10 +167,8 @@ def get_movie_from_imdb_func(title, year):
         # this is more reliable
         genres_list = soup.findAll('li', class_="ipc-inline-list__item ipc-chip__text",
                                    attrs={'role': 'presentation'})
-        print(genre_count, '\ngenre_count')
         for g in genres_list:
             if genre_count < 3:
-                print(genre_count, '\ngenre_count')
                 genre = g.get_text()
                 genres.append(genre.title())
                 genre_count += 1
@@ -196,10 +194,6 @@ def get_movie_from_imdb_func(title, year):
             poster_place = requests.get(imdb_poster_url, headers=headers)
             soup = BeautifulSoup(poster_place.text, 'html.parser')
             poster_url = soup.find('img', attrs={'class': 'sc-7c0a9e7c-0 hXPlvk'})['src']
-            try:
-                print('poster here', poster_url)
-            except Exception as e:
-                print(e)
 
         except Exception as e:
             print(e, 'skip')

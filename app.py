@@ -1,10 +1,8 @@
-from flask import *
-import os
-from dotenv import load_dotenv
 from views.user import *
 from views.search import *
 from views.films import *
 from views.userProfile import *
+from views.userSocial import *
 
 
 load_dotenv()
@@ -18,6 +16,7 @@ app = Flask(
 )
 
 app.register_blueprint(user_blueprint)
+app.register_blueprint(user_social_blueprint)
 app.register_blueprint(search_blueprint)
 app.register_blueprint(films_blueprint)
 app.register_blueprint(user_profile_blueprint)

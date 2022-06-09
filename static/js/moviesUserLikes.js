@@ -1,6 +1,6 @@
 "use strict";
 let pageMasterAndPage = cutUserInputAtLast("e/");
-let pageMaster = cutUserInputInMiddle("e/", "/w");
+let pageMaster = cutUserInputInMiddle("file/", "/likes");
 let showPlace = document.querySelector(".showPlace");
 let totalMoviePlace = document.querySelector(".wrap > h2 > span");
 let isMouseHover = false;
@@ -14,15 +14,17 @@ userProfileReviewsBt.href = `/user_profile/${pageMaster}/reviews?page=1`;
 userProfileHomeBt.href = `/user_profile/${pageMaster}`;
 userProfileLikesBt.href = `/user_profile/${pageMaster}/likes`;
 
-async function getWatchlist() {
-  const req = await fetch(`/api/user_profile/${pageMasterAndPage}`);
+async function getAllMoviesUserLikes() {
+  const req = await fetch(
+    `/api/user_profile/${pageMaster}/likes/allMovies?page=1`
+  );
   const res = await req.json();
+  console.log(res);
   return res;
 }
 
-async function showWatchlist() {
-  let data = await getWatchlist();
-  totalMoviePlace.textContent = data["data"]["totalMovies"];
+async function showAllMoviesUserLikes() {
+  let data = await getAllMoviesUserLikes();
   makePageTags("user_profile/", pageMasterAndPage, data["totalPages"]);
   data = data["data"]["data"];
   for (let i = 0; i < data.length; i++) {
@@ -33,10 +35,10 @@ async function showWatchlist() {
     <div class='posterMask hide'>
     <section class='flex'>
     <a target="_blank" href="/film/${filmId}"> 
-    <img src="/static/images/external-link.svg"/>
+    <img src="/static/images/external-link-s.svg"/>
     </a>
     <a class="removeWatchlistBt hide" href="#">
-    <img src="/static/images/eye-off.svg"/>
+    <img src="/static/images/trash-s.svg"/>
     </a>
     </section>
     </div>
@@ -47,11 +49,11 @@ async function showWatchlist() {
     showPlace.append(li);
     let userData = await getUserData();
     let userId = userData["userId"];
-    // 沒登入就不會秀出removeWatchlistBts
+    // 沒登入就不會秀出removeLikesBts
     if (userId !== undefined) {
-      let removeWatchlistBts = document.querySelectorAll(".removeWatchlistBt");
+      let removeLikesBts = document.querySelectorAll(".removeWatchlistBt");
       show(removeWatchlistBts[i]);
-      removeWatchlistBts[i].addEventListener("click", async function (e) {
+      removeLikesBts[i].addEventListener("click", async function (e) {
         e.preventDefault();
         let data = {
           movieId: filmId,
@@ -95,4 +97,5 @@ async function showWatchlist() {
     );
   }
 }
-showWatchlist();
+
+showAllMoviesUserLikes();
