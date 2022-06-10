@@ -516,6 +516,8 @@ function turnDatabaseDateToStringDate(dabataseDate) {
 // 更新按鈕裡的功能
 async function updateReviewFunc() {
   let spoilers = false;
+  let userData = await getUserData();
+  let userName = userData["userName"];
   deleteMessage();
   if (userLogPlace.value === "") {
     makeMessage(messagePlace, "Type something, please");
