@@ -32,7 +32,7 @@ async function showRecentlyReviews() {
     let watchedDay = info["watchedDay"];
     let reviewDay = info["reviewDay"];
     let date = null;
-    const filmId = info["filmId"];
+    const movieId = info["movieId"];
     let filmTitle = info["filmTitle"];
     let filmTitleForHref = filmTitle.replaceAll(" ", "+");
 
@@ -50,7 +50,7 @@ async function showRecentlyReviews() {
     let content = `
       <div>
       <img
-        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg"
+        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg"
         alt="img"
       />
     </div>
@@ -61,34 +61,19 @@ async function showRecentlyReviews() {
     </section>
       <section class="starPlace"></section>
       <p>${date}</p>
-      <p class='reviewText'>${review}</p>
+      <p class="reviewText"></p>;
     </div>
       `;
     li.innerHTML = content;
+
     reviewdPlace.append(li);
-    let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
 
-    // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
+    // 不是page擁有者就要防spoiler
     if (spoilers && pageBelongsToLoggedUser === false) {
-      reviewText.classList.add("hide");
-      let alert = document.createElement("p");
-      alert.textContent = "There are spoilers in this review!";
-      let spoilerAlert = document.createElement("a");
-      spoilerAlert.textContent = "I don't mind, let me read.";
-      spoilerAlert.href = "#";
-      spoilerAlert.addEventListener("click", function (e) {
-        e.preventDefault();
-        reviewText.classList.remove("hide");
-        alert.classList.add("hide");
-        spoilerAlert.classList.add("hide");
-      });
-      reviewBody.insertBefore(spoilerAlert, reviewText);
-      reviewBody.insertBefore(alert, spoilerAlert);
+      makeSpoilersAlert(reviewText, review);
     } else {
-      let p = document.createElement("p");
-      p.textContent = "This review may contain spoilers.";
-      reviewBody.insertBefore(p, reviewText);
+      reviewText.textContent = review;
     }
   }
   makePageTags("user_profile/", userNameAngPage, data["totalPages"]);

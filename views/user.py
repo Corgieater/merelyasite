@@ -1,6 +1,6 @@
 from controllers.auth import *
 from controllers.social import *
-from controllers.userProfile import *
+from controllers.userGeneral import *
 
 user_blueprint = Blueprint(
     'user_blueprint',
@@ -44,24 +44,6 @@ def sign_out_func():
     return sign_out()
 
 
-# user自己的功能
-# render watchlist
-@user_blueprint.route('/user_profile/<page_master>/watchlist')
-def render_user_watchlist_page(page_master):
-    page_master = page_master.replace('+', ' ')
-
-    return render_template('userWatchlist.html', pageMaster=page_master)
-
-
-# 拿watchlist
-@user_blueprint.route('/api/user_profile/<page_master>/watchlist')
-def get_watchlist_by_page(page_master):
-    page_master = page_master.replace('+', ' ')
-    page = request.args.get('page')
-
-    return get_watchlist_by_page_func(page_master, page)
-
-
 # 看該使用者有沒有把這電影加入watchlist/movies likes
 @user_blueprint.route('/api/user_profile/user_movie_state/<user_id>/<movie_id>')
 def check_user_movie_state(user_id, movie_id):
@@ -93,56 +75,6 @@ def delete_movie_from_watchlist():
     return delete_movie_from_watchlist_func(user_id, movie_id)
 
 
-# render user profile likes頁面
-@user_blueprint.route('/user_profile/<page_master>/likes')
-def render_user_likes_page(page_master):
-    page_master = page_master.replace('+', ' ')
-    return render_template('userLikes.html', pageMaster=page_master)
-
-
-# get all movies user likes for user profile
-@user_blueprint.route('/api/user_profile/<page_master>/likes/allMovies')
-def get_all_movies_user_likes(page_master):
-    page_master = page_master.replace('+', ' ')
-    page = request.args.get('page')
-    return get_all_movies_user_likes_func(page_master, page)
-
-
-# render user profile all movies user likes頁面
-@user_blueprint.route('/user_profile/<page_master>/likes/allMovies')
-def render_movies_user_likes_page(page_master):
-    return render_template('moviesUserLikes.html')
-
-
-# get all reviews user likes for user profile
-@user_blueprint.route('/api/user_profile/<page_master>/likes/allReviews')
-def get_all_reviews_user_likes(page_master):
-    page_master = page_master.replace('+', ' ')
-    page = request.args.get('page')
-    print(page_master, page)
-    return get_all_reviews_user_likes_func(page_master, page)
-
-
-# render user profile all reviews user likes頁面
-@user_blueprint.route('/user_profile/<page_master>/likes/allReviews')
-def render_reviews_user_likes_page(page_master):
-    return render_template('reviewsUserLikes.html')
-
-
-# get movies user like
-@user_blueprint.route('/api/user_profile/<page_master>/likes/movies')
-def get_movies_user_likes(page_master):
-    page_master = page_master.replace('+', ' ')
-    return get_movies_user_likes_func(page_master)
-
-
-# get reviews user like
-@user_blueprint.route('/api/user_profile/<page_master>/likes/reviews')
-def get_reviews_user_likes(page_master):
-    page_master = page_master.replace('+', ' ')
-    return get_reviews_user_likes_func(page_master)
-
-
 # 加入likes_movies 喜歡這個電影
 @user_blueprint.route('/api/user_profile/likes/movie', methods=["PATCH"])
 def add_movie_to_likes():
@@ -159,18 +91,3 @@ def delete_movie_from_likes():
     movie_id = data['movieId']
     user_id = data['userId']
     return delete_movie_from_likes_func(user_id, movie_id)
-
-
-# user profile 上傳圖片
-@user_blueprint.route('/api/user/<user_id>/upload_pic', methods=["PATCH"])
-def upload_user_profile_pic(user_id):
-    img = request.files['photoFile']
-    return upload_user_profile_pic_func(user_id, img)
-
-
-# page master profile 拿該頁面擁有者的上傳照片 沒有就用預設
-@user_blueprint.route('/api/user/<user_name>/upload_pic')
-def get_user_profile_pic(user_name):
-    user_name = user_name.replace('+', ' ')
-    return get_user_profile_pic_func(user_name)
-

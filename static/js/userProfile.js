@@ -109,7 +109,7 @@ async function showRecentlyReviews() {
     let watchedDay = info["watchedDay"];
     let reviewDay = info["reviewDay"];
     let date = null;
-    const filmId = info["filmId"];
+    const movieId = info["movieId"];
     const filmTitle = info["filmTitle"];
     const filmTitleForHref = filmTitle.replaceAll(" ", "+");
     const review = info["review"];
@@ -126,7 +126,7 @@ async function showRecentlyReviews() {
     let content = `
       <div>
       <img
-        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg"
+        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg"
         alt="img"
       />
     </div>
@@ -151,9 +151,12 @@ async function showRecentlyReviews() {
       reviewText.classList.add("hide");
       let alert = document.createElement("p");
       alert.textContent = "There are spoilers in this review!";
+      alert.classList.add("spoilerAlertText");
       let spoilerAlert = document.createElement("a");
       spoilerAlert.textContent = "I don't mind, let me read.";
       spoilerAlert.href = "#";
+      spoilerAlert.classList.add("spoilerAlert");
+
       spoilerAlert.addEventListener("click", function (e) {
         e.preventDefault();
         reviewText.classList.remove("hide");

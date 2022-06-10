@@ -72,6 +72,11 @@
   padding-bottom: 20px;
   border-bottom: 1px solid antiquewhite;
 }
+.reviewBody > img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
 /* poster */
 .showPlace > li > section > a > img {
   width: 100px;

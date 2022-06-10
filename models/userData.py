@@ -471,7 +471,6 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-
     # 拿user profile 照片
     def get_user_profile_pic(self, user_name):
         connection = p.get_connection()

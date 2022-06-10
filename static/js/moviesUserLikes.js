@@ -28,11 +28,11 @@ async function showAllMoviesUserLikes() {
   for (let i = 0; i < data.length; i++) {
     let li = document.createElement("li");
     li.classList.add("posterFrame");
-    let filmId = data[i][0];
+    let movieId = data[i][0];
     let content = `
     <div class='posterMask hide'>
     <section class='flex'>
-    <a target="_blank" href="/film/${filmId}"> 
+    <a target="_blank" href="/film/${movieId}"> 
     <img src="/static/images/external-link-s.svg"/>
     </a>
     <a class="removeWatchlistBt hide" href="#">
@@ -40,7 +40,7 @@ async function showAllMoviesUserLikes() {
     </a>
     </section>
     </div>
-    <img class="moviePos"src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg"/>
+    <img class="moviePos"src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg"/>
    
     `;
     li.innerHTML = content;
@@ -54,7 +54,7 @@ async function showAllMoviesUserLikes() {
       removeLikesBts[i].addEventListener("click", async function (e) {
         e.preventDefault();
         let data = {
-          movieId: filmId,
+          movieId: movieId,
           userId: userId,
         };
 

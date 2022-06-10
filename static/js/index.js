@@ -14,8 +14,8 @@ let dynamicTextForLikeReviews = document.querySelector(
 
 // who logged and have friends
 let newFromFriendsPlace = document.querySelector(".newFromFriendsPlace");
-let reviewsWIthFriendsPlace = document.querySelector(
-  ".reviewsWIthFriendsPlace"
+let reviewsWithFriendsPlace = document.querySelector(
+  ".reviewsWithFriendsPlace"
 );
 // who no log or no friends
 let justReviewdPlace = document.querySelector(".justReviewdPlace");
@@ -162,7 +162,6 @@ async function makeNewsFromFriends(userName) {
       let reviewdMovieNameForHref = info["movieTitle"].replaceAll(" ", "+");
       let reviewId = info["reviewId"];
       let reviewerImgId = info["reviewerImgId"];
-
       if (reviewerImgId === null) {
         reviewerImgId = "../static/images/user.png";
       } else {
@@ -241,7 +240,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
     }
 
     let reviewerNameForUrl = reviewer.replaceAll(" ", "+");
-    let movieTitleForUrl = review.replaceAll(" ", "+");
+    let movieTitleForUrl = movieTitle.replaceAll(" ", "+");
     let reviewUrl = `/user_profile/${reviewerNameForUrl}/reviews/films/${movieTitleForUrl}/${reviewId}`;
     let li = document.createElement("li");
     let content = `
@@ -250,7 +249,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
     <section class="likeReviewNamePlace flex">
       <section class='flex'>
       <img class='userPic' src="${reviewerImgId}">
-      <a href="/user_profile/${reviewer}">${reviewer}</a>
+      <a href="/user_profile/${reviewerNameForUrl}">${reviewer}</a>
       </section>
       <a href="${reviewUrl}">${movieTitle}</a>
     </section>
@@ -259,7 +258,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
   </section>
     `;
     li.innerHTML = content;
-    reviewsWIthFriendsPlace.append(li);
+    reviewsWithFriendsPlace.append(li);
     let reviewP = document.createElement("p");
     reviewP.textContent = review;
     let likeReviewPlaces = document.querySelectorAll(".likeReviewPlace");
@@ -268,12 +267,17 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
       likeReviewPlaces[i].append(reviewP);
       reviewP.classList.add("hide");
       let alert = document.createElement("p");
+      alert.classList.add("spilerAlertText");
       alert.textContent = "There are spoilers in this review!";
+      alert.classList.add("spoilerAlertText");
       let spoilerAlert = document.createElement("a");
+      spoilerAlert.classList.add("spoilerAlert");
+
       spoilerAlert.textContent = "I don't mind, let me read.";
       spoilerAlert.href = "#";
       likeReviewPlaces[i].append(alert);
       likeReviewPlaces[i].append(spoilerAlert);
+
       spoilerAlert.addEventListener("click", function (e) {
         e.preventDefault();
         reviewP.classList.remove("hide");
@@ -283,7 +287,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
     } else {
       likeReviewPlaces[i].append(reviewP);
     }
-    show(reviewsWIthFriendsPlace);
+    show(reviewsWithFriendsPlace);
     show(dynamicTextForLikeReviews);
   }
 }
@@ -300,9 +304,5 @@ async function getNewReviewed() {
   const res = await req.json();
   return res;
 }
-
-// function addEventToPosters() {
-//   console.log(popularPosters);
-// }
 
 checkUserLogin();

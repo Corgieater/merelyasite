@@ -79,19 +79,7 @@ async function showReviewsUserLikes() {
     // 如果不是此user profile page擁有者 防雷
     let reviewTexts = document.querySelectorAll(".reviewText");
     if (spoilers && !pageBelongsToLoggedUser) {
-      let alert = document.createElement("p");
-      alert.textContent = "There are spoilers in this review!";
-      let spoilerAlert = document.createElement("a");
-      spoilerAlert.textContent = "I don't mind, let me read.";
-      spoilerAlert.href = "#";
-      reviewTexts[i].append(alert);
-      reviewTexts[i].append(spoilerAlert);
-      spoilerAlert.addEventListener("click", function (e) {
-        e.preventDefault();
-        hide(alert);
-        hide(spoilerAlert);
-        reviewTexts[i].textContent = review;
-      });
+      makeSpoilersAlert(reviewTexts[i], review);
     } else {
       reviewTexts[i].textContent = review;
     }

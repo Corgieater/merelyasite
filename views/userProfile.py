@@ -76,3 +76,82 @@ def render_user_profile_reviews_each(user_name, movie_name, review_id):
 def render_setting_page():
     return render_template('userSetting.html')
 
+
+# user profile 上傳圖片
+@user_profile_blueprint.route('/api/user/<user_id>/upload_pic', methods=["PATCH"])
+def upload_user_profile_pic(user_id):
+    img = request.files['photoFile']
+    return upload_user_profile_pic_func(user_id, img)
+
+
+# page master profile 拿該頁面擁有者的上傳照片 沒有就用預設
+@user_profile_blueprint.route('/api/user/<user_name>/upload_pic')
+def get_user_profile_pic(user_name):
+    user_name = user_name.replace('+', ' ')
+    return get_user_profile_pic_func(user_name)
+
+
+# render watchlist
+@user_profile_blueprint.route('/user_profile/<page_master>/watchlist')
+def render_user_watchlist_page(page_master):
+    page_master = page_master.replace('+', ' ')
+
+    return render_template('userWatchlist.html', pageMaster=page_master)
+
+
+# 拿watchlist
+@user_profile_blueprint.route('/api/user_profile/<page_master>/watchlist')
+def get_watchlist_by_page(page_master):
+    page_master = page_master.replace('+', ' ')
+    page = request.args.get('page')
+
+    return get_watchlist_by_page_func(page_master, page)
+
+
+# render user profile likes頁面
+@user_profile_blueprint.route('/user_profile/<page_master>/likes')
+def render_user_likes_page(page_master):
+    page_master = page_master.replace('+', ' ')
+    return render_template('userLikes.html', pageMaster=page_master)
+
+
+# get all movies user likes for user profile
+@user_profile_blueprint.route('/api/user_profile/<page_master>/likes/allMovies')
+def get_all_movies_user_likes(page_master):
+    page_master = page_master.replace('+', ' ')
+    page = request.args.get('page')
+    return get_all_movies_user_likes_func(page_master, page)
+
+
+# render user profile all movies user likes頁面
+@user_profile_blueprint.route('/user_profile/<page_master>/likes/allMovies')
+def render_movies_user_likes_page(page_master):
+    return render_template('moviesUserLikes.html')
+
+
+# get all reviews user likes for user profile
+@user_profile_blueprint.route('/api/user_profile/<page_master>/likes/allReviews')
+def get_all_reviews_user_likes(page_master):
+    page_master = page_master.replace('+', ' ')
+    page = request.args.get('page')
+    return get_all_reviews_user_likes_func(page_master, page)
+
+
+# render user profile all reviews user likes頁面
+@user_profile_blueprint.route('/user_profile/<page_master>/likes/allReviews')
+def render_reviews_user_likes_page(page_master):
+    return render_template('reviewsUserLikes.html')
+
+
+# get movies user like
+@user_profile_blueprint.route('/api/user_profile/<page_master>/likes/movies')
+def get_movies_user_likes(page_master):
+    page_master = page_master.replace('+', ' ')
+    return get_movies_user_likes_func(page_master)
+
+
+# get reviews user like
+@user_profile_blueprint.route('/api/user_profile/<page_master>/likes/reviews')
+def get_reviews_user_likes(page_master):
+    page_master = page_master.replace('+', ' ')
+    return get_reviews_user_likes_func(page_master)

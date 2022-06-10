@@ -61,7 +61,7 @@ def log_in(email, password):
         }
 
         encoded_data = jwt.encode(user_data, key, algorithm="HS256")
-        res = make_response({'ok':True})
+        res = make_response({'ok': True})
         res.set_cookie('user_info', encoded_data, timedelta(days=7))
         return res
     else:

@@ -3,7 +3,7 @@ from models.databaseClass import pool as p
 
 class ReviewDatabase:
 
-    # 寫評論
+# 寫評論
     def write_review(self, movie_review, movie_id, current_date, watched_date, user_id, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -32,7 +32,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 更新評論
+# 更新評論
     def update_review(self, review_id, movie_review, watched_date, spoilers):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -57,7 +57,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 刪除評論
+# 刪除評論
     def delete_review(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -75,7 +75,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿單一評論by reviewId
+# 拿單一評論by reviewId
     def get_review_by_review_id(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -112,7 +112,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評論 5 or multiple
+# 拿評論 5 or multiple
     def get_reviews_data(self, user_name, page=0):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -157,7 +157,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 更新評分 先找有沒有舊的 有就更新 沒有就加入
+# 更新評分 先找有沒有舊的 有就更新 沒有就加入
     def rating(self, rate, user_id, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -198,7 +198,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 加入關聯
+# 加入關聯
     def add_relation_between_tables(self, table, first_id, second_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -224,7 +224,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿評分資料
+# 拿評分資料
     def get_rate_data(self, user_id, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -250,7 +250,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 刪除評分資料
+# 刪除評分資料
     def delete_rate_data(self, film_id, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -277,7 +277,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿均分資料+總共多少人平分
+# 拿均分資料+總共多少人平分
     def get_average_rate_data(self, film_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -294,7 +294,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    #  算使用者REVIEWS有幾篇 by name
+#  算使用者REVIEWS有幾篇 by name
     def get_user_reviews_count(self, user_name):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -315,8 +315,8 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    #  從REVIEW ID拿到電影跟使用者ID
-    #  給從USER PROFILE REVIEW AGAIN用
+#  從REVIEW ID拿到電影跟使用者ID
+#  給從USER PROFILE REVIEW AGAIN用
     def get_movie_id_and_user_id_for_review_again(self, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -337,7 +337,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 用使用者追蹤的對象拿review
+# 用使用者追蹤的對象拿review
     def get_latest_five_reviews_from_follows(self, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -369,7 +369,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿12篇評論給index用
+# 拿12篇評論給index用
     def get_latest_reviews_for_index(self):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -398,7 +398,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # count all reviews
+# count all reviews
     def get_all_reviews_count(self):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -414,7 +414,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 算review搜尋有多少筆資料 HERE 這裡有問題 會找到沒review的電影
+# 算review搜尋有多少筆資料
     def get_total_review_count_by_title_and_content(self, review_query):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -439,7 +439,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿movie title, review content有包含user做review搜尋的資料
+# 拿movie title, review content有包含user做review搜尋的資料
     def get_review_by_title_and_content(self, review_query, start_point):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -447,7 +447,7 @@ class ReviewDatabase:
         try:
             cursor.execute('SELECT movie_id, title, year,\n'
                            'review_id, movie_review, spoilers\n'
-                           ',reviews_users.reu_user_id,\n'
+                           ',users.image_id,\n'
                            'users.name\n'
                            'FROM movies_info\n'
                            'INNER JOIN reviews\n'
@@ -460,7 +460,7 @@ class ReviewDatabase:
                            'UNION\n'
                            'SELECT movie_id, title, year,\n'
                            'review_id, movie_review, spoilers\n'
-                           ',reviews_users.reu_user_id,\n'
+                           ',users.image_id,\n'
                            'users.name\n'
                            'FROM movies_info\n'
                            'INNER JOIN reviews\n'
@@ -503,7 +503,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # 拿追蹤的人最近喜歡了什麼評論*4 給index用
+# 拿追蹤的人最近喜歡了什麼評論*4 給index用
     def get_followings_like_reviews(self, user_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -540,7 +540,7 @@ class ReviewDatabase:
             cursor.close()
             connection.close()
 
-    # get most popular reviews*4 for 給index用
+# get most popular reviews*4 for 給index用
     def get_most_popular_reviews(self):
         connection = p.get_connection()
         cursor = connection.cursor()

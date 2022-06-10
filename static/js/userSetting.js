@@ -17,7 +17,7 @@ upLoadBt.addEventListener("click", async function (e) {
   let res = await req.json();
   if (res.ok) {
     makeMessage(globalMessagePlace, "User picture updated");
-    window.location.replace(`/user_profile/${userName}`);
+    window.location.replace(`/user_profile/${userName.replaceAll(" ", "+")}`);
   } else {
     makeMessage(globalMessagePlace, res.message);
   }

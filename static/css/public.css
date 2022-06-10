@@ -178,6 +178,7 @@ label {
 nav > h1 > a {
   margin-left: 200px;
   font-size: 50px;
+  font-weight: bold;
 }
 
 /* nav bar */
@@ -189,15 +190,12 @@ nav > ul {
 }
 nav > ul > li {
   padding: 0 10px;
+  font-weight: bold;
 }
 nav > ul > li > input {
   width: 150px;
 }
 
-/* user name */
-nav > ul > li:nth-child(1) > a {
-  font-weight: bold;
-}
 /* logInPlace */
 .logInPlace {
   width: 50%;
@@ -322,4 +320,17 @@ nav > ul > li:nth-child(1) > a {
 .namePlace {
   padding: 10px;
   align-items: center;
+}
+
+/* spoilers */
+.spoilerAlertText {
+  font-size: 22px !important;
+  font-weight: bold !important;
+  color: lightcoral !important;
+}
+.spoilerAlert {
+  text-decoration: underline !important;
+}
+.spoilerAlert:hover {
+  color: #006d77 !important;
 }

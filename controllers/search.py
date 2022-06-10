@@ -81,7 +81,7 @@ def make_reviews_search_dic(data):
             'reviewId': info[3],
             'review': info[4],
             'spoilers': info[5],
-            'reviewUserId': info[6],
+            'reviewUserImgId': info[6],
             'reviewUserName': info[7]
         }
         review_dic['data']['data'].append(dic)

@@ -114,7 +114,6 @@ async function checkUserForPages(pageMaster) {
 // 做頁碼
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
   let pagesPlace = document.querySelector(".pagesPlace");
-  // 這裡的問題 改一下
   for (let i = 0; i < totalPages; i++) {
     // 找出要切哪
     let sliceIndex = userInputAndPage.indexOf("e=");

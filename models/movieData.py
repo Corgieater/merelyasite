@@ -381,6 +381,15 @@ class MovieDatabase:
                            'ORDER BY popularity DESC\n'
                            'LIMIT 6')
             results = cursor.fetchall()
+            if len(results) == 0:
+                # 這週沒人按就找上週的
+                cursor.execute('SELECT mul_movie_id, COUNT(*) as popularity\n'
+                               'FROM movies_users_like_list \n'
+                               'WHERE YEARWEEK(mul_like_date) = YEARWEEK(NOW())-1\n'
+                               'GROUP BY mul_movie_id\n'
+                               'ORDER BY popularity DESC\n'
+                               'LIMIT 6')
+                results = cursor.fetchall()
 
         except Exception as e:
             print('get_most_popular_movie_this_week')
