@@ -1,6 +1,7 @@
 "use strict";
 let pageMasterAndPage = cutUserInputAtLast("e/");
 let pageMaster = cutUserInputInMiddle("e/", "/w");
+let pageMasterWithNoPlus = pageMaster.replaceAll("+", " ");
 let showPlace = document.querySelector(".showPlace");
 let totalMoviePlace = document.querySelector(".wrap > h2 > span");
 let isMouseHover = false;
@@ -45,10 +46,12 @@ async function showWatchlist() {
     `;
     li.innerHTML = content;
     showPlace.append(li);
-    let userData = await getUserData();
-    let userId = userData["userId"];
     // 沒登入就不會秀出removeWatchlistBts
-    if (userId !== undefined) {
+    let isPageBelongsToLoggedUser = await checkUserForPages(
+      pageMasterWithNoPlus
+    );
+    console.log(isPageBelongsToLoggedUser);
+    if (isPageBelongsToLoggedUser) {
       let removeWatchlistBts = document.querySelectorAll(".removeWatchlistBt");
       show(removeWatchlistBts[i]);
       removeWatchlistBts[i].addEventListener("click", async function (e) {

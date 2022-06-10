@@ -52,17 +52,19 @@ async function checkUserBelongs() {
   let isThePageBelongsToLoggedUser = await checkUserForPages(
     userName.replaceAll("+", " ")
   );
-  if (isThePageBelongsToLoggedUser === false) {
-    is_following();
-  } else if (isThePageBelongsToLoggedUser === true) {
-    show(editProfileBt);
+  console.log(isThePageBelongsToLoggedUser);
+  if (isThePageBelongsToLoggedUser !== undefined) {
+    if (isThePageBelongsToLoggedUser === false) {
+      is_following();
+    } else if (isThePageBelongsToLoggedUser === true) {
+      show(editProfileBt);
+    }
   }
 }
 
 // 追蹤別人
 async function following_page_master() {
   let loggedUser = await getUserData();
-
   let data = {
     following: userNameWithNoPlus,
     follower: loggedUser["userId"],

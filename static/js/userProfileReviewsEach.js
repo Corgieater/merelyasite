@@ -663,12 +663,14 @@ async function reviewAgainFunc() {
 }
 
 async function checkUserMovieStates() {
-  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
-  ${currentUserId}/${movieId}`);
+  let userMovieStates = await fetch(
+    `/api/user_profile/user_movie_state/${currentUserId}/${movieId}`
+  );
   userMovieStates = await userMovieStates.json();
   userMovieStates = userMovieStates.data;
-  let userMovieReviewState = await fetch(`/api/user_profile/user_review_state/
-  ${currentUserId}/${reviewId}`);
+  let userMovieReviewState = await fetch(
+    `/api/user_profile/user_review_state/${currentUserId}/${reviewId}`
+  );
   userMovieReviewState = await userMovieReviewState.json();
   userMovieReviewState = userMovieReviewState.data;
   let ifMovielist = userMovieStates["userWatchlist"];
@@ -681,6 +683,7 @@ async function checkUserMovieStates() {
   if (!ifMovielist) {
     show(watchlistBtPlace);
   }
+
   if (ifMovieLikes) {
     show(removeLikeBtPlace);
   }
@@ -697,4 +700,3 @@ async function checkUserMovieStates() {
 
 showProperReviewBox();
 showFilmInfo();
-getReviewLikes();

@@ -103,7 +103,9 @@ async function getUserData() {
 async function checkUserForPages(pageMaster) {
   let loggedUser = await getUserData();
   loggedUser = loggedUser["userName"];
-
+  if (loggedUser === undefined) {
+    return undefined;
+  }
   if (loggedUser !== pageMaster) {
     return false;
   } else {

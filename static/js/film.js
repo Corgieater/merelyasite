@@ -210,6 +210,7 @@ async function getUserRate() {
   const res = await req.json();
   let userId = res["userId"];
   let userRate = await fetch(`/api/rate/${userId}/${movieId}`);
+  console.log(`/api/rate/${userId}/${movieId}`);
   userRate = await userRate.json();
   userRate = userRate.data.rate;
 
