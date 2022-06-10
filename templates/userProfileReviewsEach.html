@@ -17,7 +17,7 @@
       <section>
         <section class="flex">
           <h2><a href="#"></a></h2>
-          <p><a href="#"></a></p>
+          <p></p>
         </section>
         <section>
           <section class="flex"></section>
@@ -42,14 +42,13 @@
             <img class="filterGreen" src="/static/images/heart-s.svg" alt="" />
             Liked</a
           >
-          <a class="likesCountPlace" href="#"></a>
+          <p class="likesCountPlace"></p>
         </section>
       </section>
 
       <section class="actionBox">
         <ul>
           <li class="flex hide smallActionsPlace">
-            <!-- wierd the img worked in films with../ but this is different -->
             <section class="flex likeBtPlace hide">
               <a class="likeBt" href="#"
                 ><img src="/static/images/heart.svg" alt=""
@@ -76,7 +75,6 @@
             </section>
           </li>
           <li><a class="hide" href="#">Edit or delete this review</a></li>
-          <li><a class="hide" href="#">Add to lists</a></li>
           <li><a class="hide" href="#">Review again</a></li>
           <li>
             <!-- rating for page master-->
@@ -142,12 +140,6 @@
       </section>
       <!-- 秀出多少人評分 -->
     </div>
-
-    <!-- <div class="bodyArea flex">
-      <section class="plot">
-        <p></p>
-      </section>
-    </div> -->
   </div>
 
   <!-- 寫評論區 -->
@@ -177,4 +169,5 @@
 </div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/userProfileReviewsEach.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filmGeneral.js') }}"></script>
 {% endblock %}

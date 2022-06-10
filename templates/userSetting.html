@@ -5,20 +5,21 @@
   href="{{url_for('static', filename='css/userSetting.css')}}"
 />
 {% endblock %} {% block content %}
-<div>
-  <p>Change profile image:</p>
-  <input type="file" />
+<h2>Change profile image:</h2>
+<div class="flex">
+  <form id="photoForm">
+    <input
+      type="file"
+      name="photoFile"
+      id="phtoFile"
+      accept="image/jpeg, image/png"
+    />
+    <br />
+    <button class="uploadBt">Upload photo</button>
+  </form>
+  <img class="picPlace hide" src="" alt="" />
 </div>
-<div>
-  <section>
-    <label for="changePassword"> Change password: </label>
-    <input type="password" name="changePassword" id="changePassword" />
-  </section>
-  <section>
-    <label for="confirmPassword"> Confirm password: </label>
-    <input type="password" name="confirmPassword" id="confirmPassword" />
-  </section>
-</div>
+
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/userSetting.js') }}"></script>
 {% endblock %}

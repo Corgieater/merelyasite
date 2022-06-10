@@ -12,12 +12,12 @@ MYSQL_DATABASE = 'movie'
 
 
 class UserDatabase:
-    # sign up
+# sign up
     def add_to_database(self, inputs):
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s)', inputs)
+            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s, DEFAULT)', inputs)
         except Exception as e:
             print(e)
             connection.rollback()
@@ -29,6 +29,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
+#拿Email
     def get_email(self, email):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -46,7 +47,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # check if user name taken
+# check if user name taken
     def check_user_name(self, user_name):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -91,7 +92,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # 算user數量 by name
+# 算user數量 by name
     def get_total_user_count_by_name(self, user_input):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -112,19 +113,16 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # 拿user資料by name page HERE 還在做
+# 拿user資料by name page
     def get_users_by_name(self, name, start_index):
         start_index = int(start_index) * 20
-        print(start_index)
-        print(name)
+        connection = p.get_connection()
+        cursor = connection.cursor()
         try:
-            connection = p.get_connection()
-            cursor = connection.cursor()
-            cursor.execute('SELECT name FROM users WHERE name LIKE %s LIMIT %s, 20',
+            cursor.execute('SELECT name, image_id FROM users WHERE name LIKE %s LIMIT %s, 20',
                            ('%' + name + '%', start_index))
             results = cursor.fetchall()
-            print(results)
-            print('userData get_total_user_count_by_name', len(results))
+
             if len(results) == 0:
                 return False
 
@@ -141,7 +139,7 @@ class UserDatabase:
             connection.close()
 
 
-    # show how many people are following you
+# show how many people are following you
     def get_user_followed_count(self, name, start_index):
         start_index = int(start_index) * 20
         print(start_index)
@@ -171,7 +169,7 @@ class UserDatabase:
             connection.close()
 
 
-    # show how many people you are following
+# show how many people you are following
     def get_user_following_count(self, name, start_index):
         start_index = int(start_index) * 20
         print(start_index)
@@ -201,7 +199,7 @@ class UserDatabase:
             connection.close()
 
 
-    # 確認使用者有沒有追蹤頁面作者
+# 確認使用者有沒有追蹤頁面作者
     def check_is_user_following(self, userId, page_owner):
         try:
             connection = p.get_connection()
@@ -230,7 +228,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # 追蹤使用者
+# 追蹤使用者
     def follow_other_user(self, follower_id, following_user_name):
         # find other user id and link to this user
         connection = p.get_connection()
@@ -253,7 +251,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # get watchlist by name
+# get watchlist by name
     def get_watchlist(self, page_master_name, start_index):
         start_index = int(start_index)*24
         try:
@@ -280,7 +278,7 @@ class UserDatabase:
             connection.close()
 
 
-    # count watchlist by name
+# count watchlist by name
     def get_total_movie_in_watchlist_by_name(self, page_master):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -306,7 +304,7 @@ class UserDatabase:
             connection.close()
 
 
-    # check user state watchlist, likes, etc
+# check user state watchlist, likes, etc
     def check_user_state(self, user_id, content_id, type):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -342,7 +340,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # 加入待看清單 watchlist
+# 加入待看清單 watchlist
     def add_to_watchlist(self, user_id, movie_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -360,7 +358,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # delete from watchlist
+# delete from watchlist
     def delete_from_watchlist(self, user_id, movie_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -379,7 +377,7 @@ class UserDatabase:
             connection.close()
 
 
-    # 加入movies likes
+# 加入movies likes
     def add_to_movies_likes(self, user_id, movie_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -435,7 +433,7 @@ class UserDatabase:
             cursor.close()
             connection.close()
 
-    # delete_from_reviews_users_likes
+# delete_from_reviews_users_likes
     def delete_from_reviews_users_likes(self, user_id, review_id):
         connection = p.get_connection()
         cursor = connection.cursor()
@@ -451,6 +449,120 @@ class UserDatabase:
         else:
             connection.commit()
             return True
+        finally:
+            cursor.close()
+            connection.close()
+
+# 加入user profile照片名字
+    def add_user_profile_pic(self, user_id, img_name):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('UPDATE users SET image_id = %s WHERE user_id=%s',
+                           (img_name, user_id))
+        except Exception as e:
+            print(e)
+            connection.rollback()
+            return False
+        else:
+            connection.commit()
+            return True
+        finally:
+            cursor.close()
+            connection.close()
+
+    # 拿user profile 照片
+    def get_user_profile_pic(self, user_name):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT image_id FROM users WHERE name = %s',
+                           (user_name,))
+            image_id = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return image_id
+        finally:
+            cursor.close()
+            connection.close()
+
+# 拿movies user likes limit 20
+    def get_movies_user_likes(self, page_master, limit_num):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT movies_users_like_list.mul_movie_id\n'
+                           'FROM movies_users_like_list \n'
+                           'INNER JOIN users\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = mul_user_id\n'
+                           'ORDER BY movies_users_like_list.mul_like_date DESC LIMIT %s',
+                           (page_master, limit_num))
+
+            image_id = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return image_id
+        finally:
+            cursor.close()
+            connection.close()
+
+
+# 拿reviews user likes
+    def get_reviews_user_likes(self, page_master, limit_num):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT reviews_users_like_list.rul_review_id,\n'
+                           'reviewer.name as reviewer, reviewer.image_id,\n'
+                           'reviews.review_movie_id, reviews.movie_review, reviews.spoilers,\n'
+                           'movies_info.title, movies_info.year, reviews.today\n'
+                           'FROM reviews_users_like_list \n'
+                           'INNER JOIN users\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = rul_user_id\n'
+                           'INNER JOIN reviews_users\n'
+                           'INNER JOIN users reviewer\n'
+                           'ON reviews_users_like_list.rul_review_id = reviews_users.reu_review_id\n'
+                           'AND reviews_users.reu_user_id = reviewer.user_id\n'
+                           'INNER JOIN reviews\n'
+                           'INNER JOIN movies_info\n'
+                           'ON reviews_users_like_list.rul_review_id = reviews.review_id\n'
+                           'AND reviews.review_movie_id = movies_info.movie_id\n'
+                           'ORDER BY reviews_users_like_list.rul_like_date DESC LIMIT %s',
+                           (page_master, limit_num))
+            image_id = cursor.fetchall()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return image_id
+        finally:
+            cursor.close()
+            connection.close()
+
+# count movies user likes
+    def count_all_movies_user_likes(self ,page_master):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('SELECT COUNT(movies_users_like_list.mul_movie_id)\n'
+                           'FROM movies_users_like_list \n'
+                           'INNER JOIN users\n'
+                           'ON users.name = %s\n'
+                           'AND users.user_id = movies_users_like_list.mul_user_id\n'
+                           'ORDER BY movies_users_like_list.mul_like_date DESC',
+                           (page_master,))
+            movie_counts = cursor.fetchone()
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            return movie_counts
         finally:
             cursor.close()
             connection.close()

@@ -13,7 +13,7 @@
   margin-bottom: 15px;
 }
 
-h2 {
+.frame > h2 {
   border-bottom: 1px solid antiquewhite;
 }
 
@@ -56,4 +56,9 @@ h2 {
 /* search users */
 .showPlace > li > div > div:nth-child(2) > section > a:nth-child(1) {
   margin-right: 5px;
+}
+
+/* for user image, search users */
+.userImg {
+  border-radius: 50% !important;
 }

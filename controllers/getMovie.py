@@ -3,15 +3,16 @@ from os.path import basename
 import boto3
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
-from imdb import Cinemagoer, IMDbError
+from imdb import Cinemagoer
 from models.addMovieToData import *
+import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
 key_id = os.getenv('AWS_ACCESS_KEY_ID')
 secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 bucket_name = os.getenv('BUCKET_NAME')
-omdb_key = os.getenv('TMDB_KEY')
 
 
 client = boto3.client('s3',
@@ -25,7 +26,7 @@ headers = {
               "webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
     "Accept-Encoding": "gzip, deflate, br",
     "Accept-Language": "en-US,en;q=0.8",
-    "Host": "www.imdb.com",  #目標網站
+    "Host": "www.imdb.com",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "none",
@@ -42,19 +43,15 @@ genre_count = 0
 
 
 def get_imdb_id(title, year):
-    print(title)
     movies = imdb_move_base.search_movie(title)
-    print(movies)
     imdb_movie_id = None
     for movie in movies:
         try:
             if movie['title'].lower() == title.lower() \
                     and movie['year'] == int(year) and movie['kind'] == 'movie':
-                print(movie)
                 imdb_movie_id = movie.movieID
-                continue
-        except IMDbError as e:
-            # 不知道為啥有的電影沒年份
+                break
+        except Exception as e:
             print('something wrong on get movie from imdb')
             print(e)
     return imdb_movie_id
@@ -79,6 +76,7 @@ def random_delay(time_list):
     delay = random.choice(delay_choices)
     time.sleep(delay)
 
+
 # poster to s3
 def up_load_to_s3(poster_url, movie_id):
     # 丟S3
@@ -90,9 +88,10 @@ def up_load_to_s3(poster_url, movie_id):
             ContentType='image/jpeg',
         )
 
+
 def get_movie_from_imdb_func(title, year):
     global genre_count
-    is_movie_in_database = add_movie_database.find_in_database(title, year)
+    is_movie_in_database = add_movie_database.find_movie_in_database(title, year)
     poster_url = None
     if is_movie_in_database:
         return{'error': True,
@@ -101,21 +100,19 @@ def get_movie_from_imdb_func(title, year):
         imdb_movie_id = None
         try:
             imdb_movie_id = get_imdb_id(title, year)
-            print('imdb_movie_id', imdb_movie_id)
-        except IMDbError as e:
+        except Exception as e:
             print('something went wrong on imdb database')
             print(e)
-            return {
-            'error': True,
-            'message': 'Something is wrong, please check the title and year'
-            }
+            return {'error': True,
+                    'message': 'Something is wrong, please check the title and year'
+                    }
         url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=1a264172-ae1142e4-' \
               f'8ef7-7fed1973bb8f&pf_rd_r=STTXPSSSH1CW5RG8QKKM&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i' \
               f'=top&ref_=chttp_tt_3'
-        if imdb_movie_id == None:
-            return {'error':True,
-                    'message':"Sorry, we can't find this movie, please check again"}
-        print(url)
+
+        if imdb_movie_id is None:
+            return {'error': True,
+                    'message': "Sorry, we can't find this movie, please check again"}
         try:
             page = requests.get(url, headers=headers)
         except Exception as e:
@@ -133,27 +130,30 @@ def get_movie_from_imdb_func(title, year):
         try:
             unclean_title = soup.title.string
         except Exception as e:
+            print('Something is wrong when get unclean_title')
             print(e)
 
         try:
             unclean_year = soup.findAll \
                 ('a', class_="ipc-link ipc-link--baseAlt ipc-link--inherit-color sc-8c396aa2-1 WIUyh")
         except Exception as e:
+            print('Something is wrong when get unclean_year')
             print(e)
 
         # 判斷是否有多個genre/director genre out
-        # find_genre = soup.find(text='Genre')
         find_director = soup.find(text='Director')
 
+        # clean title
         m_title = cut_string(unclean_title, ' (')
         scraped_movie.append(m_title)
-        print(m_title, 'starting')
+        # clean year
         year = unclean_year[0].string
         scraped_movie.append(year)
         try:
             story_line = soup.find('span', class_='sc-16ede01-2 gXUyNh').getText()
             scraped_movie.append(story_line)
         except Exception as e:
+            print('Something is wrong when get story_line')
             print(e)
         try:
             find_tag_line = soup.find(text="Taglines")
@@ -162,6 +162,7 @@ def get_movie_from_imdb_func(title, year):
             scraped_movie.append(tag_line)
         except Exception as e:
             scraped_movie.append('')
+            print('Something is wrong when get tag_line, maybe there is none')
             print(e)
         genres = []
         directors = []
@@ -170,25 +171,18 @@ def get_movie_from_imdb_func(title, year):
         # this is more reliable
         genres_list = soup.findAll('li', class_="ipc-inline-list__item ipc-chip__text",
                                    attrs={'role': 'presentation'})
-        if genre_count != 3:
-            for g in genres_list:
+        for g in genres_list:
+            if genre_count < 3:
                 genre = g.get_text()
                 genres.append(genre.title())
                 genre_count += 1
-        print('genres done', genres)
 
         try:
             actors = soup.find(text='Stars')
             actors = clean_by_input(soup, 'Stars')
         except Exception as e:
+            print('Something is wrong when get actors')
             print(e)
-
-        # # dealing with genres
-        # if find_genre is None:
-        #     genres = clean_by_input(soup, 'Genres')
-        # else:
-        #     genres.append(
-        #         soup.find(text='Genre').findNext('div').findNext('ul').find('li').find('a').getText())
 
         # dealing with directors
         if find_director is None:
@@ -205,100 +199,45 @@ def get_movie_from_imdb_func(title, year):
             poster_place = requests.get(imdb_poster_url, headers=headers)
             soup = BeautifulSoup(poster_place.text, 'html.parser')
             poster_url = soup.find('img', attrs={'class': 'sc-7c0a9e7c-0 hXPlvk'})['src']
-            try:
-                print('poster here', poster_url)
-            except Exception as e:
-                print(e)
 
         except Exception as e:
+            print('Something is wrong when get poster, maybe there is none')
             print(e, 'skip')
 
-        print('scraped movie',scraped_movie)
-        print(directors)
-        print(actors)
-        print(genres)
-        added_movie_id = add_movie_database.add_to_database(scraped_movie, directors, actors, genres)
+        added_movie_id = add_movie_database.add_movie_to_database(scraped_movie)
         if added_movie_id:
             for director in directors:
                 director_id = add_movie_database.find_input_from_table('director_id', 'directors', 'name', director)
                 if director_id is not None:
-                    print(f'{director_id} {director} is exist')
                     add_movie_database.add_relationship((director_id, added_movie_id),'director')
                 else:
-                    print(f'{director} not in database')
                     new_director_id = add_movie_database.add_subject_to_database_by_type(director, 'director')[0]
-                    print('new director added',new_director_id)
                     add_movie_database.add_relationship((new_director_id, added_movie_id), 'director')
 
             for actor in actors:
-                print('start actor', actor)
                 actor_id = add_movie_database.find_input_from_table('actor_id', 'actors', 'name', actor)
                 if actor_id is not None:
                     add_movie_database.add_relationship((actor_id, added_movie_id), 'actor')
                 else:
                     new_actor_id = add_movie_database.add_subject_to_database_by_type(actor, 'actor')[0]
-                    print('new actor added', new_actor_id)
                     add_movie_database.add_relationship((new_actor_id, added_movie_id), 'actor')
 
             for genre in genres:
-                print('start genre', genre)
                 genre_id = add_movie_database.find_input_from_table('genre_id', 'genres', 'type', genre)
-                print('suspicious genre', genre_id)
                 if genre_id is not None:
                     add_movie_database.add_relationship((genre_id, added_movie_id), 'genre')
                 else:
                     new_genre_id = add_movie_database.add_subject_to_database_by_type(genre, 'genre')[0]
-                    print('new genre added', new_genre_id)
                     add_movie_database.add_relationship((new_genre_id, added_movie_id), 'genre')
+
+            genre_count = 0
 
             try:
                 up_load_to_s3(poster_url, added_movie_id)
             except Exception as e:
                 print('up load to s3 got trouble')
                 print(e)
-                return {'error':True,
-                        'message':"There is no poster"}
+                return {'error': True,
+                        'message': "There is no poster"}
             else:
-                print('poster up')
                 return{'ok': True}
-        # up_load_to_s3(poster_url)
-
-
-        # title = title.replace(' ', '+')
-        # url = f'http://www.omdbapi.com/?apikey={omdb_key}&t={title}&y={year}&plot=full'
-        # data_exist = database.find_in_database(title, year)
-        # if data_exist:
-        #     return False
-        # else:
-        #     movie_id = database.check_last_movie_id()[0]+1
-        #     response = urlopen(url)
-        #     data = json.loads(response.read())
-        #     title = data['Title']
-        #     year = data['Year']
-        #     genre = data['Genre']
-        #     director = data['Director']
-        #     actors = data['Actors']
-        #     story_line = data['Plot']
-        #     tagline
-        #     poster = data['Poster']
-        #     cut_point = poster.find('_S')
-        #     # 換成大張的海報
-        #     poster = poster[:cut_point] + '_FMjpg_UX674_.jpg'
-        #     print(movie_id, title, year, genre, director, actors, story_line, poster)
-        #     movie_input = (movie_id, movie_id,title, year, story_line, tagline)
-        #     print(movie_input)
-        #     try:
-        #         database.add_to_database(movie_input)
-        #         # 丟S3
-        #         with open(basename(poster), 'wb') as f:
-        #             client.put_object(
-        #                 Bucket='merelyasite-bucket',
-        #                 Body=requests.get(poster).content,
-        #                 Key=f'posters/img{movie_id}.jpg',
-        #                 ContentType='image/jpeg',
-        #             )
-        #     except Exception as e:
-        #         print(e)
-        #         return False
-        #     else:
-        #         return True

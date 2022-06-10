@@ -82,34 +82,20 @@
   margin-right: 10px;
 }
 .justReviewdPlace > li > a > img,
-.reviewsWIthFriendsPlace.flex > li > section > img {
+.reviewsWithFriendsPlace.flex > li > section > img {
   width: 100px;
   height: 150px;
   border: solid 1px grey;
   border-radius: 5px;
 }
 
-.fade::after {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  pointer-events: none;
-  right: 350px;
-  background-image: linear-gradient(
-    to left,
-    #212121 40%,
-    rgba(255, 255, 255, 0) 80%
-  );
-  width: 80px;
-  height: 150px;
-}
-
 /* reviews friends like*/
-.reviewsWIthFriendsPlace {
+
+.reviewsWithFriendsPlace {
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.reviewsWIthFriendsPlace > li {
+.reviewsWithFriendsPlace > li {
   width: 48%;
   padding: 30px 0 50px 0;
   border-bottom: 1px solid gray;
@@ -118,24 +104,34 @@
   flex-direction: column;
   padding: 20px;
 }
+.likeReviewNamePlace > section {
+  padding: 15px 0;
+}
+.likeReviewNamePlace > section > img {
+  margin-right: 10px;
+}
+
 /* friend like user name */
-.reviewsWIthFriendsPlace > li > section > section > a:nth-child(1) {
+.reviewsWithFriendsPlace > li > section > section > section > a {
   margin-bottom: 20px;
   color: #d8e2dc;
   font-size: 22px;
+  font-weight: bold;
 }
-.reviewsWIthFriendsPlace > li > section > section > a:nth-child(1):hover {
-  color: #2a9d8f;
+.reviewsWithFriendsPlace > li > section > section > section > a:hover {
+  color: cadetblue;
 }
+
 /* movie title */
-.reviewsWIthFriendsPlace > li > section.flex > section > a:nth-child(2) {
+.reviewsWithFriendsPlace > li > section.flex > section > a:nth-child(2) {
   font-size: 30px !important;
   font-weight: bold;
   color: white;
 }
-.reviewsWIthFriendsPlace > li > section.flex > section > a:nth-child(2):hover {
+.reviewsWithFriendsPlace > li > section.flex > section > a:nth-child(2):hover {
   color: #219ebc;
 }
+/* 最受歡迎的reviews */
 .likeReviewPlace {
   margin-top: 20px;
   display: -webkit-box;
@@ -143,4 +139,5 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.5;
 }

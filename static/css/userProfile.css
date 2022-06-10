@@ -3,7 +3,10 @@
 }
 /* user */
 .profile > img {
-  width: 150px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: gray;
 }
 .profile > section {
   margin-left: 100px;
@@ -31,10 +34,6 @@
 }
 .unFollowBt.unFollow {
   background-color: #e36414 !important;
-}
-/* user profile nav 施工中*/
-.wrap > ul > li {
-  margin-right: 20px;
 }
 
 /* latest review row*/
@@ -67,13 +66,37 @@
   height: 20px;
 }
 
-/* for userProfile reviews page */
+/* userNav */
 .userNav {
-  border: 1px solid white;
-}
-.userNav > ul {
   width: 25%;
+  margin: 0 auto;
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
-.userNav > ul > li {
+.userNav > li {
+  margin-right: 20px;
+}
+.reviewBody > section {
+  align-items: baseline;
+}
+.reviewBody > section > a {
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+.reviewBody > section > a:hover {
+  color: #2a9d8f;
+}
+.reviewBody {
+  line-height: 1.5;
+}
+
+/* user little pics */
+.reviewBody > section:nth-child(2) > img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
   margin-right: 20px;
 }

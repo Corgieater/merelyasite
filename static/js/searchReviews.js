@@ -36,9 +36,7 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("s=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/reviews?reviews=${userInputAndPage}`);
-  console.log(`/api/search/reviews?reviews=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -49,7 +47,6 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   makePageTags(
     "search/reviews?reviews=",
     userInputAndPage,
@@ -61,16 +58,12 @@ async function makeShowRow(data, userInputAndPage) {
     let showPlace = document.querySelector(".showPlace");
     data = data[0]["data"].data;
     console.log(data);
-    //   use for of for async func
-    // (const info of data)
     for (let i = 0; i < data.length; i++) {
-      // console.log(info);
       let li = document.createElement("li");
       let movieId = data[i]["movieId"];
       let movieTitle = data[i]["movieTitle"];
       let review = data[i]["review"];
       let reviewId = data[i]["reviewId"];
-      let reviewUserId = data[i]["reviewUserId"];
       let reviewUserName = data[i]["reviewUserName"];
       let spoilers = data[i]["spoilers"];
       let year = data[i]["year"];
@@ -80,10 +73,18 @@ async function makeShowRow(data, userInputAndPage) {
       let reviewPageHref = `/user_profile/${userNameForHref}/reviews/films/${movieTitleForHref}/${reviewId}`;
       let userPageHref = `/user_profile/${userNameForHref}`;
 
+      let reviewerImg = data[i]["reviewUserImgId"];
+      console.log(reviewerImg);
+      if (reviewerImg === null) {
+        reviewerImg = "/static/images/user.png";
+      } else {
+        reviewerImg = `https://dwn6ych98b9pm.cloudfront.net/userPic/${reviewerImg}.jpg`;
+      }
+      console.log(reviewerImg);
       let content = `
       <section>
       <a href="${reviewPageHref}">
-      <img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg" alt="">
+      <img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg">
       </a>
       </section>
 
@@ -93,75 +94,25 @@ async function makeShowRow(data, userInputAndPage) {
           <a href="">${year}</a>
         </section>
         <section class='reviewBody'>
+        <img src="${reviewerImg}">
           <a href="${userPageHref}">${reviewUserName}</a>
-          <p class='reviewPlace'>${review}</p>
+          <p class='reviewPlace'></p>
         </section>
       </section>
       `;
-      // IT WAS IN UP THERE
-      //   <section>
-      //   <a href="#">Like this review</a>
-      //   <a href="#">10 likes</a>
-      // </section>
+
       li.classList.add("flex");
       li.innerHTML = content;
       showPlace.append(li);
+
+      // 防雷
       let reviewPlaces = document.querySelectorAll(".reviewPlace");
-      let reviewBodies = document.querySelectorAll(".reviewBody");
       if (spoilers) {
-        // let reviewBodies = document.querySelectorAll(".reviewBody");
-        // let reviewPlaces = document.querySelectorAll(".reviewPlace");
-        let alert = document.createElement("p");
-        reviewPlaces[i].classList.add("hide");
-        alert.textContent = "There are spoilers in this review!";
-        let spoilerAlert = document.createElement("a");
-        spoilerAlert.textContent = "I don't mind, let me read.";
-        spoilerAlert.href = "#";
-        spoilerAlert.addEventListener("click", function (e) {
-          e.preventDefault();
-          reviewPlaces[i].classList.remove("hide");
-          alert.classList.add("hide");
-          spoilerAlert.classList.add("hide");
-        });
-        reviewBodies[i].insertBefore(spoilerAlert, reviewPlaces[i]);
-        reviewBodies[i].insertBefore(alert, spoilerAlert);
+        makeSpoilersAlert(reviewPlaces[i], review);
+      } else {
+        reviewPlaces[i].textContent = review;
       }
-      // 本來是想做偵測有沒有ellipses然後加入a tag可以讓使用者點開
-      // 但我現在沒心力
-      // else {
-      //   let ellipsisActive = isEllipsisActive(reviewPlaces[i]);
-      //   if (ellipsisActive) {
-      //     let a = document.createElement("a");
-      //     a.href = "#";
-      //     a.textContent = "more";
-      //     a.style.color = "white";
-      //     reviewBodies[i].append(a);
-      //     a.addEventListener("click", function (e) {
-      //       e.preventDefault();
-      //       let dot = reviewPlaces[i].innerHTML.lastIndexOf("...");
-      //       console.log(dot);
-      //     });
-      //   }
-      // }
     }
-    // let reviewPlaces = document.querySelectorAll(".reviewPlace");
-    // let reviewBody = document.querySelector(".reviewBody");
-    // if (spoilers) {
-    //   console.log(reviewPlace);
-    //   reviewPlace.classList.add("hide");
-    //   let alert = document.createElement("p");
-    //   alert.textContent = "There are spoilers in this review!";
-    //   let spoilerAlert = document.createElement("a");
-    //   spoilerAlert.textContent = "I don't mind, let me read.";
-    //   spoilerAlert.href = "#";
-    //   spoilerAlert.addEventListener("click", function (e) {
-    //     e.preventDefault();
-    //     reviewText.classList.remove("hide");
-    //     alert.classList.add("hide");
-    //     spoilerAlert.classList.add("hide");
-    //   });
-    //   reviewBody.insertBefore(spoilerAlert, reviewPlace);
-    //   reviewBody.insertBefore(alert, spoilerAlert);
   }
 }
 

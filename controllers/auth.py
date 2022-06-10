@@ -14,12 +14,10 @@ database = UserDatabase()
 # check is name taken
 def check_user_name_func(sign_up_name):
     user_name_exist = database.check_user_name(sign_up_name)
-    print(user_name_exist)
     if user_name_exist:
         return{'error': True}
     else:
         return{'ok': True}
-
 
 
 def sign_up(email, password, name):
@@ -48,7 +46,6 @@ def sign_up(email, password, name):
 # 登入相關
 def log_in(email, password):
     # 先確認有沒有此email
-    print('log in', email, password)
     email_exist = database.get_email(email)
     if not email_exist:
         return {
@@ -57,16 +54,14 @@ def log_in(email, password):
         }
 
     user_info = database.check_user_log_in_info(email, password)
-    print(user_info)
     if user_info:
-        print(user_info)
         user_data = {
             'userName': user_info[0],
             'userId': user_info[1]
         }
 
         encoded_data = jwt.encode(user_data, key, algorithm="HS256")
-        res = make_response({'ok':True})
+        res = make_response({'ok': True})
         res.set_cookie('user_info', encoded_data, timedelta(days=7))
         return res
     else:
@@ -85,7 +80,6 @@ def user_checker():
                 'data': None
             }
         data = jwt.decode(token, key, algorithms=["HS256"])
-        print(data)
         if data:
             return {
                     'userName': data['userName'],
@@ -103,6 +97,5 @@ def user_checker():
 def sign_out():
     res = make_response({'ok': True})
     res.set_cookie(key='user_info', value='', expires=0)
-    print('out')
     return res
 

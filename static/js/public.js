@@ -3,6 +3,9 @@ let movieTitle = document.querySelector("#movieTitle");
 let movieYear = document.querySelector("#movieYear");
 let globalMessagePlace = document.querySelector(".globalMessagePlace");
 
+let loaderPlace = document.querySelector(".loaderPlace");
+let mask = document.querySelector(".mask");
+
 // 給要headers的功能打API用
 async function sendDataToBackend(method, data, address) {
   const req = await fetch(address, {
@@ -12,14 +15,12 @@ async function sendDataToBackend(method, data, address) {
     },
     body: JSON.stringify(data),
   });
-  console.log("send this to back", data, typeof data);
+
   const res = await req.json();
-  console.log(res);
+
   if (res.ok) {
-    console.log("res.ok", res.ok);
     return true;
   } else if (res.message) {
-    console.log("res.message", res.message);
     return res.message;
   } else {
     return res.data;
@@ -83,7 +84,7 @@ function makeAlinkAndAppend(area, prefix, iterableData) {
   }
 }
 
-// user 沒登入就滾出去>:(
+// user 沒登入就返回
 async function redirectIfNotLogin() {
   const userLoged = await checkIfLogged();
   if (!userLoged) {
@@ -102,11 +103,9 @@ async function getUserData() {
 async function checkUserForPages(pageMaster) {
   let loggedUser = await getUserData();
   loggedUser = loggedUser["userName"];
-  // if (loggedUser === undefined) {
-  //   return undefined;
-  // }
-  console.log("now logged in", loggedUser);
-  console.log("page master", pageMaster);
+  if (loggedUser === undefined) {
+    return undefined;
+  }
   if (loggedUser !== pageMaster) {
     return false;
   } else {
@@ -114,14 +113,9 @@ async function checkUserForPages(pageMaster) {
   }
 }
 
-// 做頁碼 先用成做13頁 不然有夠他媽多= =
+// 做頁碼
 async function makePageTags(pageAndQuery, userInputAndPage, totalPages) {
-  console.log("makePageTagds", userInputAndPage);
   let pagesPlace = document.querySelector(".pagesPlace");
-  // 這裡的問題 改一下
-  if (totalPages >= 14) {
-    totalPages = 14;
-  }
   for (let i = 0; i < totalPages; i++) {
     // 找出要切哪
     let sliceIndex = userInputAndPage.indexOf("e=");
@@ -145,8 +139,6 @@ function makeDateString() {
 }
 
 window.onload = function () {
-  let loaderPlace = document.querySelector(".loaderPlace");
-  let mask = document.querySelector(".mask");
   loaderPlace.classList.add("hide");
   mask.classList.add("hide");
 };

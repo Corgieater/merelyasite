@@ -2,15 +2,18 @@
 let userNameAngPage = cutUserInputAtLast("e/");
 let userName = cutUserInputInMiddle("e/", "/r");
 let page = cutUserInputAtLast("e=");
-let userProfileReviewsBt = document.querySelector(".userProfileReviewsBt");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
-userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
+let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
+let userProfileLikesBt = document.querySelector(".userProfileLikesBt");
+
+// user profile nav bar
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;
+userProfileHomeBt.href = `/user_profile/${userName}`;
+userProfileLikesBt.href = `/user_profile/${userName}/likes`;
 
 async function getLatestFiveReviews() {
   const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
   const res = await req.json();
-  console.log("resdata", res);
   return res;
 }
 
@@ -28,7 +31,7 @@ async function showRecentlyReviews() {
     let watchedDay = info["watchedDay"];
     let reviewDay = info["reviewDay"];
     let date = null;
-    const filmId = info["filmId"];
+    const movieId = info["movieId"];
     let filmTitle = info["filmTitle"];
     let filmTitleForHref = filmTitle.replaceAll(" ", "+");
 
@@ -46,67 +49,32 @@ async function showRecentlyReviews() {
     let content = `
       <div>
       <img
-        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${filmId}.jpg"
+        src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg"
         alt="img"
       />
     </div>
     <div class='reviewBody'>
+    <section class='flex'>
       <a href="${reviewPage}">${filmTitle}</a>
-      <a href="#">${info["filmYear"]}</a>
+      <p>${info["filmYear"]}</p>
+    </section>
       <section class="starPlace"></section>
       <p>${date}</p>
-      <p class='reviewText'>${review}</p>
+      <p class="reviewText"></p>;
     </div>
-  </li>
       `;
     li.innerHTML = content;
+
     reviewdPlace.append(li);
-    // FIXING STAR SHOWING
-    // let userRate = info["userRate"];
-    let starPlace = document.querySelectorAll(".starPlace");
-    let reviewBody = document.querySelectorAll(".reviewBody")[i];
     let reviewText = document.querySelectorAll(".reviewText")[i];
 
-    // FIXING STAR SHOWING
-    // if (userRate !== null) {
-    //   if (userRate !== "0.5") {
-    //     let fullStarRate = parseInt(userRate);
-    //     for (let j = 0; j < fullStarRate; j++) {
-    //       let img = document.createElement("img");
-    //       img.src = "/static/images/star.png";
-    //       starPlace[i].append(img);
-    //     }
-    //   }
-    //   let halfStarRate = userRate.toString().search(".5");
-    //   if (halfStarRate !== -1) {
-    //     let img = document.createElement("img");
-    //     img.src = "/static/images/half_star.png";
-    //     starPlace[i].append(img);
-    //   }
-    // }
-    // 不是page擁有者就要防spoiler 是擁有者就讓他知道這是spoiler就好
+    // 不是page擁有者就要防spoiler
     if (spoilers && pageBelongsToLoggedUser === false) {
-      reviewText.classList.add("hide");
-      let alert = document.createElement("p");
-      alert.textContent = "There are spoilers in this review!";
-      let spoilerAlert = document.createElement("a");
-      spoilerAlert.textContent = "I don't mind, let me read.";
-      spoilerAlert.href = "#";
-      spoilerAlert.addEventListener("click", function (e) {
-        e.preventDefault();
-        reviewText.classList.remove("hide");
-        alert.classList.add("hide");
-        spoilerAlert.classList.add("hide");
-      });
-      reviewBody.insertBefore(spoilerAlert, reviewText);
-      reviewBody.insertBefore(alert, spoilerAlert);
+      makeSpoilersAlert(reviewText, review);
     } else {
-      let p = document.createElement("p");
-      p.textContent = "This review may contain spoilers.";
-      reviewBody.insertBefore(p, reviewText);
+      reviewText.textContent = review;
     }
   }
-  console.log("userName from userprofilereviews", userName);
   makePageTags("user_profile/", userNameAngPage, data["totalPages"]);
 }
 showRecentlyReviews();

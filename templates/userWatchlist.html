@@ -5,14 +5,13 @@
   href="{{url_for('static', filename='css/userWatchlist.css')}}"
 />
 {% endblock %} {% block content %}
-<h2>{{pageMaster}} WANTS TO SEE <span></span> FILMS</h2>
-<ul class="showPlace flex alignCenter">
-  <!-- <li>
-    <a href="#"
-      ><img src="https://dwn6ych98b9pm.cloudfront.net/moviePos/img2.jpg" alt=""
-    /></a>
-  </li> -->
+<ul class="userNav flex alignCenter">
+  <li><a class="userProfileReviewsBt" href="#">Reviews</a></li>
+  <li><a class="userProfileLikesBt" href="#">Likes</a></li>
+  <li><a class="userProfileHomeBt" href="#">Profile</a></li>
 </ul>
+<h2>{{pageMaster}} WANTS TO SEE <span></span> FILMS</h2>
+<ul class="showPlace flex alignCenter"></ul>
 <div class="pagesPlace alignCenter"></div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/userWatchlist.js') }}"></script>

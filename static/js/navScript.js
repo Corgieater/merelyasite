@@ -1,7 +1,6 @@
 "use strict";
 let currentUserId = null;
 
-let mask = document.querySelector(".mask");
 // nav按鈕
 let logInBt = document.querySelector(".logInPlace > button");
 let logOutBt = document.querySelector("nav > ul > li:nth-child(5)");
@@ -62,12 +61,10 @@ async function checkNameWhenFinishTyping() {
     const req = await fetch(`/api/user/${namePlace.value}`);
     const res = await req.json();
     if (res.ok) {
-      console.log(res);
       validationPlace.classList.remove("warning");
       validationPlace.classList.add("good");
       validationPlace.textContent = "Available";
     } else {
-      console.log(res);
       validationPlace.classList.remove("good");
       validationPlace.classList.add("warning");
       validationPlace.textContent = "Taken";
@@ -122,10 +119,8 @@ signUpBt.addEventListener("click", async function (e) {
         password: password,
         name: name,
       };
-      console.log(data);
       let returnMessage = await sendDataToBackend("POST", data, "/api/user");
       if (returnMessage === true) {
-        console.log("success");
         window.location.reload();
       } else {
         makeMessage(signUpPlace, returnMessage);
@@ -182,11 +177,10 @@ async function logOut(e) {
 }
 
 let dataForShowrow = {};
-// 搜尋  HERE
+// 搜尋
 searchFormBt.addEventListener("click", async function (e) {
   e.preventDefault();
   let userOption = searchSelect.value;
-  console.log(userOption);
   let userInput = document.querySelector("#userInput");
   let userInputForHref = userInput.value.replaceAll(" ", "+");
 
@@ -229,12 +223,12 @@ addMovieBt.addEventListener("click", async function () {
   const res = await req.json();
 
   if (res.ok) {
-    // makeMessage(addMoviePlace, "It's done!", "good");
     makeMessage(globalMessagePlace, "It's done!", "good");
     userInputTitle = "";
     userInputYear = "";
     hide(loaderPlace);
     show(addMoviePlace);
+    window.location.reload();
   } else {
     makeMessage(globalMessagePlace, res.message);
     hide(loaderPlace);

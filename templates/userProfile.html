@@ -7,7 +7,7 @@
 {% endblock %} {% block content %}
 <!-- profile -->
 <div class="profile flex">
-  <img src="../static/images/user.png" alt="pic" />
+  <img class="hide" src="../static/images/user.png" alt="pic" />
   <section>
     <h2>{{ name }}</h2>
     <a class="edditProfileBt hide" href="/setting">EDIT PROFILE</a>
@@ -17,9 +17,10 @@
 </div>
 
 <!-- profile nav -->
-<ul class="userProfileNav flex">
+<ul class="userNav flex">
   <li><a class="userProfileReviewsBt" href="#">Reviews</a></li>
   <li><a class="userProfileWatchlistBt" href="#">Watchlist</a></li>
+  <li><a class="userProfileLikesBt" href="#">Likes</a></li>
 </ul>
 
 <!-- latest reviews -->

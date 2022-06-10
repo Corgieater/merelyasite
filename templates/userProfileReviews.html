@@ -4,12 +4,11 @@
   type="text/css"
   href="{{url_for('static', filename='css/userProfile.css')}}"
 />{% endblock %} {% block content %}
-<div class="userNav">
-  <ul class="flex alignCenter">
-    <li><a class="userProfileReviewsBt" href="#">Reviews</a></li>
-    <li><a class="userProfileWatchlistBt" href="#">Watchlist</a></li>
-  </ul>
-</div>
+<ul class="userNav flex alignCenter">
+  <li><a class="userProfileWatchlistBt" href="#">Watchlist</a></li>
+  <li><a class="userProfileLikesBt" href="#">Likes</a></li>
+  <li><a class="userProfileHomeBt" href="#">Profile</a></li>
+</ul>
 <div class="reviews">
   <hr />
   <ul class="reviewdPlace"></ul>
@@ -17,4 +16,5 @@
 </div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/userProfileReviews.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filmGeneral.js') }}"></script>
 {% endblock %}

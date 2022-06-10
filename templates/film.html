@@ -13,7 +13,7 @@
     <div class="headArea flex">
       <section>
         <h2></h2>
-        <a href="#"></a>
+        <p></p>
         <p></p>
         <p>Directed by</p>
         <section class="directorsPlace"></section>
@@ -56,7 +56,6 @@
             </section>
           </li>
           <li><a class="hide" href="#">Wrtie a review</a></li>
-          <li><a class="hide" href="#">Add to lists</a></li>
           <li>
             <!-- rating -->
             <fieldset class="rate hide">
@@ -121,12 +120,6 @@
       </section>
     </div>
 
-    <!-- <div class="bodyArea flex">
-      <section class="plot">
-        <p></p>
-      </section>
-    </div> -->
-
     <div class="footArea">
       <section class="casts">
         <p>CAST</p>
@@ -159,4 +152,5 @@
 </div>
 {% endblock %} {% block script %}
 <script src="{{ url_for('static', filename='js/film.js') }}"></script>
+<script src="{{ url_for('static', filename='js/filmGeneral.js') }}"></script>
 {% endblock %}
