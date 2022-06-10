@@ -33,6 +33,31 @@ async function smallActionFunc(action, api) {
   }
 }
 
+// check if user add this movie to watchlist or likes
+async function checkUserMovieStates() {
+  let userData = await getUserData();
+  let userId = userData["userId"];
+  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
+    ${userId}/${movieId}`);
+  userMovieStates = await userMovieStates.json();
+  userMovieStates = userMovieStates.data;
+  let ifMovielist = userMovieStates["userWatchlist"];
+  let ifMovieLikes = userMovieStates["userLikes"];
+  if (ifMovielist) {
+    show(removeWatchlistBtPlace);
+  }
+  if (!ifMovielist) {
+    show(watchlistBtPlace);
+  }
+  if (ifMovieLikes) {
+    show(removeLikeBtPlace);
+  }
+  if (!ifMovieLikes) {
+    show(likeBtPlace);
+  }
+}
+
+// 轉換分數成星星
 function rateToStars(rate) {
   switch (rate) {
     case "0.5": {
