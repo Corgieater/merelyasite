@@ -7,8 +7,6 @@ from views.reviewsAndRates import *
 
 load_dotenv()
 environment = os.getenv('FLASK_ENV')
-secret_key = os.getenv('JWT_SECRET_KEY')
-
 
 app = Flask(
     __name__,
