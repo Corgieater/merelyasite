@@ -274,7 +274,6 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
       spoilerAlert.classList.add("spoilerAlert");
 
       spoilerAlert.textContent = "I don't mind, let me read.";
-      spoilerAlert.href = "#";
       likeReviewPlaces[i].append(alert);
       likeReviewPlaces[i].append(spoilerAlert);
 
