@@ -263,7 +263,9 @@ async function showFilmInfo() {
   let filmGenres = data["genres"];
   // 如果有登入就驗一下
   if (currentUserId) {
-    checkUserMovieStates();
+    let userData = await getUserData();
+    let userId = userData["userId"];
+    checkUserMovieStates(userId, movieId);
   }
   poster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg`;
   reviewPoster.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${movieId}.jpg`;
