@@ -33,3 +33,11 @@
 
 ## Database Structure
 ![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
+
+## Function Introduction
+Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
+![image](https://user-images.githubusercontent.com/92343813/173248516-87103ddd-ec11-4ba2-ac67-b26ca07a5ec0.png)
+![image](https://user-images.githubusercontent.com/92343813/173248647-bf50b949-7e43-4169-afd0-e6f5e0eab9ab.png)
+
+
+
