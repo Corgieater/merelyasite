@@ -52,7 +52,7 @@ async function checkUserBelongs() {
   let isThePageBelongsToLoggedUser = await checkUserForPages(
     userName.replaceAll("+", " ")
   );
-  console.log(isThePageBelongsToLoggedUser);
+
   if (isThePageBelongsToLoggedUser !== undefined) {
     if (isThePageBelongsToLoggedUser === false) {
       is_following();

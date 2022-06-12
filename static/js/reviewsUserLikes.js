@@ -1,7 +1,6 @@
 "use strict";
 let userNameAngPage = cutUserInputAtLast("_profile/");
 let userName = cutUserInputInMiddle("file/", "/like");
-console.log(userName);
 let page = cutUserInputAtLast("e=");
 let userProfileWatchlistBt = document.querySelector(".userProfileWatchlistBt");
 let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
@@ -21,7 +20,6 @@ async function getReviewsUserLikes() {
 async function showReviewsUserLikes() {
   let data = await getReviewsUserLikes();
   makePageTags("user_profile/", userNameAngPage, data.data["totalPages"]);
-  console.log(data);
   let reviewPlace = document.querySelector(".reviewdPlace");
   let pageBelongsToLoggedUser = await checkUserForPages(
     userName.replaceAll("+", " ")

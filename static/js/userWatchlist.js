@@ -50,12 +50,13 @@ async function showWatchlist() {
     let isPageBelongsToLoggedUser = await checkUserForPages(
       pageMasterWithNoPlus
     );
-    console.log(isPageBelongsToLoggedUser);
     if (isPageBelongsToLoggedUser) {
       let removeWatchlistBts = document.querySelectorAll(".removeWatchlistBt");
       show(removeWatchlistBts[i]);
       removeWatchlistBts[i].addEventListener("click", async function (e) {
         e.preventDefault();
+        let userData = await getUserData();
+        let userId = userData["userId"];
         let data = {
           movieId: movieId,
           userId: userId,

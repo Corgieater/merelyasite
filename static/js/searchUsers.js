@@ -1,6 +1,6 @@
 "use strict";
 let userInputPlace = document.querySelector("#userInput");
-console.log(userInputPlace);
+
 let frame = document.querySelector(".frame");
 // other colletions
 let movieCollectionsBt = document.querySelector(
@@ -20,7 +20,6 @@ let usersCollectionsBt = document.querySelector(
 );
 
 let keyword = cutUserInputInMiddle("r=", "%");
-console.log(keyword);
 
 movieCollectionsBt.href = `/search?keyword=${keyword}&page=1`;
 reviewsCollectionsBt.href = `/search/reviews?reviews=${keyword}&page=1`;
@@ -38,7 +37,6 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("r=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/users?user=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
@@ -55,11 +53,9 @@ async function makeShowRow(data, userInputAndPage) {
   } else {
     let showPlace = document.querySelector(".showPlace");
     data = data[0].data;
-    console.log(data);
 
     //   use for of for async func
     for (const info of data.data) {
-      console.log(info);
       let searchedUserName = info["userName"];
       let searchedUserFollowingNum = info["followingNum"];
       let searchedUserFollowerNum = info["followerNum"];

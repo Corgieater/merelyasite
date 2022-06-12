@@ -32,9 +32,7 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("r=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/actor?actor=${userInputAndPage}`);
-  console.log(`/api/search/actor?actor=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -45,7 +43,6 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   makePageTags("search/actor?actor=", userInputAndPage, data[0]["totalPages"]);
   if (typeof data === "string") {
     makeMessage(frame, data);
@@ -55,7 +52,6 @@ async function makeShowRow(data, userInputAndPage) {
 
     //   use for of for async func
     for (const info of data.data) {
-      console.log(info);
       let id = info["actorId"];
       let actorName = info["actorName"];
       let noSpaceName = actorName.replaceAll(" ", "+");

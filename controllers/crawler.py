@@ -6,9 +6,7 @@ from bs4 import BeautifulSoup
 from models.addMovieToData import *
 import os
 from dotenv import load_dotenv
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium import webdriver
+from imdb import Cinemagoer
 
 
 load_dotenv()
@@ -16,7 +14,6 @@ load_dotenv()
 key_id = os.getenv('AWS_ACCESS_KEY_ID')
 secret_key = os.getenv('AWS_SECRET_ACCESS_KEY')
 bucket_name = os.getenv('BUCKET_NAME')
-chrome_location = os.getenv('CHROME_LOCATION')
 
 
 client = boto3.client('s3',
@@ -40,42 +37,12 @@ headers = {
 }
 
 add_movie_database = ImportDatabase()
-
-chrome_options = Options()
-chrome_options.add_argument("--disable-notifications")
+imdb_move_base = Cinemagoer()
 
 
 global genre_count
 genre_count = 0
 
-# Interstellar 2014
-def get_movie_address_from_imdb(title, year):
-    # 設置路徑讓Selenium找到chrome的driver
-    chrome = webdriver.Chrome(options=chrome_options, executable_path=chrome_location)
-    # go to imdb
-    chrome.get("https://www.imdb.com/")
-    # find the drop down menu and click it
-    imdb_drop_down = chrome.find_element(By.XPATH, '//*[@id="nav-search-form"]/div[1]/div/label/div')
-    imdb_drop_down.click()
-    # for searching title only so click it
-    drop_down_title_bt = chrome.find_element(By.XPATH, '//*[@id="navbar-search-category-select-contents"]/ul/li[2]')
-    drop_down_title_bt.click()
-    # find search bar and input key words, which are title and year for accuracy
-    imdb_search = chrome.find_element(By.XPATH, '//*[@id="suggestion-search"]')
-    imdb_search.send_keys(f"{title} {year}")
-    # submit
-    submit_bt = chrome.find_element(By.XPATH, '//*[@id="suggestion-search-button"]')
-    submit_bt.click()
-    # click movie only bt for showing movies only
-    movie_only_bt = chrome.find_element(By.XPATH, '//*[@id="sidebar"]/div[3]/ul/ul/li[1]/a')
-    movie_only_bt.click()
-    # choose the first result
-    first_movie = chrome.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/table/tbody/tr[1]/td[2]/a')
-    first_movie.click()
-    # return current page url
-    current_url = chrome.current_url
-    chrome.close()
-    return current_url
 
 
 def cut_string(string, target):
@@ -109,6 +76,20 @@ def up_load_to_s3(poster_url, movie_id):
             ContentType='image/jpeg',
         )
 
+def get_imdb_id(title, year):
+    movies = imdb_move_base.search_movie(title)
+    imdb_movie_id = None
+    for movie in movies:
+        try:
+            if movie['title'].lower() == title.lower() \
+                    and movie['year'] == int(year) and movie['kind'] == 'movie':
+                imdb_movie_id = movie.movieID
+                break
+        except Exception as e:
+            print('something wrong on get movie from imdb')
+            print(e)
+    return imdb_movie_id
+
 
 def get_movie_from_imdb_func(title, year):
     global genre_count
@@ -120,13 +101,23 @@ def get_movie_from_imdb_func(title, year):
                'message': 'Movie already exist'}
     else:
         try:
-            movie_url = get_movie_address_from_imdb(title, year)
+            imdb_movie_id = get_imdb_id(title, year)
         except Exception as e:
-            print('Selenium got trouble')
+            print('something went wrong on imdb database')
             print(e)
+            return {'error': True,
+                    'message': 'Something is wrong, please check the title and year'
+                    }
+        url = f'https://www.imdb.com/title/tt{imdb_movie_id}/?pf_rd_m=A2FGELUUNOQJNL&pf_rd_p=1a264172-ae1142e4-' \
+              f'8ef7-7fed1973bb8f&pf_rd_r=STTXPSSSH1CW5RG8QKKM&pf_rd_s=center-1&pf_rd_t=15506&pf_rd_i' \
+              f'=top&ref_=chttp_tt_3'
+
+        if imdb_movie_id is None:
+            return {'error': True,
+                    'message': "Sorry, we can't find this movie, please check again"}
 
         try:
-            page = requests.get(movie_url, headers=headers)
+            page = requests.get(url, headers=headers)
         except Exception as e:
             print('something wrong when doing request page to imdb, maybe user is trolling')
             print(e)
