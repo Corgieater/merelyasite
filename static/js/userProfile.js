@@ -156,7 +156,6 @@ async function showRecentlyReviews() {
       alert.classList.add("spoilerAlertText");
       let spoilerAlert = document.createElement("a");
       spoilerAlert.textContent = "I don't mind, let me read.";
-      spoilerAlert.href = "#";
       spoilerAlert.classList.add("spoilerAlert");
 
       spoilerAlert.addEventListener("click", function (e) {

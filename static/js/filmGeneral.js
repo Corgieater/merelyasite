@@ -7,7 +7,6 @@ function makeSpoilersAlert(placeNeedToAntiSpoilers, review) {
   spoilerAlert.textContent = "I don't mind, let me read.";
   spoilerAlert.classList.add("spoilerAlert");
 
-  spoilerAlert.href = "#";
   placeNeedToAntiSpoilers.append(alert);
   placeNeedToAntiSpoilers.append(spoilerAlert);
   spoilerAlert.addEventListener("click", function (e) {
