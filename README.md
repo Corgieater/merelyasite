@@ -41,4 +41,6 @@ Homepage for anonymous user, showing most popular movies this week and reviews w
 Reviews with spoilers won't directly show. 
 ![image](https://user-images.githubusercontent.com/92343813/173249039-b0b45371-91fb-41f3-8225-2af41d33b9ed.png)
 
+Personalizing homepage after login
+![image](https://user-images.githubusercontent.com/92343813/173249081-5d4da6af-4945-469b-8094-a653f128dfc8.png)
 
