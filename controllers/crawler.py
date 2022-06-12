@@ -41,8 +41,8 @@ headers = {
 
 add_movie_database = ImportDatabase()
 
-options = Options()
-options.add_argument("--disable-notifications")
+chrome_options = Options()
+chrome_options.add_argument("--disable-notifications")
 
 
 global genre_count
@@ -50,20 +50,29 @@ genre_count = 0
 
 # Interstellar 2014
 def get_movie_address_from_imdb(title, year):
-    chrome = webdriver.Chrome(executable_path=chrome_location)
+    # 設置路徑讓Selenium找到chrome的driver
+    chrome = webdriver.Chrome(options=chrome_options, executable_path=chrome_location)
+    # go to imdb
     chrome.get("https://www.imdb.com/")
+    # find the drop down menu and click it
     imdb_drop_down = chrome.find_element(By.XPATH, '//*[@id="nav-search-form"]/div[1]/div/label/div')
     imdb_drop_down.click()
+    # for searching title only so click it
     drop_down_title_bt = chrome.find_element(By.XPATH, '//*[@id="navbar-search-category-select-contents"]/ul/li[2]')
     drop_down_title_bt.click()
+    # find search bar and input key words, which are title and year for accuracy
     imdb_search = chrome.find_element(By.XPATH, '//*[@id="suggestion-search"]')
     imdb_search.send_keys(f"{title} {year}")
+    # submit
     submit_bt = chrome.find_element(By.XPATH, '//*[@id="suggestion-search-button"]')
     submit_bt.click()
+    # click movie only bt for showing movies only
     movie_only_bt = chrome.find_element(By.XPATH, '//*[@id="sidebar"]/div[3]/ul/ul/li[1]/a')
     movie_only_bt.click()
+    # choose the first result
     first_movie = chrome.find_element(By.XPATH, '//*[@id="main"]/div/div[2]/table/tbody/tr[1]/td[2]/a')
     first_movie.click()
+    # return current page url
     current_url = chrome.current_url
     chrome.close()
     return current_url
