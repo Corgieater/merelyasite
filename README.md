@@ -1,10 +1,6 @@
 # Movie Notes
 
 
-本專案參考Letterboxd製作，其主功能如下：
-1. 心得系統：撰寫並發佈個人心得
-2. 追蹤系統：追蹤其他使用者並達到首頁個人化
-
 #### This project is a fan project of Letterboxd. Here are the main features:
 1. ✏️ Logging: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
