@@ -1,6 +1,7 @@
 "use strict";
 let pageMasterAndPage = cutUserInputAtLast("profile/");
 let pageMaster = cutUserInputInMiddle("file/", "/likes");
+let pageMasterWithNoPlus = pageMaster.replaceAll("+", " ");
 let showPlace = document.querySelector(".showPlace");
 let totalMoviePlace = document.querySelector(".wrap > h2 > span");
 let isMouseHover = false;
@@ -17,7 +18,6 @@ userProfileLikesBt.href = `/user_profile/${pageMaster}/likes`;
 async function getAllMoviesUserLikes() {
   const req = await fetch(`/api/user_profile/${pageMasterAndPage}`);
   const res = await req.json();
-  console.log(res);
   return res;
 }
 
@@ -47,8 +47,11 @@ async function showAllMoviesUserLikes() {
     showPlace.append(li);
     let userData = await getUserData();
     let userId = userData["userId"];
-    // 沒登入就不會秀出removeLikesBts
-    if (userId !== undefined) {
+    let isPageBelongsToLoggedUser = await checkUserForPages(
+      pageMasterWithNoPlus
+    );
+    // 是page擁有者就秀刪除按鈕
+    if (isPageBelongsToLoggedUser) {
       let removeLikesBts = document.querySelectorAll(".removeWatchlistBt");
       show(removeLikesBts[i]);
       removeLikesBts[i].addEventListener("click", async function (e) {

@@ -31,9 +31,7 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("d=");
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search?keyword=${userInputAndPage}`);
-  console.log(`/api/search?keyword=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -44,7 +42,6 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
@@ -57,7 +54,6 @@ async function makeShowRow(data, userInputAndPage) {
       let title = info["title"];
       let year = info["year"];
       let directors = info["directors"];
-      console.log(directors);
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");

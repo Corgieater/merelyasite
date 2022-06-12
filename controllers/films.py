@@ -10,19 +10,6 @@ movie_database = MovieDatabase()
 user_database = UserDatabase()
 
 
-# def make_page(data, page, total_page):
-#     page = int(page) + 1
-#     data['currentPage'] = page
-#     data['nextPage'] = None
-#     data['totalPages'] = total_page
-#
-#     if page < total_page:
-#         data['nextPage'] = page + 1
-#     else:
-#         data['nextPage'] = None
-#     return data
-
-
 def get_data_by_type_func(query, page, data_type):
     data_count = 0
     if page is None:

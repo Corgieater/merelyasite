@@ -7,7 +7,6 @@ let userProfileHomeBt = document.querySelector(".userProfileHomeBt");
 
 let moviesUserLikesAllBt = document.querySelector(".moviesUserLikesAllBt");
 let reviewsUserLikesAllBt = document.querySelector(".reviewsUserLikesAllBt");
-console.log(moviesUserLikesAllBt, reviewsUserLikesAllBt);
 
 userProfileReviewsBt.href = `/user_profile/${userName}/reviews?page=1`;
 userProfileWatchlistBt.href = `/user_profile/${userName}/watchlist?page=1`;

@@ -2,7 +2,6 @@
 let director = cutUserInputAtLast("r=");
 // this need to be take care, include actor's part and actor's html
 // actor's message showing
-console.log(director, "directorjs");
 let posterPlace = document.querySelector(".posterPlace");
 let frame = document.querySelector(".frame");
 
@@ -27,15 +26,12 @@ async function getMovieByDirector() {
     let userInputAndPage = cutUserInputAtLast("r=");
     makePageTags("director?director=", userInputAndPage, res["totalPages"]);
   } else {
-    console.log(res);
-    console.log(frame);
     makeMessage(frame, res.message);
   }
 }
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
@@ -48,7 +44,6 @@ async function makeShowRow(data, userInputAndPage) {
       let title = info["title"];
       let year = info["year"];
       let directors = info["directors"];
-      console.log(directors);
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");

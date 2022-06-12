@@ -15,7 +15,6 @@ let actorsCollectionsBt = document.querySelector(
 );
 
 let keyword = cutUserInputInMiddle("e=", "&");
-console.log(keyword);
 
 movieCollectionsBt.href = `/search?keyword=${keyword}&page=1`;
 reviewsCollectionsBt.href = `/search/reviews?reviews=${keyword}&page=1`;
@@ -33,9 +32,7 @@ async function renderDataInfo() {
 // 先打API去要資料 多頁用
 async function getData() {
   let userInputAndPage = cutUserInputAtLast("e=") + "&page=1";
-  console.log(userInputAndPage);
   let req = await fetch(`/api/search/genre?genre=${userInputAndPage}`);
-  console.log(`/api/search/genre?genre=${userInputAndPage}`);
   const res = await req.json();
   if (res.data) {
     return [res, userInputAndPage];
@@ -46,7 +43,6 @@ async function getData() {
 
 async function makeShowRow(data, userInputAndPage) {
   // 沒東西就不用做了
-  console.log(data);
   if (typeof data === "string") {
     makeMessage(frame, data);
   } else {
@@ -59,7 +55,7 @@ async function makeShowRow(data, userInputAndPage) {
       let title = info["title"];
       let year = info["year"];
       let directors = info["directors"];
-      console.log(directors);
+
       let li = document.createElement("li");
       let div1 = document.createElement("div");
       let div2 = document.createElement("div");

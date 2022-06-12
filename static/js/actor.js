@@ -1,6 +1,5 @@
 "use strict";
 let actor = cutUserInputAtLast("r=");
-console.log(actor);
 // let page = cutUserInputAtLast("ge=");
 let posterPlace = document.querySelector(".posterPlace");
 
@@ -20,7 +19,6 @@ async function makePosterLi(movieIds) {
 async function getMovieByDirector() {
   let req = await fetch(`/api/actor?actor=${actor}&page=1`);
   let res = await req.json();
-  console.log(res);
   if (res.data) {
     let movieIds = await res["data"]["actorMovieId"];
     makePosterLi(movieIds);

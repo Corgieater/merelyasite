@@ -57,7 +57,6 @@ async function makeShowRow(data, userInputAndPage) {
   } else {
     let showPlace = document.querySelector(".showPlace");
     data = data[0]["data"].data;
-    console.log(data);
     for (let i = 0; i < data.length; i++) {
       let li = document.createElement("li");
       let movieId = data[i]["movieId"];
@@ -74,13 +73,11 @@ async function makeShowRow(data, userInputAndPage) {
       let userPageHref = `/user_profile/${userNameForHref}`;
 
       let reviewerImg = data[i]["reviewUserImgId"];
-      console.log(reviewerImg);
       if (reviewerImg === null) {
         reviewerImg = "/static/images/user.png";
       } else {
         reviewerImg = `https://dwn6ych98b9pm.cloudfront.net/userPic/${reviewerImg}.jpg`;
       }
-      console.log(reviewerImg);
       let content = `
       <section>
       <a href="${reviewPageHref}">
