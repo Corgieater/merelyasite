@@ -13,7 +13,6 @@ let deleteLikesReviewBt = document.querySelector(
   ".reviewLikePlace > a:nth-child(2)"
 );
 // // 查詢用
-// 把這邊處理成一個功能丟到public? 等後續有差不多的東西再做
 let uncleanUrlForReviewId = cutUserInputAtLast("/films");
 let uncleanUrlForMovieName = cutUserInputAtLast("/reviews");
 let pageMaster = cutUserInputInMiddle("e/", "/r");
@@ -21,7 +20,7 @@ let pageMasterWithNoPlus = pageMaster.replaceAll("+", " ");
 // 拿最後一個/然後找reviewID
 let indexOfLastSlash = uncleanUrlForReviewId.lastIndexOf("/");
 let reviewId = uncleanUrlForReviewId.slice(indexOfLastSlash + 1);
-// 切MovieName超麻煩
+// 切MovieName
 let indexOfStartMovieName = uncleanUrlForMovieName.indexOf("s/");
 let endIndexOfMovieName = uncleanUrlForMovieName.lastIndexOf("/");
 let movieName = uncleanUrlForMovieName.substring(
@@ -94,7 +93,6 @@ let userLogPlace = document.querySelector("#review");
 let deleteReviewBt = document.querySelector(".deleteReviewBt");
 
 // 沒登入就把reviewBox的東西都藏起來吧
-// 這邊變成要檢查如果不是該ID的人就不要給他改東西?
 async function showProperReviewBox() {
   // 看有沒有登入
   const userIsLogged = await checkIfLogged();
@@ -141,25 +139,6 @@ async function showProperReviewBox() {
 likeBt.addEventListener("click", async function (e) {
   e.preventDefault();
   smallActionFunc("PATCH", "/api/user_profile/likes/movie");
-  // let userData = await getUserData();
-  // let userId = userData["userId"];
-  // let data = {
-  //   movieId: movieId,
-  //   userId: userId,
-  // };
-  // let addToWatchlistMessage = await sendDataToBackend(
-  //   "PATCH",
-  //   data,
-  //   "/api/user_profile/likes/movie"
-  // );
-  // if (addToWatchlistMessage === true) {
-  //   window.location.reload();
-  //   makeMessage(
-  //     globalMessagePlace,
-  //     `${movieName} was added to your like list`,
-  //     "good"
-  //   );
-  // }
 });
 
 // delete from movies users likes
@@ -167,25 +146,6 @@ likeBt.addEventListener("click", async function (e) {
 removeLikeBtPlace.addEventListener("click", async function (e) {
   e.preventDefault();
   smallActionFunc("DELETE", "/api/user_profile/likes/movie");
-  // let userData = await getUserData();
-  // let userId = userData["userId"];
-  // let data = {
-  //   movieId: movieId,
-  //   userId: userId,
-  // };
-  // let addToWatchlistMessage = await sendDataToBackend(
-  //   "DELETE",
-  //   data,
-  //   "/api/user_profile/likes/movie"
-  // );
-  // if (addToWatchlistMessage === true) {
-  //   window.location.reload();
-  //   makeMessage(
-  //     globalMessagePlace,
-  //     `${movieName} was removed from your likes list`,
-  //     "good"
-  //   );
-  // }
 });
 
 // 加入待看清單
@@ -292,7 +252,6 @@ rateBts.forEach((bt) => {
     const req = await fetch("/api/user");
     const res = await req.json();
     let loggedUserId = res["userId"];
-    // let loggedUserName = res["userName"];
     let data = {
       rate: rate,
       userId: loggedUserId,
@@ -327,24 +286,6 @@ cancelBt.addEventListener("click", async function (e) {
     bt.checked = false;
   }
   smallActionFunc("DELETE", "/api/rate");
-  // const req = await fetch("/api/user");
-  // const res = await req.json();
-  // let id = res["userId"];
-  // let data = {
-  //   movieId: movieId,
-  //   userId: id,
-  // };
-  // let deleteRatingMessage = await sendDataToBackend(
-  //   "DELETE",
-  //   data,
-  //   "/api/rate"
-  // );
-  // if (deleteRatingMessage === true) {
-  //   hide(cancelBt);
-  //   window.location.reload();
-  // } else {
-  //   makeMessage(averageRatePlace, deleteRatingMessage);
-  // }
 });
 
 // 拿review資料 拿PAGE MASTER的REVIEW
@@ -513,9 +454,11 @@ function turnDatabaseDateToStringDate(dabataseDate) {
   return newDate;
 }
 
-// 更新按鈕裡的功能
+// 更新review按鈕
 async function updateReviewFunc() {
   let spoilers = false;
+  let userData = await getUserData();
+  let userName = userData["userName"];
   deleteMessage();
   if (userLogPlace.value === "") {
     makeMessage(messagePlace, "Type something, please");
@@ -659,42 +602,6 @@ async function reviewAgainFunc() {
     } else {
       makeMessage(messagePlace, reviewUpdateMessage);
     }
-  }
-}
-
-async function checkUserMovieStates() {
-  let userMovieStates = await fetch(
-    `/api/user_profile/user_movie_state/${currentUserId}/${movieId}`
-  );
-  userMovieStates = await userMovieStates.json();
-  userMovieStates = userMovieStates.data;
-  let userMovieReviewState = await fetch(
-    `/api/user_profile/user_review_state/${currentUserId}/${reviewId}`
-  );
-  userMovieReviewState = await userMovieReviewState.json();
-  userMovieReviewState = userMovieReviewState.data;
-  let ifMovielist = userMovieStates["userWatchlist"];
-  let ifMovieLikes = userMovieStates["userLikes"];
-  let ifReviewLikes = userMovieReviewState["userLikes"];
-
-  if (ifMovielist) {
-    show(removeWatchlistBtPlace);
-  }
-  if (!ifMovielist) {
-    show(watchlistBtPlace);
-  }
-
-  if (ifMovieLikes) {
-    show(removeLikeBtPlace);
-  }
-  if (!ifMovieLikes) {
-    show(likeBtPlace);
-  }
-  if (ifReviewLikes) {
-    show(deleteLikesReviewBt);
-  }
-  if (!ifReviewLikes) {
-    show(likesReviewBt);
   }
 }
 

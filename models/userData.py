@@ -1,10 +1,11 @@
 from models.databaseClass import pool as p
 import os
 from dotenv import load_dotenv
-import flask_bcrypt as bcrypt
+from flask_bcrypt import Bcrypt
 
 load_dotenv()
 
+bcrypt = Bcrypt()
 MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_USER = os.getenv('MYSQL_USER')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')

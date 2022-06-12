@@ -142,19 +142,3 @@ window.onload = function () {
   loaderPlace.classList.add("hide");
   mask.classList.add("hide");
 };
-
-// 滑鼠滑進滑出
-// unFollowBt.addEventListener(
-//   "mouseover",
-//   function () {
-//     isMouseHover = true;
-//   },
-//   false
-// );
-// unFollowBt.addEventListener(
-//   "mouseleave",
-//   function () {
-//     isMouseHover = false;
-//   },
-//   false
-// );

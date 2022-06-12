@@ -278,30 +278,6 @@ async function showFilmInfo() {
   makeAlinkAndAppend(genres, "/search/genre?genre=", filmGenres);
 }
 
-// check if user add this movie to watchlist or likes
-async function checkUserMovieStates() {
-  let userData = await getUserData();
-  let userId = userData["userId"];
-  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
-  ${userId}/${movieId}`);
-  userMovieStates = await userMovieStates.json();
-  userMovieStates = userMovieStates.data;
-  let ifMovielist = userMovieStates["userWatchlist"];
-  let ifMovieLikes = userMovieStates["userLikes"];
-  if (ifMovielist) {
-    show(removeWatchlistBtPlace);
-  }
-  if (!ifMovielist) {
-    show(watchlistBtPlace);
-  }
-  if (ifMovieLikes) {
-    show(removeLikeBtPlace);
-  }
-  if (!ifMovieLikes) {
-    show(likeBtPlace);
-  }
-}
-
 // 拿電影均分
 async function getAverageRate() {
   let data = {
