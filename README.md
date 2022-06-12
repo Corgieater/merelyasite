@@ -35,13 +35,13 @@
 ![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
 
 ## Function Introduction
-Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
++ Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
 ![image](https://user-images.githubusercontent.com/92343813/173248683-5be4c5dc-c92f-48f0-ae03-58a336346c2e.png)
 
-Reviews with spoilers won't directly show. 
++ Reviews with spoilers won't directly show. 
 ![image](https://user-images.githubusercontent.com/92343813/173249039-b0b45371-91fb-41f3-8225-2af41d33b9ed.png)
 
-Personalizing homepage after login
++ Personalizing homepage after login
 ![image](https://user-images.githubusercontent.com/92343813/173249109-b384f01f-83b1-4950-a909-65c36aa93a32.png)
 
 
