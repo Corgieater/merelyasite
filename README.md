@@ -39,7 +39,6 @@ Homepage for anonymous user, showing most popular movies this week and reviews w
 ![image](https://user-images.githubusercontent.com/92343813/173248683-5be4c5dc-c92f-48f0-ae03-58a336346c2e.png)
 
 Reviews with spoilers won't directly show. 
-![image](https://user-images.githubusercontent.com/92343813/173248709-32c95013-09ec-4e46-a750-6da42ecdc521.png)
-
+![image](https://user-images.githubusercontent.com/92343813/173249039-b0b45371-91fb-41f3-8225-2af41d33b9ed.png)
 
 
