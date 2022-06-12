@@ -8,10 +8,8 @@ let watchedDate = document.querySelector(
   '.reviewBox > section > input[type="date"]'
 );
 // review likesBt
-let likesReviewBt = document.querySelector(".reviewLikePlace > a:nth-child(1)");
-let deleteLikesReviewBt = document.querySelector(
-  ".reviewLikePlace > a:nth-child(2)"
-);
+let likesReviewBt = document.querySelector(".likesReviewBt");
+let deleteLikesReviewBt = document.querySelector(".deleteLikesReviewBt");
 // // 查詢用
 let uncleanUrlForReviewId = cutUserInputAtLast("/films");
 let uncleanUrlForMovieName = cutUserInputAtLast("/reviews");
@@ -306,9 +304,12 @@ async function showFilmInfo() {
   let userReview = document.querySelector(".userReview");
   data = data["data"];
   movieId = data["movieId"];
-  // 順便檢查一下logger有沒有加這電影 有userID的話
+  // 順便檢查一下logger有沒有加這電影+review like 有userID的話
   if (currentUserId) {
-    checkUserMovieStates();
+    let userData = await getUserData();
+    let userId = userData["userId"];
+    checkUserMovieStates(userId, movieId);
+    checkUserReviewState(userId, reviewId);
   }
   let filmTitle = data["movieTitle"];
   reviewTitle.textContent = filmTitle;

@@ -32,28 +32,48 @@ async function smallActionFunc(action, api) {
     window.location.reload();
   }
 }
+// /api/user_profile/user_review_state/<user_id>/<review_id></review_id>
+// check if user likes this review
+async function checkUserReviewState(userId, reviewId) {
+  let userReviewState = await fetch(
+    `/api/user_profile/user_review_state/${userId}/${reviewId}`
+  );
+  userReviewState = await userReviewState.json();
+  console.log(userReviewState.data);
+  userReviewState = userReviewState.data;
+  let ifReviewLikes = userReviewState["userLikes"];
+  console.log(ifReviewLikes);
+  if (ifReviewLikes) {
+    show(deleteLikesReviewBt);
+  } else {
+    show(likesReviewBt);
+  }
+}
 
 // check if user add this movie to watchlist or likes
-async function checkUserMovieStates() {
-  let userData = await getUserData();
-  let userId = userData["userId"];
-  let userMovieStates = await fetch(`/api/user_profile/user_movie_state/
-    ${userId}/${movieId}`);
+async function checkUserMovieStates(userId, movieId) {
+  let userMovieStates = await fetch(
+    `/api/user_profile/user_movie_state/${userId}/${movieId}`
+  );
   userMovieStates = await userMovieStates.json();
   userMovieStates = userMovieStates.data;
   let ifMovielist = userMovieStates["userWatchlist"];
   let ifMovieLikes = userMovieStates["userLikes"];
   if (ifMovielist) {
     show(removeWatchlistBtPlace);
+    console.log(removeWatchlistBtPlace);
   }
   if (!ifMovielist) {
     show(watchlistBtPlace);
+    console.log(watchlistBtPlace);
   }
   if (ifMovieLikes) {
     show(removeLikeBtPlace);
+    console.log(removeLikeBtPlace);
   }
   if (!ifMovieLikes) {
     show(likeBtPlace);
+    console.log(likeBtPlace);
   }
 }
 
