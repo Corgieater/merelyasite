@@ -36,8 +36,10 @@
 
 ## Function Introduction
 Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
-![image](https://user-images.githubusercontent.com/92343813/173248516-87103ddd-ec11-4ba2-ac67-b26ca07a5ec0.png)
-![image](https://user-images.githubusercontent.com/92343813/173248647-bf50b949-7e43-4169-afd0-e6f5e0eab9ab.png)
+![image](https://user-images.githubusercontent.com/92343813/173248683-5be4c5dc-c92f-48f0-ae03-58a336346c2e.png)
+
+Reviews with spoilers won't directly show. 
+![image](https://user-images.githubusercontent.com/92343813/173248709-32c95013-09ec-4e46-a750-6da42ecdc521.png)
 
 
 
