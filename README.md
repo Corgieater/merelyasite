@@ -35,6 +35,8 @@
 ![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
 
 ## Function Introduction
+
+#### Dynamic Homepage
 + Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
 ![image](https://user-images.githubusercontent.com/92343813/173248683-5be4c5dc-c92f-48f0-ae03-58a336346c2e.png)
 
