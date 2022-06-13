@@ -24,7 +24,7 @@
 
 
 ## System Architecture
-![image](https://user-images.githubusercontent.com/92343813/173247964-cb09d217-73de-4ede-a08d-e80544ace1f0.png)
+
 
 
 ## Database Structure
