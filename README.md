@@ -1,7 +1,13 @@
 # Movie Notes
 
 
-#### A movie review website
+### _A movie review website for movie lovers_
+_As a movie person, I was thinking about why there is no website for logging and sharing reviews in Taiwan. 
+Then I saw my girl friend using a Japanese website for reviewing books and it has some basic social features.
+Voila, this project was born!_
+
+
+## Main fratures
 1. ✏️ Logging: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
 3. 💾 Data Growing: Use python crawler to scrape movies into Movie Notes' own database.
@@ -9,27 +15,6 @@
 5. 🔍 Searching: Searching movies and users to know more about them.
 6. 👁️‍🗨️ Watchlist : Users can build a movie watchlist to remind themselves.
 
-
-## Backend Skills
-1. Using Docker deploying website
-2. RESTful API 
-3. Database third normal form
-4. Using AWS S3 for storing images
-5. Accomplishing CDN with AWS CloudFront
-5. Web secure with SSL and HTTPS
-6. Using flask-bicrypt to encode users passwords
-7. Recording user login statement with JWT
-8. Using BeautifulSoup to scrape movies info
-9. Nginx Reverse proxy
-
-
-## System Architecture
-![image](https://user-images.githubusercontent.com/92343813/173434370-b352ada3-c07e-49a1-8a90-ae60bba89b49.png)
-
-
-
-## Database Structure
-![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
 
 ## Function Introduction
 #### Dynamic Homepage
@@ -61,4 +46,32 @@
 ### Adding Movies
 + Adding movies to database
 ![image](https://user-images.githubusercontent.com/92343813/173250402-e1f8b87e-ca8f-48eb-bcf7-5f42f10da2b4.png)
+
+## Technique
+### Front
++ HTML
++ CSS
++ Javascript
+
+### Backend
++ Using Docker deploying website
++ RESTful API 
++ Database third normal form
++ Using AWS S3 for storing images
++ Accomplishing CDN with AWS CloudFront
++ Web secure with SSL and HTTPS
++ Using flask-bicrypt to encode users passwords
++ Recording user login statement with JWT
++ Using BeautifulSoup to scrape movies info
++ Nginx Reverse proxy
+
+
+## System Architecture
+![image](https://user-images.githubusercontent.com/92343813/173434370-b352ada3-c07e-49a1-8a90-ae60bba89b49.png)
+
+
+
+## Database Structure
+![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
+
 
