@@ -1,7 +1,7 @@
 # Movie Notes
 
 
-#### This project is a fan project of Letterboxd. Here are the main features:
+#### A movie review website
 1. ✏️ Logging: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
 3. 💾 Data Growing: Use python crawler to scrape movies into Movie Notes' own database.
