@@ -73,6 +73,7 @@ class MovieDatabase:
                            'INNER JOIN directors\n'
                            'ON directors_movies.dm_director_id = directors.director_id\n'
                            'GROUP BY title\n'
+                           'ORDER BY year DESC\n'
                            'LIMIT %s, 20',
                            ('%'+user_input+'%', start_index))
             all_movies = cursor.fetchall()
