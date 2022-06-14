@@ -58,6 +58,7 @@ Voila, this project was born!_
 
 ### Backend
 + Using Docker deploying website
++ Enviroment Python with Flask
 + RESTful API 
 + Database third normal form
 + Using AWS S3 for storing images
@@ -65,7 +66,9 @@ Voila, this project was born!_
 + Web secure with SSL and HTTPS
 + Using flask-bicrypt to encode users passwords
 + Recording user login statement with JWT
-+ Using BeautifulSoup to scrape movies info
++ Using BeautifulSoup4 to scrape movies info
++ Set crontab to scheduling scraping and writing to database events
++ Using Selenium imitating user clicking when scraping
 + Using Nginx as reverse proxy
 
 
