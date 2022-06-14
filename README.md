@@ -68,7 +68,7 @@ Voila, this project was born!_
 + Recording user login statement with JWT
 + Using BeautifulSoup4 to scrape movies info
 + Set crontab to scheduling scraping and writing to database events
-+ Using Selenium imitating user clicking when scraping
++ Using Selenium imitating user typing and clicking when scraping
 + Using Nginx as reverse proxy
 
 
