@@ -1,16 +1,16 @@
 # Movie Notes
 
-
 ### _A movie review website for movie lovers_
 _As a movie person, I was thinking about why there is no website for logging and sharing reviews in Taiwan. 
 Then I saw my girl friend using a Japanese website for reviewing books and it has some basic social features.
 Voila, this project was born!_
+### Website Url : https://merelyasite.xyz/
 
 
 ## Main fratures
-1. ✏️ Logging: Write and share reviews.
+1. ✏️ Writing and sharing logs: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
-3. 💾 Data Growing: Use python crawler to scrape movies into Movie Notes' own database.
+3. 💾 Data Growing: Use python crawler with crontab scheduling when to scrape movies into Movie Notes' own database.
 4. 💛 Sending likes: Giving a like to your favorite movies and reviews.
 5. 🔍 Searching: Searching movies and users to know more about them.
 6. 👁️‍🗨️ Watchlist : Users can build a movie watchlist to remind themselves.
@@ -21,9 +21,11 @@ Voila, this project was born!_
 + Homepage for anonymous user, showing most popular movies this week and reviews with most likes.
 ![image](https://user-images.githubusercontent.com/92343813/173248683-5be4c5dc-c92f-48f0-ae03-58a336346c2e.png)
 
+#### Spoilers Alert
 + Reviews with spoilers won't directly show.
 ![image](https://user-images.githubusercontent.com/92343813/173249039-b0b45371-91fb-41f3-8225-2af41d33b9ed.png)
 
+#### Personalizing
 + Personalizing homepage after login and following other users.
 ![image](https://user-images.githubusercontent.com/92343813/173249109-b384f01f-83b1-4950-a909-65c36aa93a32.png)
 
@@ -45,6 +47,7 @@ Voila, this project was born!_
 
 ### Adding Movies
 + Adding movies to database
+
 ![image](https://user-images.githubusercontent.com/92343813/173250402-e1f8b87e-ca8f-48eb-bcf7-5f42f10da2b4.png)
 
 ## Technique
@@ -63,11 +66,11 @@ Voila, this project was born!_
 + Using flask-bicrypt to encode users passwords
 + Recording user login statement with JWT
 + Using BeautifulSoup to scrape movies info
-+ Nginx Reverse proxy
++ Using Nginx as reverse proxy
 
 
 ## System Architecture
-![image](https://user-images.githubusercontent.com/92343813/173434370-b352ada3-c07e-49a1-8a90-ae60bba89b49.png)
+![merelyasite_with_crawler](https://user-images.githubusercontent.com/92343813/173578839-41868254-6fe8-43e1-bd4d-446392528685.png)
 
 
 
