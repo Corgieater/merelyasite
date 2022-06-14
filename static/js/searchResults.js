@@ -60,24 +60,24 @@ async function makeShowRow(data, userInputAndPage) {
       let div3 = document.createElement("div");
       let img = document.createElement("img");
       let a1 = document.createElement("a");
-      let a2 = document.createElement("a");
-      let p = document.createElement("p");
+      let p1 = document.createElement("p");
+      let p2 = document.createElement("a");
+
       img.src = `https://dwn6ych98b9pm.cloudfront.net/moviePos/img${id}.jpg`;
       img.classList.add("moviePos");
       a1.href = `/film/${id}`;
-      a2.href = `/film/${year}`;
       a1.textContent = title + " ";
-      a2.textContent = year;
-      p.textContent = "Directed by ";
+      p2.textContent = year;
+      p1.textContent = "Directed by ";
       div1.append(img);
       div2.append(a1);
-      div2.append(a2);
-      div2.append(p);
+      div2.append(p2);
+      div2.append(p1);
       div3.append(div1);
       div3.append(div2);
       div3.classList.add("showRow");
       div3.classList.add("flex");
-      makeAlinkAndAppend(p, "/director?director=", directors);
+      makeAlinkAndAppend(p1, "/director?director=", directors);
       li.append(div3);
       showPlace.append(li);
     }
