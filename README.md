@@ -10,7 +10,7 @@ Voila, this project was born!_
 ## Main fratures
 1. ✏️ Writing and sharing logs: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
-3. 💾 Data Growing: Use python crawler with crontab scheduling when to scrape movies into Movie Notes' own database.
+3. 💾 Data Growing: Use python crawler with crontab scheduling and scraping movies into Movie Notes' own database.
 4. 💛 Sending likes: Giving a like to your favorite movies and reviews.
 5. 🔍 Searching: Searching movies and users to know more about them.
 6. 👁️‍🗨️ Watchlist : Users can build a movie watchlist to remind themselves.
