@@ -79,7 +79,7 @@ Voila, this project was born!_
 
 ### Adding Movies
 + Adding movies to database
-    + With third part library - [Cinemagoer](https://imdbpy.readthedocs.io/en/latest/) geting IMDB movie Id and starting scraping
+    + With [Cinemagoer](https://imdbpy.readthedocs.io/en/latest/) geting IMDB movie Id and starting scraping
 
 ![image](https://user-images.githubusercontent.com/92343813/173250402-e1f8b87e-ca8f-48eb-bcf7-5f42f10da2b4.png)
 
