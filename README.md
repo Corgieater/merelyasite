@@ -39,7 +39,7 @@ Voila, this project was born!_
 
 
 ## System Architecture
-![merelyasite_with_crawler](https://user-images.githubusercontent.com/92343813/173578839-41868254-6fe8-43e1-bd4d-446392528685.png)
+![merelyasite-blue](https://user-images.githubusercontent.com/92343813/173858308-d2d8c91f-30df-4e7e-9695-c32fde4648dc.png)
 
 
 
@@ -79,6 +79,7 @@ Voila, this project was born!_
 
 ### Adding Movies
 + Adding movies to database
+    + With third part libraty - [Cinemagoer](https://imdbpy.readthedocs.io/en/latest/) geting IMDB movie Id and starting scraping
 
 ![image](https://user-images.githubusercontent.com/92343813/173250402-e1f8b87e-ca8f-48eb-bcf7-5f42f10da2b4.png)
 
