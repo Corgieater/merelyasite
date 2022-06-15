@@ -2,18 +2,50 @@
 
 ### _A movie review website for movie lovers_
 _As a movie person, I was thinking about why there is no website for logging and sharing reviews in Taiwan. 
-Then I saw my girl friend using a Japanese website for reviewing books and it has some basic social features.
+Then I saw my girlfriend using a Japanese website for reviewing books and it has some basic social features.
 Voila, this project was born!_
 ### Website Url : https://merelyasite.xyz/
 
 
-## Main fratures
+## Main Features
 1. ✏️ Writing and sharing logs: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
-3. 💾 Data Growing: Use python crawler with crontab scheduling and scraping movies into Movie Notes' own database.
+3. 💾 Data Growing: Use python crawler with crontab scheduling and scraping movies from IMDB to database.
 4. 💛 Sending likes: Giving a like to your favorite movies and reviews.
 5. 🔍 Searching: Searching movies and users to know more about them.
 6. 👁️‍🗨️ Watchlist : Users can build a movie watchlist to remind themselves.
+
+
+## Technique
+### Frontend
++ HTML
++ CSS
++ Javascript
+
+### Backend
++ Deploying website with docker
++ Using Python/Flask environment
++ Following RESTful API 
++ Optimizing Database with third normal form
++ Using AWS S3 for storing images
++ Accomplishing CDN with AWS CloudFront
++ Securing website with SSL and HTTPS
++ Using flask-bicrypt to encode users passwords
++ Recording user login statement with JWT
++ Using BeautifulSoup4 to scrape movies info
++ Setting crontab to scheduling scraping and writing to database events
++ Using Selenium imitating user typing and clicking when scraping
++ Using Nginx as reverse proxy
+
+
+## System Architecture
+![merelyasite_with_crawler](https://user-images.githubusercontent.com/92343813/173578839-41868254-6fe8-43e1-bd4d-446392528685.png)
+
+
+
+## Database Structure
+![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
+
 
 
 ## Function Introduction
@@ -49,35 +81,4 @@ Voila, this project was born!_
 + Adding movies to database
 
 ![image](https://user-images.githubusercontent.com/92343813/173250402-e1f8b87e-ca8f-48eb-bcf7-5f42f10da2b4.png)
-
-## Technique
-### Front
-+ HTML
-+ CSS
-+ Javascript
-
-### Backend
-+ Using Docker deploying website
-+ Enviroment Python with Flask
-+ RESTful API 
-+ Database third normal form
-+ Using AWS S3 for storing images
-+ Accomplishing CDN with AWS CloudFront
-+ Web secure with SSL and HTTPS
-+ Using flask-bicrypt to encode users passwords
-+ Recording user login statement with JWT
-+ Using BeautifulSoup4 to scrape movies info
-+ Set crontab to scheduling scraping and writing to database events
-+ Using Selenium imitating user typing and clicking when scraping
-+ Using Nginx as reverse proxy
-
-
-## System Architecture
-![merelyasite_with_crawler](https://user-images.githubusercontent.com/92343813/173578839-41868254-6fe8-43e1-bd4d-446392528685.png)
-
-
-
-## Database Structure
-![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
-
 
