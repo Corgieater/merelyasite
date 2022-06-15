@@ -147,9 +147,10 @@ section > a {
 .reviewBox > section:nth-child(2) > label {
   color: lightblue !important;
 }
-
 .reviewBox > section > label {
   color: black;
+}
+.reviewBox > textarea {
 }
 
 /* 別人寫的星星 */
