@@ -85,6 +85,4 @@ async function makeShowRow(data, userInputAndPage) {
   makePageTags("search?keyword=", userInputAndPage, data["totalPages"]);
 }
 
-// 小功能
-
 renderDataInfo();
