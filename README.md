@@ -39,7 +39,7 @@ Voila, this project was born!_
 
 
 ## System Architecture
-![merelyasite-blue](https://user-images.githubusercontent.com/92343813/173858308-d2d8c91f-30df-4e7e-9695-c32fde4648dc.png)
+![merelyasite_with_crawler_new](https://user-images.githubusercontent.com/92343813/174992456-c4f71626-4c8d-4fbe-83b3-0dfea874d563.png)
 
 
 
