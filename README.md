@@ -30,7 +30,7 @@ Voila, this project was born!_
 + Using AWS S3 for storing images
 + Accomplishing CDN with AWS CloudFront
 + Securing website with SSL and HTTPS
-+ Using flask-bicrypt to encode users passwords
++ Using Flask-Bcrypt to encode users passwords
 + Recording user login statement with JWT
 + Using BeautifulSoup4 to scrape movies info
 + Setting crontab to scheduling scraping and writing to database events
