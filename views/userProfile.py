@@ -17,14 +17,14 @@ def render_user_profile(user_name):
 
 
 # 拿最新的五個評論for user page
-@user_profile_blueprint.route('/api/get_latest_reviews/<user_name>')
+@user_profile_blueprint.route('/api/user_latest_reviews/<user_name>')
 def get_user_latest_five_reviews(user_name):
     user_name = user_name.replace('+', ' ')
     return get_user_latest_five_reviews_func(user_name)
 
 
 # 照頁數拿所有評論for user page
-@user_profile_blueprint.route('/api/get_reviews_by_page/<user_name>/reviews')
+@user_profile_blueprint.route('/api/reviews_by_page/<user_name>/reviews')
 def get_reviews_by_page(user_name):
     user_name = user_name.replace('+', ' ')
     page = request.args.get('page')
@@ -78,14 +78,14 @@ def render_setting_page():
 
 
 # user profile 上傳圖片
-@user_profile_blueprint.route('/api/user/<user_id>/upload_pic', methods=["PATCH"])
+@user_profile_blueprint.route('/api/user/<user_id>/pic', methods=["PATCH"])
 def upload_user_profile_pic(user_id):
     img = request.files['photoFile']
     return upload_user_profile_pic_func(user_id, img)
 
 
 # page master profile 拿該頁面擁有者的上傳照片 沒有就用預設
-@user_profile_blueprint.route('/api/user/<user_name>/upload_pic')
+@user_profile_blueprint.route('/api/user/<user_name>/pic')
 def get_user_profile_pic(user_name):
     user_name = user_name.replace('+', ' ')
     return get_user_profile_pic_func(user_name)

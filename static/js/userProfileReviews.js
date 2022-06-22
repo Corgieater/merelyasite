@@ -12,7 +12,7 @@ userProfileHomeBt.href = `/user_profile/${userName}`;
 userProfileLikesBt.href = `/user_profile/${userName}/likes`;
 
 async function getLatestFiveReviews() {
-  const req = await fetch(`/api/get_reviews_by_page/${userNameAngPage}`);
+  const req = await fetch(`/api/reviews_by_page/${userNameAngPage}`);
   const res = await req.json();
   return res;
 }

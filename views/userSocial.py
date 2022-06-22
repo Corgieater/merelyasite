@@ -9,7 +9,7 @@ user_social_blueprint = Blueprint(
 
 # 人際關係
 # 從追蹤對象拿頭五篇reviews
-@user_social_blueprint.route('/api/user/follows/reviews')
+@user_social_blueprint.route('/api/user/following/reviews')
 def get_latest_five_reviews_from_follows():
     return get_latest_five_reviews_from_follows_func()
 
@@ -30,7 +30,7 @@ def follows_other_people():
 
 
 # 拿追蹤的人最近喜歡了什麼評論給index用
-@user_social_blueprint.route('/api/<user_id>/get_following_latest_like_reviews/')
+@user_social_blueprint.route('/api/<user_id>/following_latest_like_reviews/')
 def get_following_latest_like_reviews(user_id):
     user_id = int(user_id)
     return get_following_latest_like_reviews_func(user_id)

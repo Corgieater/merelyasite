@@ -495,7 +495,7 @@ async function getAverageRate() {
   let data = {
     movieId: movieId,
   };
-  let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
+  let averageRate = await sendDataToBackend("POST", data, "/api/average_rate");
   if (averageRate !== undefined && averageRate["average"] !== null) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
@@ -510,7 +510,7 @@ async function getAverageRate() {
   let data = {
     movieId: movieId,
   };
-  let averageRate = await sendDataToBackend("POST", data, "/api/average-rate");
+  let averageRate = await sendDataToBackend("POST", data, "/api/average_rate");
   if (averageRate !== undefined && averageRate["average"] !== null) {
     averageRatePlace.textContent = `Average rate ${averageRate["average"]}`;
     averageRatePlace.style.cursor = "pointer";
