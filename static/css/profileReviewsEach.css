@@ -123,7 +123,7 @@ section > a {
   position: absolute;
   background-color: lightslategrey;
   width: 50%;
-  height: 600px;
+  height: 550px;
   left: 25%;
   z-index: 3;
 }
@@ -137,6 +137,10 @@ section > a {
   line-height: 1.5;
   width: 80%;
 }
+.reviewBox > section > textarea {
+  width: 80%;
+}
+
 .reviewBox > section > p {
   color: lightblue;
   font-weight: bold;
@@ -154,9 +158,20 @@ section > a {
 .reviewBox > section:nth-child(2) > label {
   color: lightblue !important;
 }
-
 .reviewBox > section > label {
   color: black;
+}
+
+@media screen and (min-width: 1300px) and (max-width: 1800px) {
+  .reviewBox > section {
+    padding: 10px;
+  }
+  .reviewBox > section > img {
+    max-width: 80%;
+  }
+  .reviewBox > section > textarea {
+    max-height: 80%;
+  }
 }
 
 /* 別人寫的星星 */
