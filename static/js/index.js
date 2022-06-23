@@ -139,7 +139,7 @@ makePopularMoviesShow();
 // PEOPLE WHO LOGGED
 // get news from friends
 async function getNewsFromFriends() {
-  let req = await fetch(`/api/user/follows/reviews`);
+  let req = await fetch(`/api/user/following/reviews`);
   const res = await req.json();
   return res;
 }
@@ -208,7 +208,7 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
   let userName = userData["userName"];
   if (currentUserId !== null) {
     let req = await fetch(
-      `/api/${currentUserId}/get_following_latest_like_reviews/`
+      `/api/${currentUserId}/following_latest_like_reviews/`
     );
     let res = await req.json();
     reviewFriendsLike = res.data.data;
@@ -293,13 +293,13 @@ async function showReviewsFriendsLikeOrOtherPeopleLike(currentUserId = null) {
 
 // some func for people do not follow or no login
 async function getMostPopularMoviesThisWeek() {
-  const req = await fetch("/api/get_most_popular_movies_this_week/");
+  const req = await fetch("/api/most_popular_movies_this_week/");
   const res = await req.json();
   return res;
 }
 
 async function getNewReviewed() {
-  let req = await fetch(`/api/get_latest_reviews/`);
+  let req = await fetch(`/api/latest_reviews/`);
   const res = await req.json();
   return res;
 }

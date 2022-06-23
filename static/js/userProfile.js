@@ -92,7 +92,7 @@ async function is_following() {
 
 // 拿最近五個reviews
 async function getLatestFiveReviews() {
-  const req = await fetch(`/api/get_latest_reviews/${userName}`);
+  const req = await fetch(`/api/user_latest_reviews/${userName}`);
   const res = await req.json();
   return res;
 }
@@ -176,7 +176,7 @@ async function showRecentlyReviews() {
 }
 
 async function getPageMasterPicAndShow() {
-  let req = await fetch(`/api/user/${userName}/upload_pic`);
+  let req = await fetch(`/api/user/${userName}/pic`);
   let res = await req.json();
   let profileImg = document.querySelector(".profile >img");
   if (res.data.picName !== null) {

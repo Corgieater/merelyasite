@@ -78,6 +78,6 @@ def get_movie_from_imdb():
 
 
 # 拿這週最熱門的電影 *6 for index
-@films_blueprint.route('/api/get_most_popular_movies_this_week/')
+@films_blueprint.route('/api/most_popular_movies_this_week/')
 def get_most_popular_movies_this_week():
     return get_most_popular_movies_this_week_func()

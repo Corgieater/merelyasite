@@ -10,7 +10,7 @@ upLoadBt.addEventListener("click", async function (e) {
   show(mask);
   show(loaderPlace);
   const photoForm = new FormData(document.querySelector("#photoForm"));
-  let req = await fetch(`/api/user/${currentUserId}/upload_pic`, {
+  let req = await fetch(`/api/user/${currentUserId}/pic`, {
     method: "PATCH",
     body: photoForm,
   });

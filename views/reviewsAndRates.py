@@ -45,7 +45,7 @@ def delete_rate():
 
 
 # 拿電影均分
-@reviewsAndRates_blueprint.route('/api/average-rate', methods=['POST'])
+@reviewsAndRates_blueprint.route('/api/average_rate', methods=['POST'])
 def get_average_rate():
     data = request.get_json()
     movie_id = data['movieId']
@@ -78,6 +78,6 @@ def film_review():
 
 
 # 拿最新的12個評論 from index
-@reviewsAndRates_blueprint.route('/api/get_latest_reviews/')
+@reviewsAndRates_blueprint.route('/api/latest_reviews/')
 def get_latest_reviews():
     return get_latest_reviews_func()
