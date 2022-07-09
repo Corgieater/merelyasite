@@ -18,13 +18,32 @@ class UserDatabase:
         connection = p.get_connection()
         cursor = connection.cursor()
         try:
-            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s, DEFAULT)', inputs)
+            cursor.execute('INSERT INTO users VALUES (%s, %s ,%s, %s, DEFAULT, DEFAULT)', inputs)
+            cursor.execute('SELECT LAST_INSERT_ID()')
+            last_insert_user_id = cursor.fetchone()
         except Exception as e:
+            print('From userData, add_to_database')
             print(e)
             connection.rollback()
             return False
         else:
             connection.commit()
+            return last_insert_user_id
+        finally:
+            cursor.close()
+            connection.close()
+
+# 更新email驗證
+    def renew_email_confirm(self, email):
+        connection = p.get_connection()
+        cursor = connection.cursor()
+        try:
+            cursor.execute('UPDATE users SET validation = 1 WHERE email = %s', (email,))
+        except Exception as e:
+            print(e)
+            return False
+        else:
+            print(email, 'confirmed')
             return True
         finally:
             cursor.close()

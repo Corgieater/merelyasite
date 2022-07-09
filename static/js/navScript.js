@@ -108,6 +108,7 @@ signUpBt.addEventListener("click", async function (e) {
     ".signUpPlace>input[type='password']"
   ).value;
   let name = document.querySelector("#signName").value;
+
   if (email === "" || password === "" || name === "") {
     makeMessage(signUpPlace, "Somewhere is empty, please check again");
   } else {

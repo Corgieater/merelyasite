@@ -2,6 +2,7 @@
 let movieTitle = document.querySelector("#movieTitle");
 let movieYear = document.querySelector("#movieYear");
 let globalMessagePlace = document.querySelector(".globalMessagePlace");
+let globalMessageCloseBt = document.querySelector(".globalMessageCloseBt");
 
 let loaderPlace = document.querySelector(".loaderPlace");
 let mask = document.querySelector(".mask");
@@ -145,3 +146,8 @@ window.onload = function () {
   loaderPlace.classList.add("hide");
   mask.classList.add("hide");
 };
+
+globalMessageCloseBt.addEventListener("click", function (e) {
+  e.preventDefault();
+  hide(globalMessagePlace);
+});

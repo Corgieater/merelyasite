@@ -359,6 +359,7 @@ class ReviewDatabase:
                            'LIMIT 6',
                            (user_id,))
             results = cursor.fetchall()
+            print('got a new acccount and i am seeing what will show\n',results)
         except Exception as e:
             print('get_latest_five_reviews_from_follows from reviewData')
             print(e)

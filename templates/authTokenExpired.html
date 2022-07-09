@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% block style %}
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="{{url_for('static', filename='css/userProfile.css')}}"
+/>
+{% endblock %} {% block content %}
+<h2>Oops...</h2>
+<p>It looks like the token had expired:(</p>
+<form action="">
+  <input type="email" />
+</form>
+
+{% endblock %} {% block script %}
+<script src="{{ url_for('static', filename='js/userProfile.js') }}"></script>
+{% endblock %}

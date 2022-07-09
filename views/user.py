@@ -1,6 +1,7 @@
 from controllers.auth import *
 from controllers.social import *
 from controllers.userGeneral import *
+from flask import flash
 
 user_blueprint = Blueprint(
     'user_blueprint',
@@ -18,8 +19,26 @@ def sign_up_func():
     return sign_up(data['email'], data['password'], data['name'])
 
 
+# 驗證email
+@user_blueprint.route('/api/user/validation/<auth_token>')
+def user_validate_func(auth_token):
+    print('someone reached validation api,', auth_token)
+    email_confirmed = confirm_token(auth_token)
+    if email_confirmed:
+        flash('Your email had been verified!', 'good')
+        return redirect('/')
+    else:
+        return redirect('/user/validation')
+
+
+# validation token失效 要重新填帳號密碼重寄
+@user_blueprint.route('/user/validation')
+def auth_token_expired():
+    return render_template('authTokenExpired.html')
+
+
 # check user name if available
-@user_blueprint.route('/api/user/<sign_up_name>',)
+@user_blueprint.route('/api/user/<sign_up_name>')
 def check_user_name(sign_up_name):
     sign_up_name = sign_up_name.replace('+', ' ')
     return check_user_name_func(sign_up_name)
