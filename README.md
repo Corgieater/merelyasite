@@ -47,6 +47,12 @@ Voila, this project was born!_
 ![image](https://user-images.githubusercontent.com/92343813/173248158-65be0dd1-e21b-4f04-a944-88cbfe4b38c4.png)
 
 
+## Scraping Bot
+### 2 bots for crawling info from IMDB and then writing into database
++ Crawler:
+Scheduled by Crontab, producing a "job done" file after scraping.
++ Watcher:
+Schefuled by Crontab, scaning the file to make sure scraping procedure is done and then writing all info into database.
 
 ## Function Introduction
 #### Dynamic Homepage
