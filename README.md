@@ -57,10 +57,6 @@ Voila, this project was born!_
 + Reviews with spoilers won't directly show.
 ![image](https://user-images.githubusercontent.com/92343813/173249039-b0b45371-91fb-41f3-8225-2af41d33b9ed.png)
 
-#### Personalizing
-+ Personalizing homepage after login and following other users.
-![image](https://user-images.githubusercontent.com/92343813/173249109-b384f01f-83b1-4950-a909-65c36aa93a32.png)
-
 ### User Watchlist
 + For remebering all the movies users want to watch. Can open a new window about the movie or removing a movie by using the icons.
 ![image](https://user-images.githubusercontent.com/92343813/173249626-91c8573c-f613-48ae-b0bd-a1cd111778c2.png)
