@@ -10,7 +10,7 @@ Voila, this project was born!_
 ## Main Features
 1. ✏️ Writing and sharing logs: Write and share reviews.
 2. 🗺️ Tracking: Track user's favorite reviewers.
-3. 💾 Data Growing: Use python crawler with crontab scheduling and scraping movies from IMDB to database.
+3. 💾 Data Growing: Use python crawler with Crontab scheduling and scraping movies from IMDB to database.
 4. 💛 Sending likes: Giving a like to your favorite movies and reviews.
 5. 🔍 Searching: Searching movies and users to know more about them.
 6. 👁️‍🗨️ Watchlist : Users can build a movie watchlist to remind themselves.
@@ -33,7 +33,7 @@ Voila, this project was born!_
 + Using Flask-Bcrypt to encode users passwords
 + Recording user login statement with JWT
 + Using BeautifulSoup4 to scrape movies info
-+ Setting crontab to scheduling scraping and writing to database events
++ Setting Crontab to scheduling scraping and writing to database events
 + Using Selenium imitating user typing and clicking when scraping
 + Using Nginx as reverse proxy
 
