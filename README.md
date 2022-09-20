@@ -4,6 +4,7 @@
 _As a movie person, I was thinking about why there is no website for logging and sharing reviews in Taiwan. 
 Then I saw my girlfriend using a Japanese website for reviewing books and it has some basic social features.
 Voila, this project was born!_
+
 _為了電影愛好者而生的網站_
 ### Website Url : https://merelyasite.xyz/
 
