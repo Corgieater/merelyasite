@@ -6,7 +6,6 @@ Then I saw my girlfriend using a Japanese website for reviewing books and it has
 Voila, this project was born!_
 
 _為了電影愛好者而生的網站_
-### Website Url : https://merelyasite.xyz/
 
 
 ## Main Features
